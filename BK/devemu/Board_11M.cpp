@@ -644,6 +644,7 @@ constexpr auto BK_BMB11M_FICTADDR = 0164;
 
 bool CMotherBoard_11M::EmulateLoadTape11()
 {
+	#ifdef EMULATE_TAPE
 	if (g_Config.m_bEmulateLoadTape && ((GetWord(0154614) == 04767) && (GetWord(0154616) == 0165536)))
 	{
 		bool bFileSelect = false; // что делать после диалога выбора
@@ -956,12 +957,13 @@ l_SelectFile:
 		m_pParent->SendMessage(WM_RESET_KBD_MANAGER, 0); // и почистим индикацию управляющих клавиш в статусбаре
 		return true; // сэмулировал
 	}
-
+    #endif
 	return false;
 }
 
 bool CMotherBoard_11M::EmulateSaveTape11()
 {
+	#ifdef EMULATE_TAPE
 	if (g_Config.m_bEmulateSaveTape && ((GetWord(0154614) == 04767) && (GetWord(0154616) == 0165536)))
 	{
 		bool bError = false;
@@ -1067,6 +1069,6 @@ bool CMotherBoard_11M::EmulateSaveTape11()
 		m_pParent->SendMessage(WM_RESET_KBD_MANAGER, 0); // и почистим индикацию управляющих клавиш в статусбаре
 		return true; // сэмулировали
 	}
-
+    #endif
 	return false;
 }

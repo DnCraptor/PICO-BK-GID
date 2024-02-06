@@ -17,7 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 #endif
-
+#define max(X, Y) (X > Y ? X : Y)
 
 constexpr auto RECORD_BUFFER = (4 * 1024 * 1024);
 constexpr auto RECORD_GROW = (2 * 1024 * 1024);
@@ -1467,7 +1467,7 @@ bool CTape::LoadBinFile(const fs::path &strPath, TAPE_FILE_INFO *pTfi)
 	{
 		if (CalcCRC(pTfi) != pTfi->crc)
 		{
-			TRACE("CRC Mismatch!\n");
+			TRACE("CRC Mismatch!\n", "", "");
 		}
 	}
 	else
@@ -1943,7 +1943,7 @@ bool CTape::FindRecordBegin(const size_t nSmplBufLen)
 			// Sleep (1);
 		}
 
-		TRACE("AutoSearch: File Start Found!\n");
+		TRACE("AutoSearch: File Start Found!\n", "", "");
 		m_nRecordPos = 0;
 		m_bAutoBeginRecord = false; // признак, что найдено начало записи при автопоиске
 	}
@@ -1979,7 +1979,7 @@ bool CTape::FindRecordEnd(const size_t nSmplBufLen)
 			if (last_length >= 500)
 			{
 				m_bAutoEndRecord = false;
-				TRACE("AutoSearch: File End Found!\n");
+				TRACE("AutoSearch: File End Found!\n", "", "");
 				return true;
 			}
 		}

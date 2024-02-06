@@ -58,6 +58,9 @@ class CString {
         m_pszData[sz - 1] = 0;
         return m_pszData;
     }
+    void ReleaseBuffer() {
+        // TODO: ?
+    }
     void ReleaseBuffer(size_t sz) {
         if (!m_pszData) return;
         m_pszData[sz] = 0;
@@ -65,6 +68,7 @@ class CString {
     PCXSTR GetString() const {
         return( m_pszData );
     }
+    PXSTR GetBuffer() { return m_pszData; }
     bool IsEmpty() const {
         if (m_pszData)
             return m_pszData[0] == 0;
@@ -81,6 +85,13 @@ class CString {
             PXSTR p = m_pszData;
             for ( ; *p; ++p) *p = tolower(*p);
         }
+    }
+    CString& MakeUpper() {
+        if (m_pszData) {
+            PXSTR p = m_pszData;
+            for ( ; *p; ++p) *p = toupper(*p);
+        }
+        return *this;
     }
     int CollateNoCase(const char* str) const {
         CString s1(str); s1.MakeLower();

@@ -103,7 +103,10 @@ class CFile : public CObject {
         UINT bw;
         return f_write(&m_file, buff, sz, &bw) == FR_OK;
     }
-    virtual void Seek(int nOffset, UINT nFrom) { f_lseek(&m_file, nOffset); }
+    virtual int Seek(int nOffset, UINT nFrom) {
+        if (FR_OK != f_lseek(&m_file, nOffset)) return -1;
+        return nOffset;
+    }
 };
 class CMemFile : public CFile {
     public:

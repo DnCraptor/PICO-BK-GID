@@ -3,6 +3,9 @@
 #ifndef _WAVEFORMATEX_
 #define _WAVEFORMATEX_
 
+#define WAVE_FORMAT_PCM 1
+#define MAXINT32 0xFFFFFFFF
+
 /*
  *  extended waveform format structure used for all non-PCM formats. this
  *  structure is common to all non-PCM formats.

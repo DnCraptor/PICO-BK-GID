@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "ScreenColors_Shared.h"
 
+#define static
+
 static const DWORD  g_pColorPalettes_std[16][4] =
 {
 	//                                                            Palette#     01           10          11
@@ -57,7 +59,7 @@ CString ColorToStr(DWORD col)
 #pragma warning(disable:4996)
 	CString strCol;
 	LPTSTR buf = strCol.GetBufferSetLength(16);
-	_sntprintf(buf, 16, _T("%06x"), (col & 0xffffff));
+	snprintf(buf, 16, _T("%06x"), (col & 0xffffff));
 	strCol.ReleaseBuffer();
 	return _T("#") + strCol;
 }
@@ -88,7 +90,7 @@ void StrToPalette(CString &strPal, DWORD *pal)
 {
 	strPal.Trim();
 	int delim = 0;
-
+#ifdef UI
 	for (int n = 0; n < 4; ++n) // количество принимаемых значений
 	{
 		int sharp = strPal.Find(_T('#'), delim); // поищем начало числа
@@ -120,5 +122,6 @@ void StrToPalette(CString &strPal, DWORD *pal)
 			break;  // то выходим из цикла
 		}
 	}
+#endif
 }
 
