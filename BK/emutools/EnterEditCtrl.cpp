@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Config.h"
 #include "EnterEditCtrl.h"
-
+#ifdef UI
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -56,3 +56,4 @@ void CEnterEdit::OnKillFocus(CWnd *pNewWnd)
 	CEdit::OnKillFocus(pNewWnd);
 	GetParent()->PostMessage(WM_DBG_TOP_ADDRESS_UPDATE, static_cast<WPARAM>(GetDlgCtrlID()));
 }
+#endif

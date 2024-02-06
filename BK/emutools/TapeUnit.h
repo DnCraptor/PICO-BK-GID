@@ -1,6 +1,6 @@
 ﻿// TapeUnit.h: interface for the CTapeUnit class.
 //
-
+#ifdef EMULATE_TAPE
 
 #pragma once
 
@@ -73,3 +73,4 @@ class CTapeUnit
 		bool            SaveAs(const fs::path &strPath, TAPETYPE type);
 };
 
+#endif

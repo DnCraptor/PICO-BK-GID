@@ -1,6 +1,6 @@
 ﻿// ScreenDIB.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "Config.h"
 #include "SprScr.h"
@@ -310,3 +310,4 @@ void CSprScr::InitColorTables()
 	m_bChangeMode = false;
 }
 
+#endif

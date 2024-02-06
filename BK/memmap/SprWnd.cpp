@@ -1,6 +1,6 @@
 ﻿// SprView.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "SprWnd.h"
@@ -232,3 +232,4 @@ void CSprWnd::OnSetScale()
 	MoveWindow(rect.left, rect.top, width + (bSV ? m_cxScroll : 0), height + (bSH ? m_cyScroll : 0), TRUE);
 }
 
+#endif

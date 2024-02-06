@@ -163,6 +163,11 @@ class CString {
             m_pszData = t;
         }
     }
+    CString& TrimRight(char c) {
+        int idx0 = strlen(m_pszData);
+        while(idx0 > 0 && (m_pszData[idx0 - 1] == c)) { m_pszData[--idx0] = 0; }
+        return (*this);
+    }
     CString& Trim() {
         if (!m_pszData) return (*this);
         PXSTR p1 = m_pszData;
@@ -215,6 +220,10 @@ class CString {
         return (*this);
     }
     CString& Insert(int, const char*) {
+        // TODO:
+        return (*this);
+    }
+    CString& Insert(int, const CString&) {
         // TODO:
         return (*this);
     }

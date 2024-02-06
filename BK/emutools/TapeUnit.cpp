@@ -1,6 +1,6 @@
 ﻿// TapeUnit.cpp: implementation of the CTapeUnit class.
 //
-
+#ifdef EMULATE_TAPE
 
 #include "pch.h"
 #include "resource.h"
@@ -457,3 +457,4 @@ bool CTapeUnit::SaveAs(const fs::path &strPath, TAPETYPE type)
 
 	return bRet;
 }
+#endif

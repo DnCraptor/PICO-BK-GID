@@ -1,6 +1,6 @@
 ﻿// LoadImgDlg.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "BKParseImage.h"
@@ -161,3 +161,4 @@ bool CLoadImgDlg::AnalyseImage(const fs::path &fname, IMGFormat *pFormat)
 	return false;
 }
 
+#endif

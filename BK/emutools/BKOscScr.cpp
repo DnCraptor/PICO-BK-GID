@@ -1,7 +1,7 @@
 ﻿
 // BKOscScr.cpp : файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "BKOscScr.h"
 #include "Config.h"
@@ -216,3 +216,4 @@ void CBKOscScr::FillBuffer(SAMPLE_INT *inBuf)
 	memcpy(m_inBuf.get(), inBuf, m_inLenByte);
 }
 
+#endif

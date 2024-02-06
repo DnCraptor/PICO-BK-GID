@@ -1,7 +1,7 @@
 ﻿
 // BKMEMDlg.cpp : файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "Config.h"
 #include "BKMEMDlg.h"
@@ -880,3 +880,4 @@ CBKMEMDlg-----------------------------------------------+
 
 
 
+#endif

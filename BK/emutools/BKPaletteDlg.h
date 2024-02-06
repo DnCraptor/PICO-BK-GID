@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 #include "resource.h"       // основные символы
 #include "Config.h"
 #include "BaseDialog.h"
@@ -48,3 +48,4 @@ class CBKPaletteDlg : public CBaseDialog
 		afx_msg void OnBnClickedButtonLoadColorpal();
 		DECLARE_MESSAGE_MAP()
 };
+#endif

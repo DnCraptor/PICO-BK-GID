@@ -1,6 +1,6 @@
 ﻿// DisasmCtrl.cpp : implementation file
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "DisasmCtrl.h"
@@ -535,3 +535,4 @@ void CDisasmCtrl::OnSetFocus(CWnd *pOldWnd)
 	Invalidate(FALSE);
 }
 
+#endif

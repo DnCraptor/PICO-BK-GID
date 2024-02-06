@@ -1,6 +1,6 @@
 ﻿// JoyEditDlg.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "Config.h"
@@ -301,3 +301,4 @@ void CJoyEditDlg::OnBnClickedButtonJoydefault()
 
 	SetDialogItems();
 }
+#endif

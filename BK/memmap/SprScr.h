@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 #include <vfw.h>
 
 class CSprScr : public CWnd
@@ -89,3 +89,4 @@ class CSprScr : public CWnd
 		DECLARE_MESSAGE_MAP()
 };
 
+#endif

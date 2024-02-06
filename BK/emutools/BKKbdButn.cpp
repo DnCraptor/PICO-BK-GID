@@ -2,7 +2,7 @@
 #include "BKKbdButn.h"
 #include "BK.h"
 #include "Config.h"
-
+#ifdef UI
 IMPLEMENT_DYNAMIC(CBKKbdButn, CWnd)
 
 CBKKbdButn::CBKKbdButn(UINT nID)
@@ -683,3 +683,4 @@ const BKKey CBKKbdButn::m_PlenKbdKeys[] =
 };
 
 
+#endif

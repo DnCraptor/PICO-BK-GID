@@ -1,6 +1,6 @@
 ﻿// BreakPoint.cpp: implementation of the CBreakPoint class.
 //
-
+#if BREAKPOINT
 
 #include "pch.h"
 #include "BreakPoint.h"
@@ -29,3 +29,4 @@ CBreakPoint::CBreakPoint(uint16_t addr)
 
 CBreakPoint::~CBreakPoint()
     = default;
+#endif

@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "GFResizeDialogHelper.h"
-
+#ifdef UI
 GFResizeDialogHelper::GFResizeDialogHelper() :
 	m_pDialog(nullptr),
 	m_OrigSize(CSize(0, 0)),
@@ -165,3 +165,4 @@ void GFResizeDialogHelper::ReadWriteToRegistry()
 		m_pDialog->MoveWindow((scr.x - newsz.cx) / 2, (scr.y - newsz.cy) / 2, newsz.cx, newsz.cy);
 	}
 }
+#endif

@@ -25,7 +25,7 @@ IDS_MODULE_MENU_START - параметры командной строки, ес
 */
 #include "Config.h"
 #include "ToolManager.h"
-
+#ifdef UI
 TCHAR g_pToolsMenuData[MAX_MENU_ITEMS][_MAX_PATH];
 int g_nToolBKDEMenuIdx = -1; //-1 - бкде не обнаружен
 
@@ -355,3 +355,4 @@ void LaunchTool(UINT id)
 	}
 }
 
+#endif

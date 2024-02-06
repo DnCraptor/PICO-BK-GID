@@ -19,7 +19,7 @@ struct MM16kPage_t
 	uint8_t    *pBuffer;        // указатель на отображаемый буфер в окне экрана
 	uint16_t    nBufSize;       // размер этого буфера
 };
-
+#ifdef UI
 // диалоговое окно CBKMEMDlg
 class CScreen;
 
@@ -100,3 +100,4 @@ class CBKMEMDlg : public CBaseDialog
 		DECLARE_MESSAGE_MAP()
 };
 
+#endif

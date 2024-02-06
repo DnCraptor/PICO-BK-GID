@@ -1,6 +1,6 @@
 ﻿// BKPaletteDlg.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "BK.h"
 
@@ -393,3 +393,4 @@ void CBKPaletteDlg::OnBnClickedButtonLoadColorpal()
 	}
 }
 
+#endif

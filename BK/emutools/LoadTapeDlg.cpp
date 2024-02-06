@@ -1,6 +1,6 @@
 ﻿// LoadTapeDlg.cpp : implementation file
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "LoadTapeDlg.h"
@@ -189,3 +189,4 @@ void CLoadTapeDlg::DrawPreview(HWND hdlg, const fs::path &strPath)
 		ClearItems(pDlg);
 	}
 }
+#endif

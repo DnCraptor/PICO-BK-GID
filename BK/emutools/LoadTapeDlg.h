@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 // LoadTapeDlg.h : header file
 //
 
@@ -27,3 +27,4 @@ class CLoadTapeDlg : public CFileDialog
 		DECLARE_MESSAGE_MAP()
 };
 
+#endif

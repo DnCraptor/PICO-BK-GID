@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-
+/***
 #include "StringUtil.h"
 #include <clocale>
 #include <cctype>    // std::tolower
@@ -149,3 +149,4 @@ bool strUtil::equalNoCase(const std::wstring &a, const std::wstring &b)
 		return std::tolower(a) == std::tolower(b);
 	});
 }
+*/

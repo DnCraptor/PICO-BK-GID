@@ -1,9 +1,9 @@
 #pragma once
 
 #define __AFXWIN_H__
-#define TRACE0(X)
-#define TRACE1(X, Y)
-#define TRACE(X, Y, Z)
+#define TRACE0(...)
+#define TRACE1(...)
+#define TRACE(...)
 
 #include <winnt.h>
 #include <CString.h>

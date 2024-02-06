@@ -1,6 +1,6 @@
 ﻿// PrintDlg.cpp : implementation file
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "Config.h"
@@ -176,3 +176,4 @@ void CPrintDlg::CalcPages()
 	SetDlgItemInt(IDC_PRN_PAGES, nPages);
 	m_nPages = nPages;
 }
+#endif

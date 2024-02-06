@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 #include "SprView.h"
 
 // CSprWnd
@@ -48,3 +48,4 @@ class CSprWnd : public CFrameWnd
 		DECLARE_MESSAGE_MAP()
 };
 
+#endif

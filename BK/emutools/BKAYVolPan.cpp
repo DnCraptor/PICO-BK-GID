@@ -1,6 +1,6 @@
 ﻿// AYVolPan.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "BKAYVolPan.h"
@@ -276,3 +276,4 @@ void CBKAYVolPan::OnBnClickedButtonAy2volDefault()
 	CConfig::AYVolPan_s def = g_Config.getVolPan(-1); // получаем структуру значений по умолчанию.
 	SetVolSlider(AY2, &def);
 }
+#endif

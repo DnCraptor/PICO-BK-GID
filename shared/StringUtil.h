@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+/***
 namespace strUtil
 {
 	// удаление заданного символа с обоих концов строки
@@ -22,3 +22,4 @@ namespace strUtil
 	// сравнение строк без учёта регистра
 	bool equalNoCase(const std::wstring &a, const std::wstring &b);
 }
+*/

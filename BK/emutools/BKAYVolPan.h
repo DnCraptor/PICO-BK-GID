@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 
 #include "Config.h"
 #include "BaseDialog.h"
@@ -71,3 +71,4 @@ class CBKAYVolPan : public CBaseDialog
 		DECLARE_MESSAGE_MAP()
 
 };
+#endif

@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 // LoadMemoryDlg.h : header file
 //
 
@@ -27,3 +27,4 @@ class CLoadMemoryDlg : public CFileDialog
 	protected:
 		DECLARE_MESSAGE_MAP()
 };
+#endif

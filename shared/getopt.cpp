@@ -200,7 +200,7 @@ static int process_long_option_a(int argc, char **argv, const char *optstring, c
 				}
 				else
 				{
-					_lock_file(stderr);
+		///			_lock_file(stderr);
 					fprintf(stderr, "%s: option '%s%s' is ambiguous; possibilities:", argv[0], prefix, d->__nextchar);
 
 					for (option_index = 0; option_index < n_options; option_index++)
@@ -210,7 +210,7 @@ static int process_long_option_a(int argc, char **argv, const char *optstring, c
 						}
 
 					fprintf(stderr, "\n");
-					_unlock_file(stderr);
+		///			_unlock_file(stderr);
 				}
 			}
 
@@ -740,7 +740,7 @@ static int process_long_option_w(int argc, wchar_t **argv, const wchar_t *optstr
 				}
 				else
 				{
-					_lock_file(stderr);
+			///		_lock_file(stderr);
 					fwprintf(stderr, L"%s: option '%s%s' is ambiguous; possibilities:", argv[0], prefix, d->__nextchar);
 
 					for (option_index = 0; option_index < n_options; option_index++)
@@ -750,7 +750,7 @@ static int process_long_option_w(int argc, wchar_t **argv, const wchar_t *optstr
 						}
 
 					fwprintf(stderr, L"\n");
-					_unlock_file(stderr);
+			///		_unlock_file(stderr);
 				}
 			}
 
@@ -854,7 +854,7 @@ static const wchar_t *_getopt_initialize_w(const wchar_t *optstring, struct _get
 		d->__ordering = REQUIRE_ORDER;
 		++optstring;
 	}
-	else if (posixly_correct | !!_wgetenv(L"POSIXLY_CORRECT"))
+	else if (posixly_correct) /// | !!_wgetenv(L"POSIXLY_CORRECT"))
 	{
 		d->__ordering = REQUIRE_ORDER;
 	}

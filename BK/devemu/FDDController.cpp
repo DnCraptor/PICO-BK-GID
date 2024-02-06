@@ -1714,7 +1714,7 @@ uint16_t CFDDController::GetState()
 		return FLOPPY_STATUS_INDEXMARK | (m_status & FLOPPY_STATUS_TRACK0);
 	}
 
-	std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
+///	std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
 
 	// далее, формируем возвращаемый статус, для выбранного привода.
 	// если двигатель включён, то выставим флаг готовности.
@@ -1853,7 +1853,7 @@ uint16_t CFDDController::GetCmdDebug() // Получить значение по
 
 uint16_t CFDDController::GetData()
 {
-	std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
+///	std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
 	m_status &= ~(FLOPPY_STATUS_MOREDATA);
 	m_bWriteMode = m_bSearchSync = false;
 	m_writeflag = m_shiftflag = false;
@@ -1868,7 +1868,7 @@ uint16_t CFDDController::GetData()
 
 void CFDDController::WriteData(uint16_t data)
 {
-	std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
+///	std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
 	m_bWriteMode = true;  // Переключаемся в режим записи, если ещё не переключились
 	m_bSearchSync = false;
 
@@ -1907,7 +1907,7 @@ void CFDDController::Periodic() // сдвиг на 1 RAW слово на дор�
 
 	{
 		// область действия мутекса
-		std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
+///		std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
 
 		// Вращаем дискеты во всех приводах сразу
 		for (auto &flp : m_pFloppy)

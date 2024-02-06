@@ -1,6 +1,6 @@
 ﻿// SprView.cpp: файл реализации
 //
-
+#ifdef UI
 #include "pch.h"
 #include "SprView.h"
 
@@ -114,3 +114,4 @@ void CSprView::OnDraw(CDC *pDC)
 }
 
 
+#endif

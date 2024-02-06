@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 // CJKField
 
 class CJKField : public CStatic
@@ -71,3 +71,4 @@ class CJoyEditDlg : public CBaseDialog
 		afx_msg void OnBnClickedButtonJoydefault();
 		DECLARE_MESSAGE_MAP()
 };
+#endif

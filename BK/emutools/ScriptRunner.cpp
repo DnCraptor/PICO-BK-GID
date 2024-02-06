@@ -42,7 +42,7 @@ CScriptRunner::CScriptRunner()
 
 CScriptRunner::~CScriptRunner()
 {
-	if (m_fileScript.m_pStream)
+	if (m_fileScript.m_o)
 	{
 		m_fileScript.Close();
 	}
@@ -53,7 +53,7 @@ CScriptRunner::~CScriptRunner()
 
 void CScriptRunner::SetScript(const fs::path &strScriptPath, const fs::path &strScriptFileName, bool bXlat)
 {
-	if (m_fileScript.m_pStream)
+	if (m_fileScript.m_o)
 	{
 		m_fileScript.Close();
 	}
@@ -86,7 +86,7 @@ bool CScriptRunner::RunScript()
 
 	if (m_bHasScript && m_pBoard)   // Если скрипт задан, и если есть эмулируемое устройство
 	{
-		if (!m_fileScript.m_pStream) // если файл ещё не открыт, попробуем открыть
+		if (!m_fileScript.m_o) // если файл ещё не открыт, попробуем открыть
 		{
 			// если файл не открыт, откроем его
 			if (!m_fileScript.Open(m_strScriptFile.c_str(), CFile::modeRead))

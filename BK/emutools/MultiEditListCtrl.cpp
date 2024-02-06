@@ -1,6 +1,6 @@
 ﻿// MultiEditListCtrl.cpp : implementation file
 //
-
+#ifdef UI
 #include "pch.h"
 #include "MultiEditListCtrl.h"
 #include "Config.h"
@@ -610,3 +610,4 @@ void CMultiEditListCtrl::SetItemWithModifiedASCII(const CString &str, const int 
 	// иначе - вообще не надо ничего выводить.
 }
 
+#endif

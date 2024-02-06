@@ -1,6 +1,6 @@
 ﻿// LoadMemoryDlg.cpp : implementation file
 //
-
+#ifdef UI
 #include "pch.h"
 
 #include "resource.h"
@@ -171,3 +171,4 @@ void CLoadMemoryDlg::DrawPreview(HWND hdlg, const fs::path &strPath)
 		ClearItems(pDlg, CString(MAKEINTRESOURCE(IDS_DISK_NOACCESS)));
 	}
 }
+#endif

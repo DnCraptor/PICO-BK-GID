@@ -1,6 +1,6 @@
 ﻿// TapeManagerDlg.cpp : implementation file
 //
-
+#ifdef UI
 #include "pch.h"
 #include "resource.h"
 #include "TapeManagerDlg.h"
@@ -1159,3 +1159,4 @@ void CTapeManagerDlg::OnCbnSelchangeTmDevices()
 }
 
 
+#endif

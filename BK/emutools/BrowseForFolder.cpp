@@ -2,7 +2,7 @@
 //
 // ShellBrowser.cpp: implementation of the CShellBrowser class.
 //
-
+#ifdef UI
 #include "pch.h"
 #include "BrowseForFolder.h"
 
@@ -226,3 +226,4 @@ int CALLBACK CBrowseForFolder::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM l
 
 	return 0;
 }
+#endif

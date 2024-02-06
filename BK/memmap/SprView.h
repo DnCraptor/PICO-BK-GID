@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#ifdef UI
 #include "SprScr.h"
 
 // CSprView
@@ -63,3 +63,4 @@ class CSprView : public CScrollView
 		afx_msg void OnDestroy();
 		DECLARE_MESSAGE_MAP()
 };
+#endif

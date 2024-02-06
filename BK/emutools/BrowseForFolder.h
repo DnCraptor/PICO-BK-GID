@@ -4,7 +4,7 @@
 //
 // Copyright 1998 Scott D. Killen
 //
-
+#ifdef UI
 #pragma once
 
 #ifndef __SHELLBROWSER_H__
@@ -151,3 +151,4 @@ inline int CBrowseForFolder::GetImage() const
 }
 
 #endif // __SHELLBROWSER_H__
+#endif

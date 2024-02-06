@@ -7,6 +7,9 @@
 #define AFXAPI
 
 #include <limits.h>
+#define ENSURE(X)
+#define ASSERT_VALID(X)
+#define memcpy_s(X, Y, Z, S) memcpy(X, Z, S)
 
 template<class TYPE>
 AFX_INLINE void AFXAPI CopyElements(TYPE* pDest, const TYPE* pSrc, INT_PTR nCount)
@@ -556,6 +559,25 @@ void CArray<TYPE, ARG_TYPE>::AssertValid() const
 // abstract iteration position
 struct __POSITION {};
 typedef __POSITION *POSITION;
+
+
+#pragma warning(push)
+#pragma warning(disable:4324)
+struct CPlex
+{
+	CPlex* pNext;
+	// BYTE data[maxNum*elementSize];
+
+	void* data() { return this+1; }
+
+	static CPlex* Create(CPlex*& head, UINT_PTR nMax, UINT_PTR cbElement);
+			// like 'calloc' but no zero fill
+			// may throw memory exceptions
+
+	void FreeDataChain();       // free this one and links
+};
+#pragma warning(pop)
+
 
 /*============================================================================*/
 // CList<TYPE, ARG_TYPE>

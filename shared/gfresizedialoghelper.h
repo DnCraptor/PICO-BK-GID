@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <vector>
-
+#ifdef UI
 /*
 GF:
 21-aug-2008 GF: Version 1.0
@@ -114,3 +114,4 @@ class GFResizeDialogHelper
 		bool        m_Registry;
 		CSize       m_CurSize;
 };
+#endif

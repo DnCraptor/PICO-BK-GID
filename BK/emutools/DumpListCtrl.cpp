@@ -3,7 +3,7 @@
 #include "MemDumpView.h"
 #include "Config.h"
 #include "Screen_Sizes.h"
-
+#ifdef UI
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -625,3 +625,4 @@ void CDumpListCtrl::SetItemWithModifiedByte(uint8_t byte, int nItem, int nSubite
 }
 
 
+#endif
