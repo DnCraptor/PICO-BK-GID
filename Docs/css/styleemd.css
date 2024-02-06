@@ -1,0 +1,88 @@
+﻿div#content-w {
+	font: 11pt sans-serif;
+	margin: 0 auto 2em;
+	padding: 1em;
+	z-index: 2;
+	background: white;
+	color: black;
+	border: 1px solid #aaa;
+	min-width: 16cm;
+	max-width: 25cm;
+/*	width: 25cm;*/
+}
+.menu {
+	font: bold 105% Arial, Helvetica, sans-serif;
+	color: #006666;
+}
+.btn {
+	background: #666666;
+	border: 1px solid #0000FF;
+	display: block;
+	margin: 1px;
+	width: 5em;
+	height: 2.5em;
+	text-align: center;
+	font: bold 10pt Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+.imgzidx {
+	z-index: 1;
+	display: block;
+	position: relative;
+	margin: 0px auto;
+}
+.imgzidxp {
+	z-index: 1;
+	display: block;
+	position: relative;
+}
+.mapzidx {
+	border-radius: 3px;
+	display: block;
+	position: absolute;
+	z-index: 2;
+	clear: both;
+}
+.mapzidx:hover {
+	border: 1px gray dashed;
+	background: url(/img/bkemu/g25.png) repeat;
+}
+.pstruc {
+	margin-bottom: 0;
+}
+/*таблицы*/
+.clfct {
+	width: 100%;
+}
+table.clfct td:first-child {
+	text-align: center;
+	width: 10%;
+}
+table.clfct td:first-child p {
+	text-align: center;
+}
+
+table.cllct td:first-child {
+	width:130px;
+}
+table.cllct td:nth-child(2) {
+	width:260px;
+}
+table.cllct td:nth-child(3) {
+	width:100px;
+}
+table.cllct td:nth-child(3) p {
+	text-align:center;
+}
+
+table.struc td:nth-child(1){
+	width:5%;
+}
+table.struc td:nth-child(2){
+	width:10%;
+}
+table.struc td:nth-child(3){
+	width:15%;
+	white-space:nowrap;
+}
+

@@ -1,0 +1,680 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_WinXP|Win32">
+      <Configuration>Release_WinXP</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_WinXP|x64">
+      <Configuration>Release_WinXP</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{89F58DA3-08A4-467E-8069-451083EE41BD}</ProjectGuid>
+    <RootNamespace>BK</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+    <SpectreMitigation>Spectre</SpectreMitigation>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+    <SpectreMitigation>Spectre</SpectreMitigation>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+    <SpectreMitigation>Spectre</SpectreMitigation>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '10.0'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0'">v110</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '12.0'">v120</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '10.0|Release_WinXP'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '11.0|Release_WinXP'">v110_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '12.0|Release_WinXP'">v120_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '14.0|Release_WinXP'">v140_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '15.0|Release_WinXP'">v141_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '16.0|Release_WinXP'">v141_xp</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)|$(Configuration)' == '17.0|Release_WinXP'">v141_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)_$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)_$(Platform)_$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)_$(Platform)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)_$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
+    <IntDir>$(SolutionDir)Temp\$(ProjectName)_$(Platform)_$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)_$(Platform)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)devemu\;$(ProjectDir)emutools\;$(ProjectDir)memmap\;$(SolutionDir)shared\</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <DisableSpecificWarnings>4995</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <SDLCheck>true</SDLCheck>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;Vfw32.lib;Winmm.lib</AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+      <Profile>false</Profile>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>cscript.exe //D //NoLogo "$(ProjectDir)tools\buildinc.js" "$(ProjectDir)" "variables.h"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)devemu\;$(ProjectDir)emutools\;$(ProjectDir)memmap\;$(SolutionDir)shared\</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <DisableSpecificWarnings>4995</DisableSpecificWarnings>
+      <BrowseInformation>true</BrowseInformation>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OpenMPSupport>true</OpenMPSupport>
+      <MinimalRebuild>false</MinimalRebuild>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;Vfw32.lib;Winmm.lib</AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+      <Profile>false</Profile>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;_DEBUG;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>cscript.exe //D //NoLogo "$(ProjectDir)tools\buildinc.js" "$(ProjectDir)" "variables.h"</Command>
+    </PreBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)devemu\;$(ProjectDir)emutools\;$(ProjectDir)memmap\;$(SolutionDir)shared\</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4995</DisableSpecificWarnings>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AssemblerOutput>All</AssemblerOutput>
+      <SDLCheck>true</SDLCheck>
+      <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;Vfw32.lib;Winmm.lib</AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;TARGET_WINXP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)devemu\;$(ProjectDir)emutools\;$(ProjectDir)memmap\;$(SolutionDir)shared\;$(ProjectDir)dxsdk(jun2010)\Include\</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4995</DisableSpecificWarnings>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AssemblerOutput>All</AssemblerOutput>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)dxsdk(jun2010)\Lib\x86\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;Vfw32.lib;Winmm.lib</AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)devemu\;$(ProjectDir)emutools\;$(ProjectDir)memmap\;$(SolutionDir)shared\</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4995</DisableSpecificWarnings>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AssemblerOutput>All</AssemblerOutput>
+      <SDLCheck>true</SDLCheck>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;Vfw32.lib;Winmm.lib</AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;NDEBUG;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;TARGET_WINXP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)devemu\;$(ProjectDir)emutools\;$(ProjectDir)memmap\;$(SolutionDir)shared\;$(ProjectDir)dxsdk(jun2010)\Include\</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4995</DisableSpecificWarnings>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AssemblerOutput>All</AssemblerOutput>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)dxsdk(jun2010)\Lib\x64\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;Vfw32.lib;Winmm.lib</AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;NDEBUG;_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="cpp.hint" />
+    <None Include="res\BK.ico" />
+    <None Include="res\BK.rc2" />
+    <None Include="res\BKDoc.ico" />
+    <None Include="res\dbg_bpt.ico" />
+    <None Include="res\dbg_cur.ico" />
+    <None Include="res\AboutThnx.html">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="res\memory.ico" />
+    <None Include="res\menu_images.bmp" />
+    <None Include="res\menu_images_256.bmp" />
+    <None Include="res\rom.ico" />
+    <None Include="res\script.ico" />
+    <None Include="res\tape.ico" />
+    <None Include="res\tctrl_play.ico" />
+    <None Include="res\tctrl_record.ico" />
+    <None Include="res\tctrl_record_dark.ico" />
+    <None Include="res\tctrl_stop.ico" />
+    <None Include="res\Toolbar.bmp" />
+    <None Include="res\Toolbar_256.bmp" />
+    <None Include="res\Toolbar_dbg.bmp" />
+    <None Include="res\Toolbar_dbg_256.bmp" />
+    <None Include="res\Toolbar_snd.bmp" />
+    <None Include="res\Toolbar_snd_256.bmp" />
+    <None Include="res\wave.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\shared\BKDRT11Header.h" />
+    <ClInclude Include="..\shared\BKImgFile.h" />
+    <ClInclude Include="..\shared\BKParseImage.h" />
+    <ClInclude Include="..\shared\HDIStuff.h" />
+    <ClInclude Include="..\shared\Ini.h" />
+    <ClInclude Include="..\shared\libdspl-2.0.h" />
+    <ClInclude Include="..\shared\ToolManager.h" />
+    <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="BaseDialog.h" />
+    <ClInclude Include="devemu\AYSnd.h" />
+    <ClInclude Include="devemu\Board_10.h" />
+    <ClInclude Include="devemu\FloppyDrive.h" />
+    <ClInclude Include="devemu\Menestrel.h" />
+    <ClInclude Include="DocPaneDlgViewBase.h" />
+    <ClInclude Include="emutools\BKAYVolPan.h" />
+    <ClInclude Include="BK.h" />
+    <ClInclude Include="BKDoc.h" />
+    <ClInclude Include="emutools\BKPaletteDlg.h" />
+    <ClInclude Include="BKSettingsDlg.h" />
+    <ClInclude Include="BKSettPage_1.h" />
+    <ClInclude Include="BKSettPage_2.h" />
+    <ClInclude Include="BKSettPage_3.h" />
+    <ClInclude Include="BKView.h" />
+    <ClInclude Include="BKVKBDView.h" />
+    <ClInclude Include="devemu\BKMessageBox.h" />
+    <ClInclude Include="devemu\BKSoundDevice.h" />
+    <ClInclude Include="devemu\Config.h" />
+    <ClInclude Include="devemu\emu8930.h" />
+    <ClInclude Include="devemu\SafeReleaseDefines.h" />
+    <ClInclude Include="devemu\ScreenColors_Shared.h" />
+    <ClInclude Include="devemu\Screen_Shared.h" />
+    <ClInclude Include="devemu\BKSound_Defines.h" />
+    <ClInclude Include="devemu\Screen_Sizes.h" />
+    <ClInclude Include="DisasmView.h" />
+    <ClInclude Include="devemu\BkSound.h" />
+    <ClInclude Include="devemu\Board.h" />
+    <ClInclude Include="devemu\Board_11.h" />
+    <ClInclude Include="devemu\Board_11M.h" />
+    <ClInclude Include="devemu\Board_11M_FDD.h" />
+    <ClInclude Include="devemu\Board_11_FDD.h" />
+    <ClInclude Include="devemu\Board_EXT32.h" />
+    <ClInclude Include="devemu\Board_10_FDD.h" />
+    <ClInclude Include="devemu\Board_MSTD.h" />
+    <ClInclude Include="devemu\Covox.h" />
+    <ClInclude Include="devemu\CPU.h" />
+    <ClInclude Include="devemu\Device.h" />
+    <ClInclude Include="devemu\emu2149.h" />
+    <ClInclude Include="devemu\FDDController.h" />
+    <ClInclude Include="devemu\HDD.h" />
+    <ClInclude Include="devemu\LockVarType.h" />
+    <ClInclude Include="devemu\MSF.h" />
+    <ClInclude Include="devemu\MSFManager.h" />
+    <ClInclude Include="devemu\Screen.h" />
+    <ClInclude Include="devemu\Speaker.h" />
+    <ClInclude Include="devemu\Tape.h" />
+    <ClInclude Include="emutools\BKKbdButn.h" />
+    <ClInclude Include="emutools\BKOscScr_Shared.h" />
+    <ClInclude Include="emutools\LoadImgDlg.h" />
+    <ClInclude Include="emutools\JoyEditDlg.h" />
+    <ClInclude Include="MemDumpView.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="RegDumpViewCPU.h" />
+    <ClInclude Include="emutools\BKOscScr.h" />
+    <ClInclude Include="emutools\BreakPoint.h" />
+    <ClInclude Include="emutools\BrowseForFolder.h" />
+    <ClInclude Include="emutools\DisasmCtrl.h" />
+    <ClInclude Include="emutools\Debugger.h" />
+    <ClInclude Include="emutools\DropTarget.h" />
+    <ClInclude Include="emutools\DumpListCtrl.h" />
+    <ClInclude Include="emutools\EnterEditCtrl.h" />
+    <ClInclude Include="emutools\ExceptionHalt.h" />
+    <ClInclude Include="emutools\LoadMemoryDlg.h" />
+    <ClInclude Include="emutools\LoadTapeDlg.h" />
+    <ClInclude Include="emutools\MultiEditListCtrl.h" />
+    <ClInclude Include="emutools\PrintDlg.h" />
+    <ClInclude Include="emutools\ScriptRunner.h" />
+    <ClInclude Include="emutools\TapeManagerDlg.h" />
+    <ClInclude Include="emutools\TapeUnit.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="memmap\BKMEMDlg.h" />
+    <ClInclude Include="memmap\SprScr.h" />
+    <ClInclude Include="memmap\SprView.h" />
+    <ClInclude Include="memmap\SprWnd.h" />
+    <ClInclude Include="OscillatorView.h" />
+    <ClInclude Include="RegDumpViewFDD.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SliderButton.h" />
+    <ClInclude Include="StaticLink.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="TapeCtrlView.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="emutools\vkeycodes.h" />
+    <ClInclude Include="variables.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\shared\BKImgFile.cpp" />
+    <ClCompile Include="..\shared\BKParseImage.cpp" />
+    <ClCompile Include="..\shared\HDIStuff.cpp" />
+    <ClCompile Include="..\shared\Ini.cpp" />
+    <ClCompile Include="..\shared\libdspl-2.0.cpp" />
+    <ClCompile Include="..\shared\ToolManager.cpp" />
+    <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="BaseDialog.cpp" />
+    <ClCompile Include="devemu\AYSnd.cpp" />
+    <ClCompile Include="devemu\Board_10.cpp" />
+    <ClCompile Include="devemu\FloppyDrive.cpp" />
+    <ClCompile Include="devemu\Menestrel.cpp" />
+    <ClCompile Include="DocPaneDlgViewBase.cpp" />
+    <ClCompile Include="emutools\BKAYVolPan.cpp" />
+    <ClCompile Include="BK.cpp" />
+    <ClCompile Include="BKDoc.cpp" />
+    <ClCompile Include="emutools\BKPaletteDlg.cpp" />
+    <ClCompile Include="BKSettingsDlg.cpp" />
+    <ClCompile Include="BKSettPage_1.cpp" />
+    <ClCompile Include="BKSettPage_2.cpp" />
+    <ClCompile Include="BKSettPage_3.cpp" />
+    <ClCompile Include="BKView.cpp" />
+    <ClCompile Include="BKVKBDView.cpp" />
+    <ClCompile Include="devemu\BKMessageBox.cpp" />
+    <ClCompile Include="devemu\BKSoundDevice.cpp" />
+    <ClCompile Include="devemu\Config.cpp" />
+    <ClCompile Include="devemu\emu8930.cpp" />
+    <ClCompile Include="devemu\ScreenColors_Shared.cpp" />
+    <ClCompile Include="DisasmView.cpp" />
+    <ClCompile Include="devemu\BkSound.cpp" />
+    <ClCompile Include="devemu\Board.cpp" />
+    <ClCompile Include="devemu\Board_11.cpp" />
+    <ClCompile Include="devemu\Board_11M.cpp" />
+    <ClCompile Include="devemu\Board_11M_FDD.cpp" />
+    <ClCompile Include="devemu\Board_11_FDD.cpp" />
+    <ClCompile Include="devemu\Board_EXT32.cpp" />
+    <ClCompile Include="devemu\Board_10_FDD.cpp" />
+    <ClCompile Include="devemu\Board_MSTD.cpp" />
+    <ClCompile Include="devemu\Covox.cpp" />
+    <ClCompile Include="devemu\CPU.cpp" />
+    <ClCompile Include="devemu\Device.cpp" />
+    <ClCompile Include="devemu\emu2149.cpp" />
+    <ClCompile Include="devemu\FDDController.cpp" />
+    <ClCompile Include="devemu\HDD.cpp" />
+    <ClCompile Include="devemu\MSFManager.cpp" />
+    <ClCompile Include="devemu\Screen.cpp" />
+    <ClCompile Include="devemu\Speaker.cpp" />
+    <ClCompile Include="devemu\Tape.cpp" />
+    <ClCompile Include="emutools\BKKbdButn.cpp" />
+    <ClCompile Include="emutools\DebuggerAssembly.cpp" />
+    <ClCompile Include="emutools\LoadImgDlg.cpp" />
+    <ClCompile Include="emutools\JoyEditDlg.cpp" />
+    <ClCompile Include="MemDumpView.cpp" />
+    <ClCompile Include="RegDumpViewCPU.cpp" />
+    <ClCompile Include="emutools\BKOscScr.cpp" />
+    <ClCompile Include="emutools\BreakPoint.cpp" />
+    <ClCompile Include="emutools\BrowseForFolder.cpp" />
+    <ClCompile Include="emutools\DisasmCtrl.cpp" />
+    <ClCompile Include="emutools\Debugger.cpp" />
+    <ClCompile Include="emutools\DumpListCtrl.cpp" />
+    <ClCompile Include="emutools\EnterEditCtrl.cpp" />
+    <ClCompile Include="emutools\ExceptionHalt.cpp" />
+    <ClCompile Include="emutools\LoadMemoryDlg.cpp" />
+    <ClCompile Include="emutools\LoadTapeDlg.cpp" />
+    <ClCompile Include="emutools\MultiEditListCtrl.cpp" />
+    <ClCompile Include="emutools\PrintDlg.cpp" />
+    <ClCompile Include="emutools\ScriptRunner.cpp" />
+    <ClCompile Include="emutools\TapeManagerDlg.cpp" />
+    <ClCompile Include="emutools\TapeUnit.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="memmap\BKMEMDlg.cpp" />
+    <ClCompile Include="memmap\SprScr.cpp" />
+    <ClCompile Include="memmap\SprView.cpp" />
+    <ClCompile Include="memmap\SprWnd.cpp" />
+    <ClCompile Include="OscillatorView.cpp" />
+    <ClCompile Include="RegDumpViewFDD.cpp" />
+    <ClCompile Include="SliderButton.cpp" />
+    <ClCompile Include="StaticLink.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_WinXP|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TapeCtrlView.cpp" />
+    <ClCompile Include="emutools\vkeycodes.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BK.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Big\menu_images.bmp" />
+    <Image Include="res\Big\menu_images_256.bmp" />
+    <Image Include="res\Big\Toolbar.bmp" />
+    <Image Include="res\Big\Toolbar_256.bmp" />
+    <Image Include="res\Big\Toolbar_dbg.bmp" />
+    <Image Include="res\Big\Toolbar_dbg_256.bmp" />
+    <Image Include="res\Big\Toolbar_snd.bmp" />
+    <Image Include="res\Big\Toolbar_snd_256.bmp" />
+    <Image Include="res\Big\Toolbar_vcapt.bmp" />
+    <Image Include="res\Big\Toolbar_vcapt_256.bmp" />
+    <Image Include="res\BK_main.png" />
+    <Image Include="res\kbdPlen.png" />
+    <Image Include="res\kbdPlen_pressed.png" />
+    <Image Include="res\kbdSoft.png" />
+    <Image Include="res\kbdSoft_pressed.png" />
+    <Image Include="res\mmbuttons.bmp" />
+    <Image Include="res\output_wnd.ico" />
+    <Image Include="res\output_wnd_hc.ico" />
+    <Image Include="res\SprToolbar.bmp" />
+    <Image Include="res\tctrl_pause.ico" />
+    <Image Include="res\Toolbar_vcapt.bmp" />
+    <Image Include="res\Toolbar_vcapt_256.bmp" />
+    <Image Include="res\wnd_debug.ico" />
+    <Image Include="res\wnd_debug_hc.ico" />
+    <Image Include="res\wnd_dumpmem.ico" />
+    <Image Include="res\wnd_dumpmem_hc.ico" />
+    <Image Include="res\wnd_dumpregCPU.ico" />
+    <Image Include="res\wnd_dumpregCPU_hc.ico" />
+    <Image Include="res\wnd_dumpregFDD.ico" />
+    <Image Include="res\wnd_dumpregFDD_hc.ico" />
+    <Image Include="res\wnd_kbd.ico" />
+    <Image Include="res\wnd_kbd_hc.ico" />
+    <Image Include="res\wnd_osc.ico" />
+    <Image Include="res\wnd_osc_hc.ico" />
+    <Image Include="res\wnd_tape.ico" />
+    <Image Include="res\wnd_tape_hc.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="BK.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

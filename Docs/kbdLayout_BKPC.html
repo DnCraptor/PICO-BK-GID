@@ -1,0 +1,752 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Раскладка PC клавиатуры в эмуляторе</title>
+<style type="text/css">
+<!--
+.btn {
+	font: 12px Arial, Helvetica, sans-serif;
+	color: #000000;
+	background: #FFFFFF;
+	border: 1px solid #333333;
+	text-align: center;
+	vertical-align: middle;
+}
+.btn:hover {
+	background:#99CCFF;
+}
+.noact {
+	font: 12px Arial, Helvetica, sans-serif;
+	border: 1px solid #333333;
+	text-align: center;
+	vertical-align: middle;
+	color: #666666;
+	background: #CCCCCC;
+}
+.spc {
+	background: #999999;
+}
+.hint {
+	font: 12px Arial, Helvetica, sans-serif;
+	text-align: center;
+	vertical-align: middle;
+	display:none;
+	position: absolute;
+	visibility: hidden;
+	height: 38px;
+	background: #FFFFCC;
+	border: 1px solid #0000cc;
+	/*text-shadow: -1px -1px 1px #eee, 1px -1px 1px #eee, 1px 1px 1px #eee, -1px 1px 1px #eee, 2px 2px 4px #006; */
+	border-radius: 5px 5px 5px 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	box-shadow: 5px 5px 5px #666666;
+	-webkit-box-shadow: 5px 5px 5px #666666;
+	-moz-box-shadow: 5px 5px 5px #666666;
+}
+.inhint {
+	vertical-align: middle;
+	display:table-cell;
+	padding: 0px 5px;
+}
+.numloff {
+	display: block;
+}
+.numlon {
+	display: none;
+}
+.numlock {
+	cursor: pointer;
+}
+-->
+</style>
+<script type="text/javascript">
+function getPageOffsetLeft(el) {
+	var x;
+	// Return the x coordinate of an element relative to the page.
+	x = el.offsetLeft;
+	if (el.offsetParent != null)
+		x += getPageOffsetLeft(el.offsetParent);
+	return x;
+}
+function getPageOffsetTop(el) {
+	var y;
+	// Return the y coordinate of an element relative to the page.
+	y = el.offsetTop;
+	if (el.offsetParent != null)
+		y += getPageOffsetTop(el.offsetParent);
+	return y;
+}
+function sw(t) //show t == td object
+{
+	var str;
+	if (t.className == 'btn')
+	{
+		info = t.attributes.getNamedItem('info');
+		if (info!=null)
+			str = info.value;
+		else
+			str = t.innerHTML;
+	}
+	else if (t.className == 'noact')
+	{
+		str = 'Не задействовано.';
+	}
+	else
+	{
+		return false;
+	}
+	var hint = document.getElementById('hint');
+	document.getElementById('inhint').innerHTML = str;
+	hint.style.left = getPageOffsetLeft(t) + 1 + 'px';
+	hint.style.top = getPageOffsetTop(t) + t.offsetHeight + 'px';
+	hint.style.display = 'table';	//чтобы работало выравнивание по вертикали
+	hint.style.visibility = 'visible';
+	if (hint.clientWidth < t.clientWidth)
+	{
+		hint.style.width = t.clientWidth + 'px';
+	}
+}
+function hd(t) //hidden t == td object
+{
+	hint = document.getElementById('hint');
+	hint.style.display = 'none';
+	hint.style.visibility = 'hidden';
+	hint.style.width = '';	//если мы переопределяли длину, то её надо отменить
+}
+
+var numshow = true;
+var numshow2 = true;
+
+function numlon(n)
+{
+	var non = document.getElementById('numlon');
+	var noff = document.getElementById('numloff');
+    var cond = numshow;
+    if (n)
+    {
+        non = document.getElementById('numlon2');
+        noff = document.getElementById('numloff2');
+        cond = numshow2;
+    }
+	if (cond)
+	{
+		non.style.display = 'block';
+		non.style.visibility = 'visible';
+		noff.style.display = 'none';
+		noff.style.visibility = 'hidden';
+	}
+	else 
+	{
+		noff.style.display = 'block';
+		noff.style.visibility = 'visible';
+		non.style.display = 'none';
+		non.style.visibility = 'hidden';
+	}
+}
+function numloff(n)
+{
+	var non = document.getElementById('numlon');
+	var noff = document.getElementById('numloff');
+    var cond = numshow;
+    if (n)
+    {
+        non = document.getElementById('numlon2');
+        noff = document.getElementById('numloff2');
+        cond = numshow2;
+    }
+	if (cond)
+	{
+		noff.style.display = 'block';
+		noff.style.visibility = 'visible';
+		non.style.display = 'none';
+		non.style.visibility = 'hidden';
+	}
+	else
+	{
+		non.style.display = 'block';
+		non.style.visibility = 'visible';
+		noff.style.display = 'none';
+		noff.style.visibility = 'hidden';
+	}
+}
+
+function fix(b)
+{
+	numshow = b;
+}
+
+function fix2(b)
+{
+	numshow2 = b;
+}
+
+window.onload = function () // цепляем ко всем нужным таблицам обработчики
+{ 
+	var elems = document.getElementsByTagName('table');
+	for(var t = 0; t < elems.length; t++)
+	{
+		if(elems[t].id == 'tbkb')
+		{
+			elems[t].onmouseover = function (e) {
+				e = e || event;
+				var target = e.target || e.srcElement;
+				if (target.tagName == 'TD') {
+					if (target.id == 'numl')
+						numlon(false);
+					else if (target.id == 'numl2')
+						numlon(true);
+                    else
+						sw(target);
+				}
+			}
+			elems[t].onmouseout = function (e) {
+				e = e || event;
+				var target = e.target || e.srcElement;
+				if (target.tagName == 'TD') {
+					if (target.id == 'numl')
+						numloff(false);
+					else if (target.id == 'numl2')
+						numloff(true);
+                    else
+						hd(target);
+				}
+			}
+		}
+	}
+}
+</script>
+</head>
+<body>
+<div id='hint' class='hint'><span id='inhint' class="inhint"></span></div>
+<h1>Раскладка БКшных клавиш на клавиатуре ПК.</h1>
+<p>Наведите мышь на белую клавишу, чтобы увидеть, какая клавиша ПКшной клавиатуры ей соответствует.</p>
+<p>Подсказка: на Num Lock можно нажать.</p>
+<table width="1000" border="0" bgcolor="#CCCCCC">
+  <tr>
+    <td valign="top"><table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="btn" info="Esc">КТ</td>
+          <td width="38" class="spc">&nbsp;</td>
+          <td width="38" class="btn" info="F1"> ПОВТ </td>
+          <td width="38" class="btn" info="F2"> =|=&gt;| </td>
+          <td width="38" class="btn" info="F3"> |&lt;== </td>
+          <td width="38" class="btn" info="F4"> |==&gt; </td>
+          <td class="spc">&nbsp;</td>
+          <td width="38" class="btn" info="F5">ИНД СУ</td>
+          <td width="38" class="btn" info="F6">БЛОК РЕД</td>
+          <td width="38" class="btn" info="F7">ШАГ</td>
+          <td width="38" class="btn" info="F8">СБР</td>
+          <td class="spc">&nbsp;</td>
+          <td width="38" class="noact">F9</td>
+          <td width="38" class="noact">F10</td>
+          <td width="38" class="noact">F11</td>
+          <td width="38" class="btn" info="F12">СТОП</td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="btn" info="~ `<br>&nbsp;">~ `<br>: ;</td>
+          <td width="38" class="btn">!<br>
+            1</td>
+          <td width="38" class="btn">@ &quot;<br>
+            2</td>
+          <td width="38" class="btn" info="# №<br>3">#<br>3</td>
+          <td width="38" class="btn" info="$ ;<br>4">$<br>4</td>
+          <td width="38" class="btn">%<br>
+            5</td>
+          <td width="38" class="btn" info="^ :<br>6">^ &amp;<br>6</td>
+          <td width="38" class="btn" info="&amp; ?<br>7">&amp; '<br>7</td>
+          <td width="38" class="btn">*<br>
+            8</td>
+          <td width="38" class="btn">(<br>
+            9</td>
+          <td width="38" class="btn">)<br>
+            0</td>
+          <td width="38" class="btn" info="_ -">_ -<br>&nbsp;</td>
+          <td width="38" class="btn" info="+ =">+ =<br>&nbsp;</td>
+          <td colspan="2" class="btn" info="Backspace">&lt;===</td>
+        </tr>
+        <tr>
+          <td height="38" colspan="2" class="btn" info="Tab">ТАБ</td>
+          <td class="btn">Q<br>
+            Й</td>
+          <td class="btn">W<br>
+            Ц</td>
+          <td class="btn">E<br>
+            У</td>
+          <td class="btn">R<br>
+            К</td>
+          <td class="btn">T<br>
+            Е</td>
+          <td class="btn">Y<br>
+            Н</td>
+          <td class="btn">U<br>
+            Г</td>
+          <td class="btn">I<br>
+            Ш</td>
+          <td class="btn">O<br>
+            Щ</td>
+          <td class="btn">P<br>
+            З</td>
+          <td class="btn">{ [<br>
+            Х</td>
+          <td width="38" class="btn">} ]<br>
+            Ъ</td>
+          <td width="38" class="btn" info="| \">| \<br>
+            ? /</td>
+        </tr>
+        <tr>
+          <td height="38" colspan="2" class="btn" info="Caps Lock"> СТР / ЗАГЛ</td>
+          <td class="btn">A<br>
+            Ф</td>
+          <td class="btn">S<br>
+            Ы</td>
+          <td class="btn">D<br>
+            В</td>
+          <td class="btn">F<br>
+            А</td>
+          <td class="btn">G<br>
+            П</td>
+          <td class="btn">H<br>
+            Р</td>
+          <td class="btn">J<br>
+            О</td>
+          <td class="btn">K<br>
+            Л</td>
+          <td class="btn">L<br>
+            Д</td>
+          <td class="btn">: ;<br>
+            Ж</td>
+          <td class="btn">&quot; '<br>
+            Э</td>
+          <td colspan="2" class="btn" info="Enter">ВВОД</td>
+        </tr>
+        <tr>
+          <td height="38" colspan="3" class="btn">Shift</td>
+          <td class="btn">Z<br>
+            Я</td>
+          <td class="btn">X<br>
+            Ч</td>
+          <td class="btn">C<br>
+            С</td>
+          <td class="btn">V<br>
+            М</td>
+          <td class="btn">B<br>
+            И</td>
+          <td class="btn">N<br>
+            Т</td>
+          <td class="btn">M<br>
+            Ь</td>
+          <td class="btn">&lt; ,<br>
+            Б</td>
+          <td class="btn">&gt; .<br>
+            Ю</td>
+          <td class="btn">? /<br>
+            , .</td>
+          <td colspan="2" class="btn">Shift</td>
+        </tr>
+        <tr>
+          <td height="38" class="btn" info="Левый Ctrl">СУ</td>
+          <td class="btn" info="Левый Win">РУС/ЛАТ</td>
+          <td class="btn" info="Левый Alt">АР2</td>
+          <td colspan="8" class="btn">ПРОБЕЛ</td>
+          <td class="btn" info="Правый Alt">АР2</td>
+          <td class="btn" info="Правый Win">РУС/ЛАТ</td>
+          <td class="noact">Contxt</td>
+          <td class="btn" info="Правый Ctrl">СУ</td>
+        </tr>
+      </table></td>
+    <td class="spc">&nbsp;</td>
+    <td valign="top"><table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="noact">Print<br>
+            Screen</td>
+          <td width="38" class="noact">Scroll<br>
+            Lock</td>
+          <td width="38" class="btn" info="Pause<br>Break">СТОП</td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="btn" info="Insert">ВС</td>
+          <td width="38" class="btn" info="Home">УСТ ТАБ</td>
+          <td width="38" class="btn" info="Page<br>Up">СБР ТАБ</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="btn" info="Delete">ГРАФ</td>
+          <td width="38" class="btn" info="End">ЗАП</td>
+          <td width="38" class="btn" info="Page<br>Down">СТИР</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="spc">&nbsp;</td>
+          <td width="38" class="spc">&nbsp;</td>
+          <td width="38" class="spc">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="spc">&nbsp;</td>
+          <td width="38" class="btn">&uarr;</td>
+          <td width="38" class="spc">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="btn">&larr;</td>
+          <td width="38" class="btn">&darr;</td>
+          <td width="38" class="btn">&rarr;</td>
+        </tr>
+      </table></td>
+    <td class="spc">&nbsp;</td>
+    <td valign="top"><table width="100%" border="0">
+        <tr>
+          <td height="38" class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <div id="numloff" class="numloff">
+        <table id="tbkb" width="100%" border="0">
+          <tr>
+            <td id="numl" width="38" height="38" class="btn numlock" onClick="fix(true)">Num<br>
+              Lock</td>
+            <td width="38" height="38" class="noact">/</td>
+            <td width="38" class="noact">*</td>
+            <td width="38" class="noact">-</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="noact">7<br>Home</td>
+            <td width="38" height="38" class="noact">8<br>
+              &uarr;</td>
+            <td width="38" class="noact">9<br>
+              PgUp</td>
+            <td width="38" rowspan="2" class="noact">+</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="noact">4<br>&larr;</td>
+            <td width="38" height="38" class="noact">5<br>&nbsp;</td>
+            <td width="38" class="noact">6<br>&rarr;</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="noact">1<br>End</td>
+            <td width="38" height="38" class="noact">2<br>&darr;</td>
+            <td width="38" class="noact">3<br>PgDn</td>
+            <td width="38" rowspan="2" class="btn" info="Enter">ВВОД</td>
+          </tr>
+          <tr>
+            <td height="38" colspan="2" class="noact">0<br>
+              Ins</td>
+            <td width="38" class="noact">.<br>
+              Del</td>
+          </tr>
+        </table>
+      </div>
+      <div id="numlon" class="numlon">
+        <table id="tbkb" width="100%" border="0">
+          <tr>
+            <td id="numl" width="38" height="38" class="btn numlock" onClick="fix(false)">Num<br>
+              Lock</td>
+            <td width="38" height="38" class="noact">/</td>
+            <td width="38" class="noact">*</td>
+            <td width="38" class="noact">-</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="btn" info="7<br>Home">Лев.кн<br>
+              Кн.1</td>
+            <td width="38" height="38" class="btn" info="8<br>&uarr;">&uarr;</td>
+            <td width="38" class="btn" info="9<br>PgUp">Пр.кн<br>
+              кн.3</td>
+            <td width="38" rowspan="2" class="noact">+</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="btn" info="4<br>&larr;">&larr;</td>
+            <td width="38" height="38" class="btn" info="5<br>&nbsp;">Кн.5</td>
+            <td width="38" class="btn" info="6<br>&rarr;">&rarr;</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="btn" info="1<br>End">Кн.2</td>
+            <td width="38" height="38" class="btn" info="2<br>&darr;">&darr;</td>
+            <td width="38" class="btn" info="3<br>PgDn">Кн.4</td>
+            <td width="38" rowspan="2" class="btn" info="Enter">ВВОД</td>
+          </tr>
+          <tr>
+            <td height="38" colspan="2" class="noact">0<br>
+              Ins</td>
+            <td width="38" class="noact">.<br>
+              Del</td>
+          </tr>
+        </table>
+      </div></td>
+  </tr>
+</table>
+<p><b>Для варианта JCUKEN раскладки</b></p>
+<table width="1000" border="0" bgcolor="#CCCCCC">
+  <tr>
+    <td valign="top"><table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="btn" info="Esc">КТ</td>
+          <td width="38" class="spc">&nbsp;</td>
+          <td width="38" class="btn" info="F1"> ПОВТ </td>
+          <td width="38" class="btn" info="F2"> =|=&gt;| </td>
+          <td width="38" class="btn" info="F3"> |&lt;== </td>
+          <td width="38" class="btn" info="F4"> |==&gt; </td>
+          <td class="spc">&nbsp;</td>
+          <td width="38" class="btn" info="F5">ИНД СУ</td>
+          <td width="38" class="btn" info="F6">БЛОК РЕД</td>
+          <td width="38" class="btn" info="F7">ШАГ</td>
+          <td width="38" class="btn" info="F8">СБР</td>
+          <td class="spc">&nbsp;</td>
+          <td width="38" class="noact">F9</td>
+          <td width="38" class="noact">F10</td>
+          <td width="38" class="noact">F11</td>
+          <td width="38" class="btn" info="F12">СТОП</td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="btn" info="~ `<br>&nbsp;">&gt; &lt;<br>: ;</td>
+          <td width="38" class="btn">!<br>
+            1</td>
+          <td width="38" class="btn" info="@ &quot;<br>2">&quot;<br>2</td>
+          <td width="38" class="btn" info="# №<br>3">#<br>3</td>
+          <td width="38" class="btn" info="$ ;<br>4">$<br>4</td>
+          <td width="38" class="btn">%<br>
+            5</td>
+          <td width="38" class="btn" info="^ :<br>6">&amp;<br>6</td>
+          <td width="38" class="btn" info="&amp; ?<br>7">'<br>7</td>
+          <td width="38" class="btn">*<br>
+            8</td>
+          <td width="38" class="btn">(<br>
+            9</td>
+          <td width="38" class="btn">)<br>
+            0</td>
+          <td width="38" class="btn" info="_ -">: -<br>&nbsp;</td>
+          <td width="38" class="btn" info="+ =">= +<br>&nbsp;</td>
+          <td colspan="2" class="btn" info="Backspace">&lt;===</td>
+        </tr>
+        <tr>
+          <td height="38" colspan="2" class="btn" info="Tab">ТАБ</td>
+          <td class="btn" info="Q<br>Й">J<br>Й</td>
+          <td class="btn" info="W<br>Ц">C<br>Ц</td>
+          <td class="btn" info="E<br>У">U<br>У</td>
+          <td class="btn" info="R<br>К">K<br>К</td>
+          <td class="btn" info="T<br>Е">E<br>Е</td>
+          <td class="btn" info="Y<br>Н">N<br>Н</td>
+          <td class="btn" info="U<br>Г">G<br>Г</td>
+          <td class="btn" info="I<br>Ш">[<br>Ш</td>
+          <td class="btn" info="O<br>Щ">]<br>Щ</td>
+          <td class="btn" info="P<br>З">Z<br>З</td>
+          <td class="btn" info="{ [<br>Х">H<br>Х</td>
+          <td width="38" class="btn" info="} ]<br>Ъ">_<br>Ъ</td>
+          <td width="38" class="btn" info="| \">; /<br>? /</td>
+        </tr>
+        <tr>
+          <td height="38" colspan="2" class="btn" info="Caps Lock"> СТР / ЗАГЛ</td>
+          <td class="btn" info="A<br>Ф">F<br>Ф</td>
+          <td class="btn" info="S<br>Ы">Y<br>Ы</td>
+          <td class="btn" info="D<br>В">W<br>В</td>
+          <td class="btn" info="F<br>А">A<br>А</td>
+          <td class="btn" info="G<br>П">P<br>П</td>
+          <td class="btn" info="H<br>Р">R<br>Р</td>
+          <td class="btn" info="J<br>О">O<br>О</td>
+          <td class="btn" info="K<br>Л">L<br>Л</td>
+          <td class="btn" info="L<br>Д">D<br>Д</td>
+          <td class="btn" info=": ;<br>Ж">V<br>Ж</td>
+          <td class="btn" info="&quot; '<br>Э">\<br>Э</td>
+          <td colspan="2" class="btn" info="Enter">ВВОД</td>
+        </tr>
+        <tr>
+          <td height="38" colspan="3" class="btn">Shift</td>
+          <td class="btn" info="Z<br>Я">Q<br>Я</td>
+          <td class="btn" info="X<br>Ч">^<br>Ч</td>
+          <td class="btn" info="C<br>С">S<br>С</td>
+          <td class="btn" info="V<br>М">M<br>М</td>
+          <td class="btn" info="B<br>И">I<br>И</td>
+          <td class="btn" info="N<br>Т">T<br>Т</td>
+          <td class="btn" info="M<br>Ь">X<br>Ь</td>
+          <td class="btn" info="&lt; ,<br>Б">B<br>Б</td>
+          <td class="btn" info="&gt; .<br>Ю">@<br>Ю</td>
+          <td class="btn" info="? /<br>, .">, .<br>&nbsp;</td>
+          <td colspan="2" class="btn">Shift</td>
+        </tr>
+        <tr>
+          <td height="38" class="btn" info="Левый Ctrl">СУ</td>
+          <td class="btn" info="Левый Win">РУС/ЛАТ</td>
+          <td class="btn" info="Левый Alt">АР2</td>
+          <td colspan="8" class="btn">ПРОБЕЛ</td>
+          <td class="btn" info="Правый Alt">АР2</td>
+          <td class="btn" info="Правый Win">РУС/ЛАТ</td>
+          <td class="noact">Contxt</td>
+          <td class="btn" info="Правый Ctrl">СУ</td>
+        </tr>
+      </table></td>
+    <td class="spc">&nbsp;</td>
+    <td valign="top"><table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="noact">Print<br>
+            Screen</td>
+          <td width="38" class="noact">Scroll<br>
+            Lock</td>
+          <td width="38" class="btn" info="Pause<br>Break">СТОП</td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <table id="tbkb" width="100%" border="0">
+        <tr>
+          <td width="38" height="38" class="btn" info="Insert">ВС</td>
+          <td width="38" class="btn" info="Home">УСТ ТАБ</td>
+          <td width="38" class="btn" info="Page<br>Up">СБР ТАБ</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="btn" info="Delete">ГРАФ</td>
+          <td width="38" class="btn" info="End">ЗАП</td>
+          <td width="38" class="btn" info="Page<br>Down">СТИР</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="spc">&nbsp;</td>
+          <td width="38" class="spc">&nbsp;</td>
+          <td width="38" class="spc">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="spc">&nbsp;</td>
+          <td width="38" class="btn">&uarr;</td>
+          <td width="38" class="spc">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="38" height="38" class="btn">&larr;</td>
+          <td width="38" class="btn">&darr;</td>
+          <td width="38" class="btn">&rarr;</td>
+        </tr>
+      </table></td>
+    <td class="spc">&nbsp;</td>
+    <td valign="top"><table width="100%" border="0">
+        <tr>
+          <td height="38" class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td class="spc">&nbsp;</td>
+        </tr>
+      </table>
+      <div id="numloff2" class="numloff">
+        <table id="tbkb" width="100%" border="0">
+          <tr>
+            <td id="numl2" width="38" height="38" class="btn numlock" onClick="fix2(true)">Num<br>
+              Lock</td>
+            <td width="38" height="38" class="noact">/</td>
+            <td width="38" class="noact">*</td>
+            <td width="38" class="noact">-</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="noact">7<br>Home</td>
+            <td width="38" height="38" class="noact">8<br>
+              &uarr;</td>
+            <td width="38" class="noact">9<br>
+              PgUp</td>
+            <td width="38" rowspan="2" class="noact">+</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="noact">4<br>&larr;</td>
+            <td width="38" height="38" class="noact">5<br>&nbsp;</td>
+            <td width="38" class="noact">6<br>&rarr;</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="noact">1<br>End</td>
+            <td width="38" height="38" class="noact">2<br>&darr;</td>
+            <td width="38" class="noact">3<br>PgDn</td>
+            <td width="38" rowspan="2" class="btn" info="Enter">ВВОД</td>
+          </tr>
+          <tr>
+            <td height="38" colspan="2" class="noact">0<br>
+              Ins</td>
+            <td width="38" class="noact">.<br>
+              Del</td>
+          </tr>
+        </table>
+      </div>
+      <div id="numlon2" class="numlon">
+        <table id="tbkb" width="100%" border="0">
+          <tr>
+            <td id="numl2" width="38" height="38" class="btn numlock" onClick="fix2(false)">Num<br>
+              Lock</td>
+            <td width="38" height="38" class="noact">/</td>
+            <td width="38" class="noact">*</td>
+            <td width="38" class="noact">-</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="btn" info="7<br>Home">Лев.кн<br>
+              Кн.1</td>
+            <td width="38" height="38" class="btn" info="8<br>&uarr;">&uarr;</td>
+            <td width="38" class="btn" info="9<br>PgUp">Пр.кн<br>
+              кн.3</td>
+            <td width="38" rowspan="2" class="noact">+</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="btn" info="4<br>&larr;">&larr;</td>
+            <td width="38" height="38" class="btn" info="5<br>&nbsp;">Кн.5</td>
+            <td width="38" class="btn" info="6<br>&rarr;">&rarr;</td>
+          </tr>
+          <tr>
+            <td width="38" height="38" class="btn" info="1<br>End">Кн.2</td>
+            <td width="38" height="38" class="btn" info="2<br>&darr;">&darr;</td>
+            <td width="38" class="btn" info="3<br>PgDn">Кн.4</td>
+            <td width="38" rowspan="2" class="btn" info="Enter">ВВОД</td>
+          </tr>
+          <tr>
+            <td height="38" colspan="2" class="noact">0<br>
+              Ins</td>
+            <td width="38" class="noact">.<br>
+              Del</td>
+          </tr>
+        </table>
+      </div></td>
+  </tr>
+</table>
+
+<p>P.S. Не могу придумать, куда поместить знак ? в латинской раскладке. Не 
+хаватает одной&nbsp; цифробуквенной клавиши.</p>
+<table style="width: 100%" border="0">
+	<tr>
+		<td valign="top">
+		<p><b>Примечания.</b></p>
+		</td>
+		<td valign="top">
+		<ol>
+			<li>Если Num Lock ВКЛЮЧЕН - функции управления эмулятором,
+  если Num Lock ВЫКЛЮЧЕН - эмуляция джойстика/мыши</li>
+			<li>Символы над цифрами - знаки при нажатии шифта. Если их два, то левый - в латинской раскладке, правый - в русской.</li>
+			<li>Для OEM клавиш легенда такая: верхний ряд - символы в латинской раскладке, 
+нижний - в русской, если символов несколько - то первый символ - с шифтом, 
+второй - без шифта.</li>
+			<li>В зависимости от опции эмулятора "Стандартное переключение 
+			РУС/ЛАТ", клавиши Win работают либо как переключатель раскладки при нажатии на любую из двух. Либо - левый Win - включение русской раскладки, правый Win - включение латинской раскладки.</li>
+		</ol>
+
+		</td>
+	</tr>
+</table>
+<p>&nbsp;</p>
+</body>
+</html>

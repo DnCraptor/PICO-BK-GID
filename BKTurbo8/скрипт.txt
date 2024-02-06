@@ -1,0 +1,88 @@
+﻿каждая строка содержит одну команду, пустая строка игнорируется
+Перед командой может стоять метка для перехода по команде ветвления.
+
+Переменные: R0..R7
+Восемь штук, нет стека и счётчика команд. Все равноправны.
+
+набор команд скрипта
+---------------------------------------------------------
+                            mov(b) #число, rn  ; загрузка значения в регистр
+                            mov(b) #label, rn  ; загрузка значения в регистр
+                            mov(b) label, rn   ; загрузка значения из памяти в регистр
+                            mov(b) rn, label   ; выгрузка значения из регистра в память
+label берётся из таблицы определённых меток.
+Если там не находится, то ошибка выполнения скрипта.
+
+b0000001  ss dd             mov(b) rx, ry   ; пересылка
+b0000010  ss dd             cmp(b) rx, ry
+b0000011  ss dd             bit(b) rx, ry
+b0000100  ss dd             bic(b) rx, ry
+b0000101  ss dd             bis(b) rx, ry
+b0000110  ss dd             and(b) rx, ry
+b0000111  ss dd             xor(b) rx, ry
+b0001000  ss dd             add(b) rx, ry
+b0001001  ss dd             sub(b) rx, ry
+00000000  ss dd             xchg   rx, ry   ; обмен словами между регистрами или памятью.
+
+10000000  dd                swab   rn
+b0010000  dd                clr(b) rn
+b0010001  dd                com(b) rn
+b0010010  dd                inc(b) rn
+b0010011  dd                dec(b) rn
+b0010100  dd                neg(b) rn
+b0010101  dd                adc(b) rn
+b0010110  dd                sbc(b) rn
+b0010111  dd                tst(b) rn
+b0011000  dd                ror(b) rn
+b0011001  dd                rol(b) rn
+b0011010  dd                asr(b) rn
+b0011011  dd                asl(b) rn
+b0011100  dd                rcr(b) rn
+b0011101  dd                rcl(b) rn
+
+ss, dd - байт адресации и регистра источника, приёмника
+
+
+b010xxxx                    stf/clf nzvc (b=1 - установка, b=0 сброс признаков)
+
+
+три или два байта опкода, и за ним могут быть одно или 2 слова для
+адресаций 5,6
+
+адресации:
+00000rrr     Rn
+00100rrr     (Rn)
+01000rrr     (Rn)+
+01100rrr     -(Rn)
+100xxyyy    Rx[Ry] - индексная, базами индекса могут быть только 4 регистра R4..R7, индексами - все 8
+10100000    #global_label - непосредственная
+11000000    global_label - абсолютная
+11100000    свободно
+
+здесь, global_label может быть как имя метки, так и число, которое будет
+или значение, или абсолютный адрес
+
+
+все команды ветвления
+00110000   word         br    script_label
+00110001   word         bne   script_label
+00110010   word         beq   script_label
+00110011   word         bge   script_label
+00110100   word         blt   script_label
+00110101   word         bgt   script_label
+00110110   word         ble   script_label
+00110111   word         bpl   script_label
+00111000   word         bmi   script_label
+00111001   word         bhi   script_label
+00111010   word         blos  script_label
+00111011   word         bvc   script_label
+00111100   word         bvs   script_label
+00111101   word         bhis (bcc) script_label
+00111110   word         blo  (bcs) script_label
+
+для ветвлений - байт опкода, за ним - номер строки перехода занимающий слово
+
+00111111 00000rrr word  sob rn, script_label
+
+
+

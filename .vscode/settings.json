@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "ps2.h": "c",
+        "string": "cpp",
+        "mutex": "cpp",
+        "chrono": "cpp",
+        "random": "cpp",
+        "limits": "cpp",
+        "cstdint": "cpp"
+    }
+}

@@ -1,0 +1,755 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Файлы исходного кода">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы\devemu">
+      <UniqueIdentifier>{8920162a-506f-42b9-bc60-c92ce8ffa4c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\devemu">
+      <UniqueIdentifier>{de33dc75-c41c-4364-81dc-e65d8e595911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\emutools">
+      <UniqueIdentifier>{eac4fee4-1a9f-4384-a1cb-aee36455e457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\emutools">
+      <UniqueIdentifier>{45468422-c51b-4b4c-9bcc-ae7b0d068cf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\memmap">
+      <UniqueIdentifier>{cadd42cd-f0e9-466a-8a88-bbd059880959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\memmap">
+      <UniqueIdentifier>{385e2e39-96e0-4a48-95c1-ac31618284b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\shared">
+      <UniqueIdentifier>{1284db4c-4aa7-4950-bc82-95c59a1b2a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\shared">
+      <UniqueIdentifier>{de5ef951-4775-421b-95e5-aed2d2967e0b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\BK.rc2">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\BKDoc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\BK.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\Toolbar.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\Toolbar_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\memory.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\tape.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\dbg_cur.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\dbg_bpt.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\tctrl_record.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\tctrl_play.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\tctrl_stop.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\script.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\rom.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\wave.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\tctrl_record_dark.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\Toolbar_snd_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\Toolbar_snd.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\Toolbar_dbg_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\Toolbar_dbg.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\menu_images_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\menu_images.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="cpp.hint" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="res\AboutThnx.html">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BK.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticLink.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Device.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Screen.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\Debugger.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BreakPoint.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_EXT32.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_MSTD.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Covox.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\CPU.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\MSF.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\MSFManager.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\ExceptionHalt.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Speaker.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\MultiEditListCtrl.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\FDDController.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Tape.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\BkSound.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\DropTarget.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\LoadMemoryDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\LoadTapeDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\TapeManagerDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\TapeUnit.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BrowseForFolder.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\ScriptRunner.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="BKView.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\PrintDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_11M.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="OscillatorView.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_11M_FDD.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="BKDoc.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\HDD.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\emu2149.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="TapeCtrlView.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="memmap\SprScr.h">
+      <Filter>Заголовочные файлы\memmap</Filter>
+    </ClInclude>
+    <ClInclude Include="memmap\SprView.h">
+      <Filter>Заголовочные файлы\memmap</Filter>
+    </ClInclude>
+    <ClInclude Include="memmap\SprWnd.h">
+      <Filter>Заголовочные файлы\memmap</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_11.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_11_FDD.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderButton.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\LockVarType.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\EnterEditCtrl.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\DisasmCtrl.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="DisasmView.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\DumpListCtrl.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="MemDumpView.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\LoadImgDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BKOscScr.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BKOscScr_Shared.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Screen_Shared.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\BKMessageBox.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="BKVKBDView.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_10_FDD.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\emu8930.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="BKSettingsDlg.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="RegDumpViewCPU.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="RegDumpViewFDD.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\SafeReleaseDefines.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Config.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\ScreenColors_Shared.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\BKSound_Defines.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BKKbdButn.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\ToolManager.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\Ini.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKDRT11Header.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKImgFile.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKParseImage.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\HDIStuff.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\BKSoundDevice.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Screen_Sizes.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="BKSettPage_1.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="BKSettPage_2.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="BKSettPage_3.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\vkeycodes.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BKAYVolPan.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\BKPaletteDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="emutools\JoyEditDlg.h">
+      <Filter>Заголовочные файлы\emutools</Filter>
+    </ClInclude>
+    <ClInclude Include="memmap\BKMEMDlg.h">
+      <Filter>Заголовочные файлы\memmap</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Menestrel.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\libdspl-2.0.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="DocPaneDlgViewBase.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\Board_10.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDialog.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\FloppyDrive.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="devemu\AYSnd.h">
+      <Filter>Заголовочные файлы\devemu</Filter>
+    </ClInclude>
+    <ClInclude Include="AboutDlg.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="variables.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BK.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticLink.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Device.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Screen.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\Debugger.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\BreakPoint.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_EXT32.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_MSTD.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Covox.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\CPU.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\MSFManager.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\ExceptionHalt.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Speaker.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\MultiEditListCtrl.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\FDDController.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Tape.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\BkSound.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\LoadMemoryDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\LoadTapeDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\TapeManagerDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\TapeUnit.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\BrowseForFolder.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\ScriptRunner.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="BKView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\PrintDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_11M.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="OscillatorView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_11M_FDD.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="BKDoc.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\HDD.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\emu2149.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="TapeCtrlView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="memmap\SprScr.cpp">
+      <Filter>Файлы исходного кода\memmap</Filter>
+    </ClCompile>
+    <ClCompile Include="memmap\SprView.cpp">
+      <Filter>Файлы исходного кода\memmap</Filter>
+    </ClCompile>
+    <ClCompile Include="memmap\SprWnd.cpp">
+      <Filter>Файлы исходного кода\memmap</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_11.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_11_FDD.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderButton.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\EnterEditCtrl.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\DisasmCtrl.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="DisasmView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\DumpListCtrl.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="MemDumpView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\LoadImgDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\BKOscScr.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="BKVKBDView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_10_FDD.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\emu8930.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="BKSettingsDlg.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="RegDumpViewCPU.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="RegDumpViewFDD.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Config.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\ScreenColors_Shared.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\BKKbdButn.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\Ini.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\ToolManager.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\BKImgFile.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\BKParseImage.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\HDIStuff.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\BKSoundDevice.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\BKMessageBox.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="BKSettPage_1.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="BKSettPage_2.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="BKSettPage_3.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\vkeycodes.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\BKAYVolPan.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\BKPaletteDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\JoyEditDlg.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+    <ClCompile Include="memmap\BKMEMDlg.cpp">
+      <Filter>Файлы исходного кода\memmap</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Menestrel.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\libdspl-2.0.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="DocPaneDlgViewBase.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\Board_10.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseDialog.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\FloppyDrive.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="devemu\AYSnd.cpp">
+      <Filter>Файлы исходного кода\devemu</Filter>
+    </ClCompile>
+    <ClCompile Include="AboutDlg.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="emutools\DebuggerAssembly.cpp">
+      <Filter>Файлы исходного кода\emutools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BK.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\SprToolbar.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_debug_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_dumpmem_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_dumpregCPU_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_dumpregFDD_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_kbd_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_osc_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_tape_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_snd_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_snd.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_dbg_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_dbg.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\menu_images_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\menu_images.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_dumpregFDD.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_dumpregCPU.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_debug.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_dumpmem.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_kbd.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_tape.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\wnd_osc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\output_wnd.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\output_wnd_hc.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\mmbuttons.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Toolbar_vcapt.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Toolbar_vcapt_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_vcapt.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\Big\Toolbar_vcapt_256.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\tctrl_pause.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\kbdPlen.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\kbdPlen_pressed.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\kbdSoft.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\kbdSoft_pressed.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\BK_main.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

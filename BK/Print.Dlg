@@ -1,0 +1,50 @@
+﻿/*
+После редактирования файла ресурсов BK.rc
+в Visual Studio нужно восстановить диалог печати.
+Потому что дурацкое Visual Studio заменяет IDы
+контролов с шаблонных имён на их числовые значения,
+заданные в файле dlgs.h
+И включение dlgs.h в файл BK.rc после этого становится 
+бессмысленным.
+*/
+
+#include <dlgs.h>
+
+IDD_PRINT DIALOGEX 0, 0, 434, 201
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Печать эмулятора БК"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Принтер",grp4,10,7,415,81,WS_GROUP
+    LTEXT           "&Имя:",stc6,16,20,36,8
+    COMBOBOX        cmb4,52,18,152,152,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_GROUP | WS_TABSTOP
+    PUSHBUTTON      "&Свойства",psh2,212,17,60,14,WS_GROUP
+    LTEXT           "Состояние:",stc8,16,36,51,10,SS_NOPREFIX
+    CONTROL         "",stc12,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,71,36,224,10
+    LTEXT           "Тип:",stc7,16,48,51,10,SS_NOPREFIX
+    CONTROL         "",stc11,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,71,48,143,10
+    LTEXT           "Положение:",stc10,16,60,51,10,SS_NOPREFIX
+    CONTROL         "",stc14,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,71,60,157,10
+    LTEXT           "Комментарий:",stc9,16,72,51,10,SS_NOPREFIX
+    CONTROL         "",stc13,"Static",SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,71,72,152,10
+    GROUPBOX        "Опции эмулятора",IDC_STATIC,10,90,289,81
+    EDITTEXT        IDC_PRN_TITLE,15,100,206,15,ES_AUTOHSCROLL
+    LTEXT           "Строка заголовка",IDC_STATIC,227,102,63,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,15,120,280,20
+    CONTROL         "Печать экрана",IDC_PRN_PRINT_SCREEN,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,20,125,65,10
+    CONTROL         "Инверсно",IDC_PRN_INVERSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,97,125,53,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,15,145,280,20
+    CONTROL         "Печать листинга с адреса",IDC_PRN_PRINT_CODE,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,20,150,105,11
+    EDITTEXT        IDC_PRN_START_ADDR,126,149,35,12,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "по",IDC_STATIC,168,151,10,10
+    EDITTEXT        IDC_PRN_END_ADDR,181,149,35,12,ES_AUTOHSCROLL | ES_NUMBER
+    RTEXT           "Страниц",IDC_STATIC,222,150,29,10
+    EDITTEXT        IDC_PRN_PAGES,255,149,35,12,ES_CENTER | ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER | NOT WS_TABSTOP
+    GROUPBOX        "Копии",grp2,305,90,120,80,WS_GROUP
+    LTEXT           "Число &копий:",stc5,313,106,55,8
+    EDITTEXT        edt3,369,103,32,12,ES_NUMBER | WS_GROUP
+    ICON            "",ico3,319,123,21,20,SS_CENTERIMAGE | WS_GROUP
+    CONTROL         "&Разбивать по страницам",chx2,"Button",BS_AUTOCHECKBOX | BS_TOP | BS_MULTILINE | WS_GROUP | WS_TABSTOP,354,127,66,22
+    DEFPUSHBUTTON   "OK",IDOK,320,175,48,14,WS_GROUP
+    PUSHBUTTON      "Отмена",IDCANCEL,372,175,48,14
+END

@@ -1,0 +1,197 @@
+﻿/*индивидуальное оформление*/
+body {
+	background: #eee;
+}
+.content {
+	margin: 0 auto 2em;
+	padding: 1em;
+	background: white;
+	color: black;
+	border: 1px solid #aaa;
+	text-align: left;
+	width: 50em;
+	font-size: 0.9em;
+}
+p, ul, ol {
+	font-family: Arial, Helvetica, sans-serif;
+	widows: 2;
+	orphans: 2;
+}
+p {
+	margin: 0px;
+	color: #000000;
+	text-indent: 1cm;
+	text-align: justify;
+}
+ol {
+	margin: 0.4em 0 0.4em 2em;
+}
+ul {
+	margin: 0.4em 0 0.4em 1em;
+}
+ol * ul {
+	margin: 0.4em 0 0.4em 0;
+}
+img {
+	border: none;
+	vertical-align: middle;
+}
+caption {
+	font-style: italic;
+}
+center {
+	margin: 12pt auto;
+}
+blockquote {
+	margin: 0 0 0 1.5cm;
+}
+table * p {
+	text-indent: 0;
+	text-align: center;
+	margin-top: 2pt;
+}
+li p {
+	text-indent: 0;
+}
+H1, H2, H3 {
+	font-family: Arial, Helvetica, sans-serif;
+	widows: 2;
+	orphans: 2;
+}
+H1 {
+	font-size: x-large;
+	font-weight: bold;
+	color: #000000;
+	margin-bottom: 1em;
+	margin-top: 2em;
+	page-break-before: always;
+	text-align: center;
+	border-bottom: 1px solid #999999;
+}
+H2 {
+	font-size: large;
+	font-style: italic;
+	font-weight: bold;
+	margin-left: 2cm;
+	margin-top: 1.5em;
+	margin-bottom: 0.8em;
+	color: #000000;
+}
+H3 {
+	font-size: medium;
+	font-weight: bold;
+	color: #000000;
+	margin-left: 2cm;
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+
+/*оглавление*/
+#toc {
+	text-indent: 0;
+	text-align: left;
+}
+.tocem {
+	margin-left: 0.5cm;
+}
+div#toc p {
+	text-indent: 0;
+	text-align: left;
+}
+/*титульный лист*/
+.bbk {
+	font: bold 14px "Courier New", Courier, monospace;
+}
+.title, .ann , .ttln {
+	font: Verdana, Arial, Helvetica, sans-serif;
+}
+.title {
+	text-align: center;
+	text-indent: 0;
+	margin: 3em auto;
+	font-size: xx-large;
+	font-weight: bold;
+}
+.ann {
+	font-size: 9pt;
+	margin-bottom: 0.5cm;
+	text-indent: 0;
+	text-align: left;
+}
+.ttln {
+	text-indent: 0;
+	font-size: 11pt;
+	font-weight: bold;
+}
+.annh {
+	font-weight: bold;
+}
+.autri {
+	margin-left: auto;
+	width: 12em;
+	text-align: left;
+}
+
+/*общие классы*/
+.attnt {
+	font-weight: bold;
+	color: #660000;
+	letter-spacing: 6pt;
+}
+.subhd {
+	margin-left: 2.5cm;
+	margin-top: 12pt;
+	margin-bottom: 6pt;
+	font-weight: bold;
+	font-style: italic;
+}
+.ardsk {
+	margin-left: 2cm;
+	text-indent: -1cm;
+	text-align: left;
+}
+.ardsktl {
+	margin-left: 1cm;
+	text-indent: -1cm;
+	text-align: justify;
+}
+.lptl {
+	margin-left: 0.5em;
+	text-indent: -0.5em;
+	text-align: justify;
+}
+/*колоризация и выделение*/
+.code, .code2 {
+	margin: 6pt 0px 6pt 1.5cm;
+	padding: 6pt 0.5cm 6pt 0.5cm;
+	border: 1px solid #CCCCCC;
+	background-color: #fcfcfc;
+}
+.sample {
+	margin: 6pt 0 6pt 0.5cm;
+	padding: 6pt 0.5cm 6pt 0.5cm;
+	border: 1px solid #CCCCCC;
+	background-color: #fcfcfc;
+}
+.code p, .sample p {
+	text-indent: 0;
+	text-align: left;
+}
+.code, .code2, .sample, .code2 * p, .code p, .sample p {
+	font: 10pt "Courier New", Courier, monospace;
+}
+/*ссылки*/
+.western {
+	text-decoration: none;
+	font-weight: bold;
+	color: #336699;
+	border: 1px dotted #e0e0e0;
+}
+.western:hover {
+	color: #0066FF;
+	border: 1px solid #C0C0C0;
+}
+.western:visited {
+	color: #800080;
+	border: 1px dotted #909090;
+}

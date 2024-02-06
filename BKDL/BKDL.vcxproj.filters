@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\shared">
+      <UniqueIdentifier>{6dbc65df-6de6-4f03-8d12-2be504c1ca9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\shared">
+      <UniqueIdentifier>{8455f7b7-8c25-4a42-8340-79234b644441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\imgos">
+      <UniqueIdentifier>{5d497104-06e7-4fc4-8465-7370ec72a349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\imgos">
+      <UniqueIdentifier>{f87aa89b-20db-49a2-84a3-da87b59cfb75}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="BKDL.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\getopt.h">
+      <Filter>Файлы заголовков\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKDEDefines.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_ANDos.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_AODos.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_Csidos3.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_HCDos.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_MicroDos.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_MKDos.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_MSDOS.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_NORD.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_Prototype.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_RT11.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\ImgUtil.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKParseImage.h">
+      <Filter>Файлы заголовков\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKImgFile.h">
+      <Filter>Файлы заголовков\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\StringUtil.h">
+      <Filter>Файлы заголовков\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_DaleOS.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_Holography.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BKDE\imgos\BKFloppyImage_Optok.h">
+      <Filter>Файлы заголовков\imgos</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BKDL.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\getopt.cpp">
+      <Filter>Исходные файлы\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_ANDos.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_AODos.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_Csidos3.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_HCDos.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_MicroDos.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_MKDos.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_MSDOS.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_NORD.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_Prototype.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_RT11.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\ImgUtil.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\BKParseImage.cpp">
+      <Filter>Исходные файлы\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\BKImgFile.cpp">
+      <Filter>Исходные файлы\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\StringUtil.cpp">
+      <Filter>Исходные файлы\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_DaleOS.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_Holography.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BKDE\imgos\BKFloppyImage_Optok.cpp">
+      <Filter>Исходные файлы\imgos</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BKDL.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

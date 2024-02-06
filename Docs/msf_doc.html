@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="RU">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Эмулятор БК 0010(01) - Формат файла .MSF</title>
+<link href="css/cmmn.css" rel="stylesheet">
+<link href="css/style11.css" rel="stylesheet">
+<link href="css/styleemd.css" rel="stylesheet">
+</head>
+
+<body style="text-justify-trim: punctuation">
+
+<div id="content">
+	<div class="mw-content-ltr">
+	</div>
+	<h2>Формат файла .MSF версии 1.9 (Memory state file)<br>для эмулятора БК 0010(01) 
+	и БК 0011(М) </h2>
+	<p>Файлы данного формата обычно хранят в себе полный слепок всей памяти БК на 
+	момент сохранения, состояние регистров, уменьшенную копию экрана, а также любую 
+	другую необходимую для последующего восстановления информацию. Формат является 
+	бинарным, и представляет собой теговую структуру. Каждый тег представляет собой 
+	заголовок, и данные некоторого типа. Теги могут располагаться в любом порядке 
+	(кроме первого заголовочного тега <span class="oprt">MSF_FILE_HEADER</span>), 
+	а также быть вложенными один в другой (но на практике оказалось, что в этом 
+	нет необходимости). Теоретически любой из тегов может быть пропущен, а также 
+	могут присутствовать теги, которые незнакомы эмулятору данной версии, и будут 
+	без проблем пропущены. Таким образом теоретически осуществляется совместимость 
+	форматов разных версий в обе стороны.</p>
+	<p>Но практически - нет. MSF младших версий не поддерживается из-за того, что 
+	там нет критически важных блоков, без которых невозможно восстановить состояние 
+	эмулятора. И соответственно, невозможна дальнейшая эмуляция.</p>
+	<h3>Формат заголовочного тега:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_FILE_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td></td>
+			<td><span class="keywd">uint32_t</span></td>
+			<td><span class="selc">type</span>;</td>
+			<td>// тип файла всегда равен (<span class="var">STATE_ID</span> ==
+			<span class="nmbr">65536</span>)</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><span class="keywd">uint32_t</span></td>
+			<td><span class="selc">version</span>;</td>
+			<td>// версия файла: <span class="nmbr">10</span> –
+			<span class="nmbr">1</span>.<span class="nmbr">0</span>,
+			<span class="nmbr">15</span> – <span class="nmbr">1</span>.<span class="nmbr">5</span>,
+			<span class="nmbr">20</span> – <span class="nmbr">2</span>.<span class="nmbr">0</span>, 
+			и т.д. В настоящее время версия файла <span class="nmbr">1</span>.<span class="nmbr">9</span> 
+			(<span class="nmbr">19</span>) и более ранние версии не поддерживаются.</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><span class="keywd">uint32_t</span></td>
+			<td><span class="selc">configuration</span>;</td>
+			<td>// конфигурация компьютера:
+			<ol start="0">
+				<li>БК 0010-01 с БЕЙСИКом &quot;Вильнюс 1986&quot;</li>
+				<li>БК 0010-01 с блоком МСТД</li>
+				<li>БК 0010-01 с дополнительным блоком ОЗУ 32Кб</li>
+				<li>БК 0010-01 со стандартным контроллером НГМД 326</li>
+				<li>БК 0010-01 с контроллером НГМД А16М</li>
+				<li>БК 0010-01 с контроллером НГМД+HDD СМК-512</li>
+				<li>БК 0010-01 с контроллером НГМД+HDD Самара</li>
+				<li>БК 0011</li>
+				<li>БК 0011 со стандартным контроллером НГМД 326Д</li>
+				<li>БК 0011 с контроллером НГМД А16М</li>
+				<li>БК 0011 с контроллером НГМД+HDD СМК-512</li>
+				<li>БК 0011 с контроллером НГМД+HDD Самара</li>
+				<li>БК 0011М</li>
+				<li>БК 0011М со стандартным контроллером НГМД 326Д</li>
+				<li>БК 0011М с контроллером НГМД А16М</li>
+				<li>БК 0011М с контроллером НГМД+HDD СМК-512</li>
+				<li>БК 0011М с контроллером НГМД+HDD Самара</li>
+				<li>БК 0010Ш с фокалом 084</li>
+			</ol>
+			</td>
+		</tr>
+	</table>
+	};
+	<p>Далее следуют теги с данными для конкретной конфигурации.</p>
+	<h3>Формат тега:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span></td>
+			<td><span class="selc">type</span>;</td>
+			<td>// тип тега</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span></td>
+			<td><span class="selc">length</span>;</td>
+			<td>// длина тега в файле, занимаемая им вместе с заголовком</td>
+		</tr>
+	</table>
+	};
+	<p>За тегом сразу следуют данные. Теги бывают следующих типов:</p>
+	<table class="border vtop">
+		<tr>
+			<th style="width: 10%">Имя</th>
+			<th style="width: 5%">Тип</th>
+			<th style="width: 15%">Длина (байт)</th>
+			<th style="width: 70%">Комментарий</th>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_UNKNOWN</span></td>
+			<td>
+			<p>-<span class="nmbr">1</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> и более</p>
+			</td>
+			<td>
+			<p>неизвестный блок. Просто пустая болванка, сделан на всякий случай</p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_BASEMEMORY</span></td>
+			<td>
+			<p><span class="nmbr">0</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">64</span> Кб</p>
+			</td>
+			<td>
+			<p>блок памяти основного <span class="nmbr">64</span> Кбайтного пространства. 
+			Вся память с <span class="nmbr">0</span> – <span class="nmbr">0200000</span>, 
+			то, что в ней находится в текущий момент. В версии 1.0 вместе с системными 
+			регистрами, в версии 1.1 системные регистры сохраняются в отдельном 
+			блоке </p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_CPU_REGISTERS</span></td>
+			<td>
+			<p><span class="nmbr">1</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">18</span></p>
+			</td>
+			<td>
+			<p>Регистры процессора: <span class="regn">R0</span> –
+			<span class="regn">R5</span>, <span class="regn">SP</span>,
+			<span class="regn">PC</span>, <span class="regn">PSW</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_PREVIEW</span></td>
+			<td>
+			<p><span class="nmbr">2</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + переменное количество</p>
+			</td>
+			<td>
+			<p>Малая копия экрана. См. описание ниже</p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_10EXT16</span></td>
+			<td>
+			<p><span class="nmbr">3</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">24</span>Кб</p>
+			</td>
+			<td>
+			<p>Блок расширенной памяти КНГМД А16М <span class="nmbr">16</span>К 
+			ОЗУ + <span class="nmbr">8</span>К ПЗУ. </p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_10EXT32</span></td>
+			<td>
+			<p><span class="nmbr">4</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">32</span>Кб</p>
+			</td>
+			<td>
+			<p>Страницы расширенной памяти <span class="nmbr">32</span>К. Располагается 
+			с адресов <span class="nmbr">0120000</span> – <span class="nmbr">140000</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_11EXT64</span></td>
+			<td>
+			<p><span class="nmbr">5</span></p>
+			</td>
+			<td>&nbsp; </td>
+			<td>
+			<p>Страницы расширенной памяти 64К для БК11М. Формат не определён.
+			<b>Устарел. Зарезервирован. </b></p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_PORT_REGS</span></td>
+			<td>
+			<p><span class="nmbr">6</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">30</span> </p>
+			</td>
+			<td>
+			<p>(Начиная с версии 1.1) Блок размещения системных регистров
+			<span class="nmbr">177660</span>, <span class="nmbr">177662</span>,
+			<span class="nmbr">177664</span>, <span class="nmbr">177700</span>-<span class="nmbr">177716
+			</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_MEMMAP</span></td>
+			<td>
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">16</span>*<span class="nmbr">24</span> 
+			+ <span class="nmbr">12</span></p>
+			</td>
+			<td>
+			<p>(Начиная с версии 1.1) Карта памяти, в которой обозначено, какие 
+			страницы и банки памяти куда подключены. </p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_BASEMEMORY11M</span></td>
+			<td>
+			<p><span class="nmbr">8</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">0700000</span></p>
+			</td>
+			<td>
+			<p>(Начиная с версии 1.1) Весь блок памяти БК 11М, включая доп. ПЗУ 
+			+ ПЗУ контроллера А16М и доп. ОЗУ</p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_MEMORY_SMK512</span></td>
+			<td>
+			<p><span class="nmbr">9</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + (<span class="nmbr">512</span>-<span class="nmbr">16</span>)*<span class="nmbr">1024</span></p>
+			</td>
+			<td>
+			<p>(Начиная с версии 1.1) Блок памяти ОЗУ контроллера СМК-512. Т.к.
+			<span class="nmbr">16</span> Кб уже сохраняется в блоках №<span class="nmbr">3</span> 
+			и №<span class="nmbr">8</span>, то здесь сохраняется
+			<span class="nmbr">512</span> Кб-<span class="nmbr">16</span> Кб </p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_CONFIG</span></td>
+			<td>
+			<p><span class="nmbr">10</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + заранее не известно</p>
+			</td>
+			<td>
+			<p>(Начиная с версии 1.2) Структура g_config.<br>(Начиная с версии 1.3)<br>
+			текстовый файл конфигурации со всеми текущими настройками. </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="oprt">MSF_BLOCKTYPE_FRAMEDATA</p>
+			</td>
+			<td>
+			<p class="nmbr">11</p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + <span class="nmbr">4</span>*<span class="nmbr">8</span> 
+			+ <span class="nmbr">8</span>*<span class="nmbr">3</span></p>
+			</td>
+			<td>
+			<p>В версии 1.9 размер такой. Блок содержит состояние ВЕ-таймера, состояние 
+			хода луча ЭЛТ, состояние текущего вычислительного фрейма эмуляции.</p>
+			</td>
+		</tr>
+		<tr>
+			<td><span class="oprt">MSF_BLOCKTYPE_WAVE</span></td>
+			<td>
+			<p><span class="nmbr">200</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">8</span> + заранее не известно</p>
+			</td>
+			<td>
+			<p>Используется в <span class="selc">tap</span> файлах для хранения 
+			контента.</p>
+			</td>
+		</tr>
+	</table>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_BASEMEMORY</span> (Тип 0) &quot;Блок 
+	памяти основного 64 Кбайтного пространства&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span></td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Далее следуют 64 Кбайта основной памяти в диапазоне адресов
+	<span class="nmbr">0</span> – <span class="nmbr">200000</span>.</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_CPU_REGISTERS</span> (Тип 1) &quot;Регистры 
+	процессора&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_CPU_REGISTERS</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">r0</span>;</td>
+			<td>// регистр общего назначения <span class="regn">R0</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">r1</span>;</td>
+			<td>// регистр общего назначения <span class="regn">R1</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">r2</span>;</td>
+			<td>// регистр общего назначения <span class="regn">R2</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">r3</span>;</td>
+			<td>// регистр общего назначения <span class="regn">R3</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">r4</span>;</td>
+			<td>// регистр общего назначения <span class="regn">R4</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">r5</span>;</td>
+			<td>// регистр общего назначения <span class="regn">R5</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">sp</span>;</td>
+			<td>// регистр стека <span class="regn">SP</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">pc</span>;</td>
+			<td>// регистр команд <span class="regn">PC</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">psw</span>;</td>
+			<td>// слово состояния процессора <span class="regn">PSW</span></td>
+		</tr>
+	</table>
+	};
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_PREVIEW</span> (Тип 2) &quot;Малая 
+	копия экрана&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};&nbsp;
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">BITMAPINFOHEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biSize</span> = <span class="nmbr">40</span>;</td>
+			<td>// размер структуры <span class="var">BITMAPINFOHEADER</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biWidth</span> = <span class="nmbr">256</span>;</td>
+			<td>// всегда <span class="nmbr">256</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biHeight</span> = <span class="nmbr">256</span>;</td>
+			<td>// всегда <span class="nmbr">256</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">biPlanes</span> = <span class="nmbr">1</span>;</td>
+			<td>// всегда <span class="nmbr">1</span> (<span class="nmbr">1</span> 
+			плоскость);</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">biBitCount</span> = <span class="nmbr">32</span>;</td>
+			<td>// кол-во бит на пиксель (любое допустимое кол-во бит)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biCompression</span> = <span class="nmbr">0</span>;</td>
+			<td>// всегда <span class="nmbr">0</span> (без компрессии)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biSizeImage</span> = <span class="nmbr">0</span>;</td>
+			<td>// не используется</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biXPelsPerMeter</span> = <span class="nmbr">0</span>;</td>
+			<td>// не используется</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biYPelsPerMeter</span> = <span class="nmbr">0</span>;</td>
+			<td>// не используется</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biClrUsed</span> = <span class="nmbr">0</span>;</td>
+			<td>// не используется</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">biClrImportant</span> = <span class="nmbr">0</span>;</td>
+			<td>// не используется</td>
+		</tr>
+	</table>
+	};
+	<p>Далее следует непосредственно массив бит картинки. Картинка записывается 
+	в перевёрнутом по вертикали виде, где каждая строка выровнена на границу
+	<span class="nmbr">4</span>-х байт.</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_10EXT16</span> (Тип 3) &quot;Блок 
+	расширенной памяти КНГМД А16М 16К ОЗУ + 8К ПЗУ&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Для версии <span class="nmbr">1</span>.<span class="nmbr">0</span>: </p>
+	<p><span class="keywd">uint32_t</span> <span class="selc">bBasic</span> - флаг, 
+	включено ли ПЗУ (<span class="nmbr">0</span> – нет, <span class="nmbr">1</span> 
+	– да)</p>
+	<p>Далее следуют <span class="nmbr">24</span> Кбайта памяти при установленном 
+	флаге <span class="selc">bBasic</span> в <span class="nmbr">1</span> (обычно 
+	ПЗУ <span class="nmbr">24</span>К бейсика)</p>
+	<p>Далее следуют <span class="nmbr">24</span> Кбайта памяти при установленном 
+	флаге <span class="selc">bBasic</span> в <span class="nmbr">0</span> (обычно 
+	ДОЗУ <span class="nmbr">16</span>К + ПЗУ НГМД <span class="nmbr">8</span>К)</p>
+	<p>Начиная с версии <span class="nmbr">1</span>.<span class="nmbr">1</span>:</p>
+	<p>Далее следуют <span class="nmbr">24</span> Кбайта памяти при установленном 
+	флаге <span class="selc">bBasic</span> в <span class="nmbr">0</span> (обычно 
+	ДОЗУ <span class="nmbr">16</span>К + ПЗУ НГМД <span class="nmbr">8</span>К), 
+	без флага <span class="selc">bBasic</span>.</p>
+	<p>&nbsp;</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_10EXT32</span> (Тип 4) &quot;Страницы 
+	расширенной памяти 32К&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p><span class="keywd">uint32_t</span> <span class="selc">nPage</span> - номер 
+	подключенной страницы <span class="nmbr">0</span> – <span class="nmbr">3</span></p>
+	<p>Далее следуют <span class="nmbr">32</span> Кбайта дополнительной памяти</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_PORT_REGS</span> (Тип 6) &quot;Системные 
+	регистры&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};&nbsp;
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_PORT_REGS</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177660</span>;</td>
+			<td>// регистр состояния клавиатуры </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177662_in</span>;</td>
+			<td>// регистр данных клавиатуры </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177662_out</span>;</td>
+			<td>// регистр палитр, буфера экрана и таймер по вектору
+			<span class="nmbr">100</span> (только на БК11(М)) </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177664</span>;</td>
+			<td>// регистр смещения </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177700</span>;</td>
+			<td>// регистр режима </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177702</span>;</td>
+			<td>// регистр адреса прерывания </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177704</span>;</td>
+			<td>// регистр ошибки</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177706</span>;</td>
+			<td>// регистр установки таймера </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177710</span>;</td>
+			<td>// регистр счётчика таймера </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177712</span>;</td>
+			<td>// регистр управления таймером </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177714_in</span>;</td>
+			<td>// входной регистр порта ввода вывода </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177714_out</span>;</td>
+			<td>// выходной регистр порта ввода вывода</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177716_in</span>;</td>
+			<td>// регистр порта по чтению (чтение с МФ или с линии) </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177716_out_tap</span>;</td>
+			<td>// регистр порта по записи (запись на МФ или в линию) </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">p0177716_out_mem</span>;</td>
+			<td>// регистр порта по записи (установка страниц памяти, на БК11(М))
+			</td>
+		</tr>
+	</table>
+	};
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_MEMMAP</span> (Тип 7) &quot;Карта 
+	памяти&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Далее следует массив из <span class="nmbr">16</span> элементов следующей 
+	структуры, которые отвечают за сегменты адресного пространства размером
+	<span class="nmbr">4</span> Кб, последний сегмент служит для хранения режимов 
+	работы контроллера АльтПро:</p>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">BKMEMBank_t</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">BOOL</span> </td>
+			<td><span class="selc">bReadable</span>;</td>
+			<td>// флаг, указывающий что память доступна для чтения</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">BOOL</span> </td>
+			<td><span class="selc">bWritable</span>;</td>
+			<td>// флаг, указывающий что память доступна для записи</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">nBank</span>;</td>
+			<td>// номер банка памяти <span class="nmbr">4</span> kb </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">nPage</span>;</td>
+			<td>// страница памяти БК11 == <span class="selc">nBank</span> &gt;&gt;
+			<span class="nmbr">2</span></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">nOffset</span>;</td>
+			<td>// смещение в массиве == <span class="selc">nBank</span> &lt;&lt;
+			<span class="nmbr">12</span> </td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">nTimingCorrection</span>;</td>
+			<td>// значение корректировки тайминга при обращении к памяти, которая 
+			не управляется ВП1-037 (ПЗУ или ОЗУ СМК)</td>
+		</tr>
+	</table>
+	};
+	<p>И затем следует один элемент следующей структуры, который сохраняет информацию 
+	о типе FDD контроллера и режимах работы контроллеров АльтПро.</p>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">ConfBKModel_t</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">nAltProMemBank</span>;</td>
+			<td>// код подключения страницы памяти контроллера для записи</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">nExtCodes</span>;</td>
+			<td>// доп. коды контроллера, такие как <span class="nmbr">10</span> 
+			- подключение бейсика и <span class="nmbr">4</span> - блокировка регистров
+			<span class="nmbr">177130</span> и <span class="nmbr">177132</span> 
+			по чтению (для простоты ПЗУ бейсика включается только в режиме
+			<span class="nmbr">020</span>. В остальных режимах не имеет смысла, 
+			хотя на реальной железке технически возможно)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint16_t</span> </td>
+			<td><span class="selc">nROMPresent</span>;</td>
+			<td>// битовая маска присутствия ПЗУ БК на своих местах.</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">nAltProMode</span>;</td>
+			<td>// код режима контроллера</td>
+		</tr>
+	</table>
+	};
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_BASEMEMORY11M</span> (Тип 8) &quot;Блок 
+	памяти БК 11М, включая доп. ПЗУ + ПЗУ контроллера А16М и доп. ОЗУ&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Далее следует массив размером <span class="nmbr">0700000</span> байт содержащий 
+	всю указанную память.</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_MEMORY_SMK512</span> (Тип 9) &quot;Блок 
+	памяти ОЗУ контроллера СМК-512&quot;:</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Далее следует массив размером <span class="nmbr">512</span> -
+	<span class="nmbr">16</span> Кбайт содержащий всю указанную память (первые
+	<span class="nmbr">16</span> Кбайт входят в блок <span class="oprt">MSF_BLOCKTYPE_BASEMEMORY11M</span>).</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_CONFIG</span> (Тип 10) &quot;Конфигурация&quot;:
+	</h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Довольно сложный блок. Сперва формируется массив в памяти содержащий содержимое
+	<i>ini</i> файла конфигурации. Определяется его размер, и затем сохраняется 
+	в виде бинарного массива. Размер переменный.</p>
+	<h3>Формат тега <span class="oprt">MSF_BLOCKTYPE_FRAMEDATA</span> (Тип 11) &quot;Параметры 
+	фрейма&quot;: </h3>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_BLOCK_HEADER</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">type</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">uint32_t</span> </td>
+			<td><span class="selc">length</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};
+	<p>Далее идёт следующая структура данных.</p>
+	<p class="contn"><span class="keywd">struct </span><span class="oprt">MSF_FRAMEDATA</span><br>
+	{</p>
+	<table class="border2 vtop struc">
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td colspan="2">// состояние ВЕ таймера </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">nTimerSpeed</span>;</td>
+			<td>// текущее значение счётчика ВЕ таймера</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">nTimerDiv</span>;</td>
+			<td>// текущий делитель ВЕ таймера</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td colspan="2">// состояние экрана</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">nVideoAddress</span>;</td>
+			<td>// видео адрес, младшие 6 бит - счётчик строк внутри строки</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">bHgate</span>;</td>
+			<td>// флаг отсчёта служебных видеоциклов в строке</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">bVgate</span>;</td>
+			<td>// флаг отсчёта служебных строк</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">nVGateCounter</span>;</td>
+			<td>// дополнительный счётчик служебных строк </td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">nLineCounter</span>;</td>
+			<td>// счётчик видео строк</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td colspan="2">// состояние фрейма (значения внутренних счётчиков фрейма)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">int</span> </td>
+			<td><span class="selc">nCPUTicks</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">double</span> </td>
+			<td><span class="selc">fMediaTicks</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">double</span> </td>
+			<td><span class="selc">fMemoryTicks</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="keywd">double</span> </td>
+			<td><span class="selc">fFDDTicks</span>;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	};<p>Последовательности тегов для конфигураций создаваемых эмулятором версии
+	<span class="nmbr">3</span>.x. Хотя порядок тегов может быть произвольным, в 
+	реальных файлах <b>MSF</b> теги идут именно так:</p>
+	<h3>0 – БК 0010(01) с БЕЙСИКом &quot;Вильнюс 1986&quot;</h3>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">0</p>
+			</td>
+			<td>
+			<p>Основная память 64К</p>
+			</td>
+		</tr>
+	</table>
+	<h3>1,17 – БК 0010(01) с блоком МСТД или БК 0010Ш</h3>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">0</p>
+			</td>
+			<td>
+			<p>Основная память 64К</p>
+			</td>
+		</tr>
+	</table>
+	<h3>2 – БК 0010(01) с дополнительным блоком ОЗУ 32Кб</h3>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">0</p>
+			</td>
+			<td>
+			<p>Основная память 64К</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">4</p>
+			</td>
+			<td>
+			<p>Страницы расширенной памяти 32К</p>
+			</td>
+		</tr>
+	</table>
+	<h3>3,4,6 – БК 0010(01) со стандартным КНГМД (+16кБ ОЗУ), контроллером A16M 
+	с ДОЗУ 16К, контроллером НГМД+HDD Самара (+16кБ ОЗУ):</h3>
+	<p>(дело в том, что стандартный КНГМД строится на основе А16М с отключенным 
+	функционалом переключения страниц и жёстко закреплённым стандартным режимом. 
+	А весь код обработки один.)</p>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">0</p>
+			</td>
+			<td>
+			<p>Основная память 64К</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">3</p>
+			</td>
+			<td>
+			<p>Блок расширенной памяти 16К + 8К КНГМД</p>
+			</td>
+		</tr>
+	</table>
+	<h3>5 – БК 0010(01) с контроллером СМК-512 с ДОЗУ 512К</h3>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">0</p>
+			</td>
+			<td>
+			<p>Основная память 64К</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">3</p>
+			</td>
+			<td>
+			<p>Блок расширенной памяти 16К + 8К КНГМД</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">9</p>
+			</td>
+			<td>
+			<p>Блок памяти ОЗУ контроллера СМК-512</p>
+			</td>
+		</tr>
+	</table>
+	<h3>7,8,9,11,12,13,14,16 – БК 0011(М) без FDD, со стандартным FDD, с контроллером 
+	A16M с ДОЗУ 16К, с контроллером Самара</h3>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">8</p>
+			</td>
+			<td>
+			<p>Весь блок памяти БК 11М, включая доп. ПЗУ + ПЗУ контроллера А16М 
+			и доп. ОЗУ</p>
+			</td>
+		</tr>
+	</table>
+	<h3>10,15 – БК 0011(М) с контроллером СМК-512 с ДОЗУ 512К</h3>
+	<table class="border clfct">
+		<tr>
+			<th>Тип</th>
+			<th>Название</th>
+		</tr>
+		<tr>
+			<td>
+			<p class="var">Hdr</p>
+			</td>
+			<td>
+			<p>Заголовочный тег</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">2</p>
+			</td>
+			<td>
+			<p>Preview</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">10</p>
+			</td>
+			<td>
+			<p>Config</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">1</p>
+			</td>
+			<td>
+			<p>Регистры процессора</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">6</p>
+			</td>
+			<td>
+			<p>Системные регистры и порты</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">7</p>
+			</td>
+			<td>
+			<p>Карта памяти </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">8</p>
+			</td>
+			<td>
+			<p>Весь блок памяти БК 11М, включая доп. ПЗУ + ПЗУ контроллера А16М 
+			и доп. ОЗУ </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="nmbr">9</p>
+			</td>
+			<td>
+			<p>Блок памяти ОЗУ контроллера СМК-512</p>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
+</html>

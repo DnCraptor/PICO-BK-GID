@@ -1,0 +1,452 @@
+﻿.contn {
+	text-indent: 0cm;
+}
+.leftid {
+	text-align: left;
+	text-indent: 0.5cm;
+}
+.leftmr {
+	margin-left:0.5cm;
+	text-align: left;
+}
+.centr {
+	text-align: center;
+    text-indent: 0px;
+}
+.left {
+	text-align: left !important;
+}
+.just {
+	text-align: justify !important;
+}
+.right {
+	text-align: right !important;
+}
+/*колоризация и выделение*/
+.seln {
+	font-style:italic;
+}
+.selw {
+	font-weight: bold;
+}
+.selc {
+	color:#000066;
+}
+.selb {
+	color: #0066FF;
+}
+.itl {
+	font-style: italic;
+	color: #999999;
+}
+.var{
+	/* переменная в ЯВУ */
+	color: #990000;
+}
+.keywd { /* ключевое слово/префикс */
+	color: #0000FF;
+}
+.cmdk { /* команда монитора/системы */
+	font-weight: bold;
+	color: #000066;
+}
+.cmdm { /* имя функции/процедуры */
+	font-weight: bold;
+	color: #800000;
+}
+.cmds { /* мнемоника */
+	font-weight:bold;
+	color: #0000CC;
+}
+.cmdf { /* мнемоника EIS/FIS */
+	font-weight: bold;
+	color: #3366FF;
+}
+.pscm { /* псевдокоманда/встроенный оператор */
+	color: #3399FF;
+	font-weight: bold;
+}
+.macro { /* макрокоманда */
+	color: #0066CC;
+	font-weight: bold;
+}
+.oprt {
+	/* оператор/ключ/параметр */
+	color: #6600CC;
+}
+.argm {
+	/* аргумент команды */
+	color: #6600CC;
+	font-style: italic;
+}
+.strn { /* строковое значение */
+	color: #666666;
+}
+.regn { /* регистр */
+	color: #0066FF;
+}
+.rown {
+	/* номер строки */
+	color: #FF66FF;
+}
+.cmmnt { /* комментарий */
+	color:#006600;
+}
+.nmbr { /* число */
+	color: #FF6600;
+}
+.labl { /* метка/переменная в ассемблере */
+	color:#990099;
+	font-weight:bold;
+}
+.locl { /* локальная метка */
+	color: #CC0099;
+	font-weight:bold;
+}
+.opcd { /* опкод */
+	color: #666666;
+	font-weight: bold;
+}
+.symb { /* символ */
+	color: #996600;
+	font-weight: bold;
+}
+.errm { /* код/номер ошибки */
+	color: #CC0000
+}
+/*рисунки*/
+table.tpic, table.tpicc, table.tpicv, table.tpicvc, table.tpicr {
+	text-indent: 0;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	empty-cells: show;
+}
+
+table.tpic p, table.tpicv p, table.tpicc p, table.tpicvc p, table.tpicr p {
+	text-indent: 0;
+	font: 90% "Courier New", Courier, monospace;
+}
+table.tpicc p, table.tpicvc p {
+	text-align: center;
+}
+table.tpic th {
+	text-align: center;
+	font-weight: bold;
+	vertical-align: middle;
+}
+table.tpic td, table.tpic td p {
+	text-align: left;
+	vertical-align: top;
+	font: "Courier New", Courier, monospace;
+}
+table.tpicc td, table.tpicc td p {
+	text-align: center;
+	vertical-align: top;
+	font: "Courier New", Courier, monospace;
+}
+table.tpicr td, table.tpicr td p {
+	text-align: right;
+	vertical-align: top;
+	font: "Courier New", Courier, monospace;
+}
+table.tpicv td, table.tpicv td p {
+	text-align: left;
+	vertical-align: middle;
+	font: "Courier New", Courier, monospace;
+}
+table.tpicvc td, table.tpicvc td p {
+	text-align: center;
+	vertical-align: middle;
+	font: "Courier New", Courier, monospace;
+}
+.picttl {
+	margin-top: 6pt;
+	text-indent: 0;
+	text-align: center;
+	font-style: italic;
+}
+/*cell border styles*/
+.cswdth {
+	width: 1cm;
+}
+.cstrbld {
+	border: 3px double #000000;
+}
+.cstrblds {
+	border-top: 3px double #000000;
+	border-left: 3px double #000000;
+	border-right: 3px double #000000;
+	border-bottom: 1px solid #000000;
+}
+.cstrbldslb {
+	border-top: 3px double #000000;
+	border-left: 1px solid #000000;
+	border-right: 3px double #000000;
+	border-bottom: 1px solid #000000;
+}
+.cs____n {
+	border: none;
+}
+.cstrblsd {
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 3px double #000000;
+}
+.cstrb_sd {
+	border-top: 1px solid #000000;
+	border-left: none;
+	border-right: 1px solid #000000;
+	border-bottom: 3px double #000000;
+}
+.cstrblsdl {
+	border-top: 1px solid #000000;
+	border-left: 3px double #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+.cst_blsd {
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: 3px double #000000;
+}
+.cst_b_sd {
+	border-top: 1px solid #000000;
+	border-left: none;
+	border-right: none;
+	border-bottom: 3px double #000000;
+}
+.cstrbls {
+	border: 1px solid #000000;
+}
+.cst_bls {
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cstr_ls {
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+}
+.cstrb_s {
+	border-top: 1px solid #000000;
+	border-left: none;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+.cst_blds {
+	border-top: 3px double #000000;
+	border-left: 3px double #000000;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cst_b_ds {
+	border-top: 3px double #000000;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cst_blsdt {
+	border-top: 3px double #000000;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cstrblsdt {
+	border-top: 3px double #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+
+.cst__ls {
+	border-top: 1px solid #000000;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: none;
+}
+.cstr__s {
+	border-top: 1px solid #000000;
+	border-right: 1px solid #000000;
+}
+.cs__bls {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cs__blsdb {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: 3px double #000000;
+}
+.cs__blsdl {
+	border-top: none;
+	border-left: 3px double #000000;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cs__blsdlb {
+	border-top: none;
+	border-left: 3px double #000000;
+	border-right: none;
+	border-bottom: 3px double #000000;
+}
+.cs_rbls {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+.cs_rb_s {
+	border-top: none;
+	border-left: none;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+.cs_rblsdr {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: 3px double #000000;
+	border-bottom: 1px solid #000000;
+}
+.cs_rblsdrb {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: 3px double #000000;
+	border-bottom: 3px double #000000;
+}
+.cs_rblsdb {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 3px double #000000;
+}
+.cs_rb_sdb {
+	border-top: none;
+	border-left: none;
+	border-right: 1px solid #000000;
+	border-bottom: 3px double #000000;
+}
+.cs_r__s {
+	border-top: none;
+	border-left: none;
+	border-right: 1px solid #000000;
+	border-bottom: none;
+}
+.cs__b_s {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid #000000;
+}
+.cs__b_d {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 3px double #000000;
+}
+.cst___s {
+	border-top: 1px solid #000000;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+}
+.cst___d {
+	border-top: 3px double #000000;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+}
+.cs___ls {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: none;
+}
+.cs___ld {
+	border-top: none;
+	border-left: 3px double #000000;
+	border-right: none;
+	border-bottom: none;
+}
+.cs_r_lsd {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: 3px double #000000;
+	border-bottom: none;
+}
+.cs_r_ls {
+	border-top: none;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: none;
+}
+.cst_b_s {
+	border-left: none;
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	border-right: none;
+}
+.cs_r__d {
+	border-top: none;
+	border-left: none;
+	border-right: 3px double #000000;
+	border-bottom: none;
+}
+.cst_bldsh {
+	border-top: 1px dashed #000000;
+	border-left: 1px solid #000000;
+	border-right: none;
+	border-bottom: 1px dashed #000000;
+}
+.cstrbldsh {
+	border-top: 1px dashed #000000;
+	border-left: 1px solid #000000;
+	border-right: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+}
+.mblk{
+	margin: 2pt;
+	padding: 4pt;
+}
+
+.ovrln {
+	border-top: 1px solid #000000;
+}
+
+.ovrlni {
+	border-top: 1px solid #000000;
+	font-style:	italic;
+}
+
+.dirvrl {
+	writing-mode:vertical-rl;
+}
+
+tr.line1 * p {
+	text-align:center;
+	font-style:italic;
+}
+tr.line1 td {
+	text-align:center;
+	vertical-align:middle;
+}
+
+tr.line2 * p {
+	text-align:left;
+	font-style:italic;
+}
+tr.line2 td {
+	text-align:left;
+	vertical-align:middle;
+	writing-mode:vertical-rl;
+}
+
+.tdbg{
+	background-color: #DDDDDD;
+}

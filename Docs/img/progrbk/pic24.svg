@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg height="100" width="336"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:cc="http://creativecommons.org/ns#"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ id="svg3093" version="1.1">
+ <style>
+.style0 {
+	stroke: #000;
+	fill: none;
+}
+.style3 {
+	stroke: #ccc;
+	fill: none;
+}
+
+.style1, .style2 {
+	writing-mode: lr-tb;
+	letter-spacing: 0pt;
+	word-spacing: 0pt;
+	fill: #000000;
+	font-family: "Courier New", Courier, monospace;
+	font-size:	10pt;
+}
+.style1 {
+	text-anchor: start;
+	text-align: start;
+}
+.style2 {
+	text-anchor: middle;
+	text-align: center;
+}
+</style>
+<metadata id="metadata3098">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1">
+ <text id="t_lb" x="24" y="16" class="style2">TT:</text>
+ <text id="t_lbd" x="24" y="60" class="style2">Метка</text>
+ <rect id="r_lb" x="1.5" y="46.5" width="46" height="22" class="style3"/>
+ <polyline id="pl_lb" points="0,0 0,6 26,6 26,0 26,6 13,6 13,26" transform="translate(9.5,20.5)" class="style0"/>
+
+ <text id="t_cmd" x="86" y="16" class="style2">MOV</text>
+ <text id="t_cmdd" x="86" y="60" class="style2">Операция</text>
+ <rect id="r_cmd" x="50.5" y="46.5" width="70" height="22" class="style3"/>
+ <polyline id="pl_cmd" points="0,0 0,6 30,6 30,0 30,6 15,6 15,26" transform="translate(70.5,20.5)" class="style0"/>
+
+ <text id="t_opr" x="160" y="16" class="style2">R1,R4</text>
+ <text id="t_oprd" x="160" y="60" class="style2">Операнды</text>
+ <rect id="r_opr" x="124.5" y="46.5" width="72" height="22" class="style3"/>
+ <polyline id="pl_opr" points="0,0 0,6 42,6 42,0 42,6 21,6 21,26" transform="translate(138.5,20.5)" class="style0"/>
+
+ <text id="t_cmn" x="280" y="16" class="style2">;Пересылка</text>
+ <text id="t_cmnd" x="280" y="60" class="style2">Комментарий</text>
+ <rect id="r_cmnr" x="232.5" y="46.5" width="96" height="22" class="style3"/>
+ <polyline id="pl_opr" points="0,0 0,6 84,6 84,0 84,6 42,6 42,26" transform="translate(238.5,20.5)" class="style0"/>
+ 
+ </g>
+</svg>

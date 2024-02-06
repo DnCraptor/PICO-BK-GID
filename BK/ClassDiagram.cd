@@ -1,0 +1,1012 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CAboutDlg" Collapsed="true">
+    <Position X="26.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAGAgQAAAABAABAIAAAAgAAAAAAAACAAAAAAAAg=</HashCode>
+      <FileName>BK.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBaseDialog" Collapsed="true">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAGAyCmAQECYAQgEDAIAhBSFACBDEUAABAoQAAFABCA=</HashCode>
+      <FileName>BaseDialog.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDocPaneDlgViewBase" Collapsed="true">
+    <Position X="5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAAAAAACEAAAiIAAAABBAQACAAAAEAAAABAAAAAAA=</HashCode>
+      <FileName>DocPaneDlgViewBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKApp" Collapsed="true">
+    <Position X="29.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAIAAAACkAUAAAAAABQAAEAAQKAABRAEACAAI=</HashCode>
+      <FileName>BK.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKDoc" Collapsed="true">
+    <Position X="31.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEACAAAAAACAAAgAAgASggAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BKDoc.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSettingsDlg" Collapsed="true">
+    <Position X="12.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAKEAAAAIAAEIADAAAAABAAAAAAgAAAAACACAAAA=</HashCode>
+      <FileName>BKSettingsDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BKSettDlg_1" Collapsed="true">
+    <Position X="17" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAkAKcAAAAAAAMgABAIUCQBAACAABIAAAACAAgAAHA=</HashCode>
+      <FileName>BKSettPage_1.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BKSettDlg_2" Collapsed="true">
+    <Position X="21.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQAAAKEAAAIAAAAAABACAAABACCACAAAACAAAAAAAOA=</HashCode>
+      <FileName>BKSettPage_2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BKSettDlg_3" Collapsed="true">
+    <Position X="1.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAqEABIAACACAABBAAAABCAAAgAAAAAAQAEIQQEA=</HashCode>
+      <FileName>BKSettPage_3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKView" Collapsed="true">
+    <Position X="35" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AOAAAAEiAAHAAUARnAhAoAQQgWIAEAICAMqZAAAMEQA=</HashCode>
+      <FileName>BKView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKVKBDView" Collapsed="true">
+    <Position X="36.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGDEBBAEOGBQAgIAAEBAEAAADgQAAEAAChIAAAAAAA=</HashCode>
+      <FileName>BKVKBDView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDisasmView" Collapsed="true">
+    <Position X="0.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAAACAAAAiBBQEgAAAAAAAQAABAQAAAAAAABA=</HashCode>
+      <FileName>DisasmView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMemDumpView" Collapsed="true">
+    <Position X="5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AImgECcADgAAAAgAwFAAgEBAMBIAQCACAQAAAQAAAAA=</HashCode>
+      <FileName>MemDumpView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSvDmpParamDlg" Collapsed="true">
+    <Position X="10.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIFQUAAgAAAIAAABIAAAABAAIAAAAAAICIAABABAQ=</HashCode>
+      <FileName>MemDumpView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLdDmpParamDlg" Collapsed="true">
+    <Position X="14.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAEAEAAAQAAAAAABAAAAABAAIAAIAAARCIAAAAAAA=</HashCode>
+      <FileName>MemDumpView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CRegDumpViewCPU" Collapsed="true">
+    <Position X="9.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IhGCSDAoKAQAMAAAojACQAjEBAAoAEQgAAABggFAAAI=</HashCode>
+      <FileName>RegDumpViewCPU.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMainFrame" Collapsed="true">
+    <Position X="31.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>d3z9nzpnj47X7/rc6Muz7tf6v+ksblws6l/5bt5re/w=</HashCode>
+      <FileName>MainFrm.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="COscillatorlView" Collapsed="true">
+    <Position X="36.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACDAQAAAAEIAAAIAAAIAAAAAGAAAAUQAAAAAAAIAFA=</HashCode>
+      <FileName>OscillatorView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CRegDumpViewFDD" Collapsed="true">
+    <Position X="2.75" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICEABCAAACAABQAAIBACAABAAAAAAAACgAAIAAEAAAA=</HashCode>
+      <FileName>RegDumpViewFDD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCustomSliderCtrl" Collapsed="true">
+    <Position X="33.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAABAAAAAAAAAABAABIAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>SliderButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSliderButton" Collapsed="true">
+    <Position X="33.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAQAAIAEQEiQAABBEAKAAACAAAIAAAgAAACAEAIA=</HashCode>
+      <FileName>SliderButton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CStaticLink" Collapsed="true">
+    <Position X="28" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgAAEAAAIIBAAAAAAIAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>StaticLink.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTapeCtrlView" Collapsed="true">
+    <Position X="7.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AoFFAABAAAAEQAgAAZAAAAACAEAAAAAiMIAAICAARIA=</HashCode>
+      <FileName>TapeCtrlView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_10" Collapsed="true">
+    <Position X="12" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAgAIAAAEAAAA=</HashCode>
+      <FileName>devemu\Board_10.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CFloppyDrive" Collapsed="true">
+    <Position X="31.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MAQCwAAAABAEhBJAAAAIiACgMIQADQQRUCYAABACACU=</HashCode>
+      <FileName>devemu\FloppyDrive.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Counter8253" Collapsed="true">
+    <Position X="26.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAIAAEgASAAACQgZAAAQAEACAAEAEAFgAAARAAAGA=</HashCode>
+      <FileName>devemu\Menestrel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMenestrel" Collapsed="true">
+    <Position X="15.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIEAAAQBIAIBBAAAAgAAAAACAARAAAIAAEAQAgAAAAA=</HashCode>
+      <FileName>devemu\Menestrel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKMessageBox" Collapsed="true">
+    <Position X="36.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAIAAAAAAAAAAAAAAAAAAAABAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\BKMessageBox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKSoundDevice" Collapsed="true">
+    <Position X="11" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAIQgEQDEAgAhABGAciIAAAAACYAEQAEAQIKQSABAEA=</HashCode>
+      <FileName>devemu\BKSoundDevice.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CConfig" Collapsed="true">
+    <Position X="29.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gqy/WpJE35sVQ4HM0OFCzKTly34ivsBhkIjXeaSHFHE=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CEMU8930" Collapsed="true">
+    <Position X="11" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SIAEAxYJQEIIBgQAEkAAAEQCIATAMBNAAAAQAkCQAgI=</HashCode>
+      <FileName>devemu\emu8930.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKScreen_Shared" Collapsed="true">
+    <Position X="31.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAaiAgQIgIAAAgCABCAAAAEAAIAAAAAACBAACAACQ=</HashCode>
+      <FileName>devemu\Screen_Shared.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBkSound" Collapsed="true">
+    <Position X="33.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oAICwUgIEgkBHQABQEDgBBRQAASkAEAEEAITAAAEAAA=</HashCode>
+      <FileName>devemu\BkSound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard" Collapsed="true">
+    <Position X="6.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>dcQTPOM3mvsBzCHUTjUxmcnMxCFTLAZh1AYEDBY4n2I=</HashCode>
+      <FileName>devemu\Board.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_11" Collapsed="true">
+    <Position X="0.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAkAABAAAAAAAAAACKAAAAEQIAAggAIAgAAAAAA=</HashCode>
+      <FileName>devemu\Board_11.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_11M" Collapsed="true">
+    <Position X="2" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAAAEgAJgAAAAAACAACKgIAAEQIAAggAYEAAIhAAE=</HashCode>
+      <FileName>devemu\Board_11M.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_11M_FDD" Collapsed="true">
+    <Position X="3" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAAAAAAgAAAAAIAAAAAAAIgABAABAAAggAIAAAEgAAA=</HashCode>
+      <FileName>devemu\Board_11M_FDD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_11_FDD" Collapsed="true">
+    <Position X="0.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAgAAAAAIAAAAAAAIgABAABAAAhgAIAAQAgAAA=</HashCode>
+      <FileName>devemu\Board_11_FDD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_EXT32" Collapsed="true">
+    <Position X="5.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAABEAAAQAAAAAACAAgIAAAAAABAgAIAABAgAAA=</HashCode>
+      <FileName>devemu\Board_EXT32.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_10_FDD" Collapsed="true">
+    <Position X="7.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAgBAAAAIAKAAAAAIgIBAABAAAggAIAAQAgAAA=</HashCode>
+      <FileName>devemu\Board_10_FDD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMotherBoard_MSTD" Collapsed="true">
+    <Position X="9.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAgAIAAAAAAAA=</HashCode>
+      <FileName>devemu\Board_MSTD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCovox" Collapsed="true">
+    <Position X="13.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAQBAAAQAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Covox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCPU" Collapsed="true">
+    <Position X="31.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>xJhPO4nZcQRjz9D3edcdWGShBMpdeIT/sPvUmfc+1dI=</HashCode>
+      <FileName>devemu\CPU.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDevice" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAKBAAAAAABEAAAwAAAAAAAAAAAAEAgBEA=</HashCode>
+      <FileName>devemu\Device.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CEMU2149" Collapsed="true">
+    <Position X="6.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>UIgEAhYtQAMABkBAGkAAEEQCIATAsAcABEAQAwEQCgI=</HashCode>
+      <FileName>devemu\emu2149.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CFDDController" Collapsed="true">
+    <Position X="14.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RgRAYEBxE0kAsBBcQIAZMVRApBAgIcIBKBXggBIiB1A=</HashCode>
+      <FileName>devemu\FDDController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CHDD" Collapsed="true">
+    <Position X="33.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEYAMEYEAcAgBASAIIEABAQIClUhABIEMEAwEIAAA=</HashCode>
+      <FileName>devemu\HDD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CATA_IDE" Collapsed="true">
+    <Position X="28" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAEAggAAAAAQAIAAAAAAAAAAACAAEAAAAAAAAA=</HashCode>
+      <FileName>devemu\HDD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LockVarType" Collapsed="true">
+    <Position X="33.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAQCAIABAEAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>devemu\LockVarType.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMSFManager" Collapsed="true">
+    <Position X="33.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACASACgCAwIQqiAqIjACCDIDEIMCMEYioAAAAAAAAI=</HashCode>
+      <FileName>devemu\MSFManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CScreen" Collapsed="true">
+    <Position X="29.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>qexFkVIAhwlBBKpOqMBgZJRE0HQAKB3EITEISRqQQkQ=</HashCode>
+      <FileName>devemu\Screen.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSpeaker" Collapsed="true">
+    <Position X="8.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAEQBAAACFAAAAAAACAAAQIQEAAAAAAAAACAAAIA=</HashCode>
+      <FileName>devemu\Speaker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTape" Collapsed="true">
+    <Position X="29.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FghFDQPUgAEAssAI2IgIoAQRSMVAREMLEaQAvIgGRBA=</HashCode>
+      <FileName>devemu\Tape.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKAYVolPan" Collapsed="true">
+    <Position X="19.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAKEMAAAAAAANABAAAgABAAAgADwAwAEAAAAAACA=</HashCode>
+      <FileName>emutools\BKAYVolPan.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKPaletteDlg" Collapsed="true">
+    <Position X="23.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAoAiwEAAAAAAAEACRAAAQARAAIAABAAAgAAAAgAQAQ=</HashCode>
+      <FileName>emutools\BKPaletteDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKKbdButn" Collapsed="true">
+    <Position X="35" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAGKFAAQAIHDggkIAIEAMGRAwGAAZAGQIAAIBEDQEBw=</HashCode>
+      <FileName>emutools\BKKbdButn.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKOScScr_Shared" Collapsed="true">
+    <Position X="28" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAIgAAIABAAQAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\BKOscScr_Shared.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLoadImgDlg" Collapsed="true">
+    <Position X="26.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAwAAAIAAAAAAAAAAEAACAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\LoadImgDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CJKField" Collapsed="true">
+    <Position X="36.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAEAAAAAAAIAAIAAAAAEARIABAAQAAMAAAAAAAA=</HashCode>
+      <FileName>emutools\JoyEditDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CJoyEditDlg" Collapsed="true">
+    <Position X="5.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAEAAAAAAAiAARIAAAABQIAAAAAAgAigwAAEAIA=</HashCode>
+      <FileName>emutools\JoyEditDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKOscScr" Collapsed="true">
+    <Position X="26.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACBAAAAAAEIAAgAAAQAAAwAQCAIIQIAAAAAAQAAAEA=</HashCode>
+      <FileName>emutools\BKOscScr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBreakPoint" Collapsed="true">
+    <Position X="26.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEIAAAAAAAAAAAAkAAAAAAAAAAAAESAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\BreakPoint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBrowseForFolder" Collapsed="true">
+    <Position X="28" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BgAAKCAMQAAQgAAAAAQASKAQAAAAAIQgAACAAABAgAA=</HashCode>
+      <FileName>emutools\BrowseForFolder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDisasmCtrl" Collapsed="true">
+    <Position X="36.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAGAAAEGASACQBAAAgABIAAIAAAAAkABCAAAAACA=</HashCode>
+      <FileName>emutools\DisasmCtrl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDebugger" Collapsed="true">
+    <Position X="35" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>Aoo+MeAkkhQLgDBH/NpIAIBPAwYhOgQGomRgF0YjANA=</HashCode>
+      <FileName>emutools\Debugger.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDropTarget" Collapsed="true">
+    <Position X="26.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAABAIAAIAAAAAAAAAA=</HashCode>
+      <FileName>emutools\DropTarget.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CDumpListCtrl" Collapsed="true">
+    <Position X="12.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAECAUAAGBAgCAEAAABCAgiCgEEACCEAAiABAwAKA=</HashCode>
+      <FileName>emutools\DumpListCtrl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CEnterEdit" Collapsed="true">
+    <Position X="28" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgQAAIAAAAAAAIAAAABAAA=</HashCode>
+      <FileName>emutools\EnterEditCtrl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CExceptionHalt" Collapsed="true">
+    <Position X="29.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAABAAAAAAABAA=</HashCode>
+      <FileName>emutools\ExceptionHalt.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLoadMemoryDlg" Collapsed="true">
+    <Position X="28" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\LoadMemoryDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLoadTapeDlg" Collapsed="true">
+    <Position X="29.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAIAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\LoadTapeDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMultiEdit" Collapsed="true">
+    <Position X="35" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAJAAAAAAEBAAQBIIAAAAAAAIAAAAIAAA=</HashCode>
+      <FileName>emutools\MultiEditListCtrl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CMultiEditListCtrl" Collapsed="true">
+    <Position X="12.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQgOcMAZAAgAAABIIAGAAwAkAQIAMAAAAABAAAAEEA=</HashCode>
+      <FileName>emutools\MultiEditListCtrl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CPrintDlg" Collapsed="true">
+    <Position X="28" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAABAAoBAQABAAAIAAACBAEcAAAQAQAAAEACAIAAA=</HashCode>
+      <FileName>emutools\PrintDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CScriptRunner" Collapsed="true">
+    <Position X="31.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAIAgAAQgAAAAAgBAAEAAAAAQEAyIAAMGAAAAgIAA=</HashCode>
+      <FileName>emutools\ScriptRunner.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTapeManagerDlg" Collapsed="true">
+    <Position X="3.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CGA1FDewDAiAOQKBgXBSlAAFROBEBBIWAAZIEEAAgwg=</HashCode>
+      <FileName>emutools\TapeManagerDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTapeUnit" Collapsed="true">
+    <Position X="31.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAQCAAEABOAAEBCAAAAAAAAACCAFCAJAgAAADxAw=</HashCode>
+      <FileName>emutools\TapeUnit.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKMEMDlg" Collapsed="true">
+    <Position X="8" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgADACMAAAACFCiIwlEoAgKgEACJBCRIAAEAAggAABg=</HashCode>
+      <FileName>memmap\BKMEMDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSprScr" Collapsed="true">
+    <Position X="35" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CKUBAAQAAAUAACIgoGAAhAAAkCQYYCECJAAAQkAASgA=</HashCode>
+      <FileName>memmap\SprScr.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSprView" Collapsed="true">
+    <Position X="36.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABAAAAAAEAAEIAAEBAAAAAkCAAYAAAMAAAAgACCgA=</HashCode>
+      <FileName>memmap\SprView.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSprWnd" Collapsed="true">
+    <Position X="26.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEgACAIAAAEAIACgAAAAABkAAKAAYCCBDIIYAAAAACA=</HashCode>
+      <FileName>memmap\SprWnd.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKImgFile" Collapsed="true">
+    <Position X="33.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CCACQAEAAAAAIAAAABBAACJAQAAAGAAAACQAAACCQAg=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\BKImgFile.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CBKParseImage" Collapsed="true">
+    <Position X="29.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQCAAAgAAAACBEABAAgQAAAACAAkAAAAAAgABICAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\BKParseImage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CIni" Collapsed="true">
+    <Position X="35" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>C6MgAAQQAIRAAAkYgDCAAIAICAkSAAECAAKEAARYYQM=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\Ini.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="ButtonIDs" Collapsed="true">
+    <Position X="26.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAACAAAAAAAIAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>MainFrm.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="btnList" Collapsed="true">
+    <Position X="36.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAABAA=</HashCode>
+      <FileName>memmap\BKMEMDlg.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Bool_Items" Collapsed="true">
+    <Position X="35" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAgA=</HashCode>
+      <FileName>BKSettPage_2.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DISPLAY_MODE_PARAM" Collapsed="true">
+    <Position X="36.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>MemDumpView.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SvDmpParam" Collapsed="true">
+    <Position X="28" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAABAAIAAAAAAAAAAAAAAAAAAACBA=</HashCode>
+      <FileName>MemDumpView.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CUSTOMVIEW_MODE_PARAM" Collapsed="true">
+    <Position X="33.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>RegDumpViewCPU.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CLI_PARAMETERS" Collapsed="true">
+    <Position X="28" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEAAAAAAAAAAAAAIAAMAAAgAAAABAgAABAgAAAAAACI=</HashCode>
+      <FileName>MainFrm.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="BK_MODEL_PARAMETERS" Collapsed="true">
+    <Position X="28" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAgAIAAAAAEAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="confStringParam" Collapsed="true">
+    <Position X="31.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAgAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SoundChipModelList" Collapsed="true">
+    <Position X="26.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIACAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SoundChipFreqlList" Collapsed="true">
+    <Position X="36.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="BKMEMBank_t" Collapsed="true">
+    <Position X="31.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAABAAAAAAAAAAAAAAAAABAAAAAgAAAABA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ConfBKModel_t" Collapsed="true">
+    <Position X="29.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAgAAIAAAAAAAAAAAAAAAIAAEAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="JoyElem_t" Collapsed="true">
+    <Position X="31.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAI=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="WindowParam_t" Collapsed="true">
+    <Position X="36.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAgAAAAIAAAAAAAAAAQAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DumperParam_t" Collapsed="true">
+    <Position X="26.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAQAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="BKScreen_t" Collapsed="true">
+    <Position X="33.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAQAACAAAAACAAAAAACIAAAAABAIAAAAAgAAA=</HashCode>
+      <FileName>devemu\Screen_Shared.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="HDDREG" Collapsed="true">
+    <Position X="28" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQIAAAAgQAABAEIBAEAAAAAAAQIAAAAAAIQAAAAAAA=</HashCode>
+      <FileName>devemu\HDD.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MSF_FILE_HEADER" Collapsed="true">
+    <Position X="28" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MSF_BLOCK_HEADER" Collapsed="true">
+    <Position X="35" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MSF_CPU_REGISTERS" Collapsed="true">
+    <Position X="26.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICAAAAAAAAAAAAAAAAAAAAAAQACBAAAgIAAAgAAAEAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MSF_PORT_REGS" Collapsed="true">
+    <Position X="31.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAFABwAAAAAEAAEAAAAAAAAEEAAAAwMAAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MSF_FRAMEDATA" Collapsed="true">
+    <Position X="29.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAACAAAAAAAAAABAEIEAAAAAAEAAACAgAQAEAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MSF_BLOCK_INFO" Collapsed="true">
+    <Position X="36.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TAPE_FILE_INFO" Collapsed="true">
+    <Position X="31.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAARCQAAQAAAAAEAAAAAAAAIEAAAQAAYQAACAAAA=</HashCode>
+      <FileName>devemu\Tape.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="WaveHeader" Collapsed="true">
+    <Position X="35" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAIAAAAEAAAQAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>devemu\Tape.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DataHeader" Collapsed="true">
+    <Position X="35" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Tape.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="BKKey" Collapsed="true">
+    <Position X="29.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgCAAAAAAAAAAAAAAAAAAAAAwAAAACAAQAAACIAAAA=</HashCode>
+      <FileName>emutools\BKKbdButn.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MM16kPage_t" Collapsed="true">
+    <Position X="33.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIQAAAAAAAAAAAABAAAAAAAAAAAACAAAAABAAA=</HashCode>
+      <FileName>memmap\BKMEMDlg.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="RT11SegmentHdr" Collapsed="true">
+    <Position X="35" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAACEAAAAAAAAAAAgAhAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\BKDRT11Header.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="PARSE_RESULT" Collapsed="true">
+    <Position X="33.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AECAAAAAAAAQAAAAQAAAAAAgQAAAAAAAAAggAAAAEAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\BKParseImage.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SYS_SECTOR" Collapsed="true">
+    <Position X="29.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABBAQAAAEAAAYBAAASAEAGBAABQEAAAAAAAASBBA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\HDIStuff.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="IMGFormat" Collapsed="true">
+    <Position X="29.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgEAAAAAAAIAAAAAAAAgAAAAAEAAggEKACAg=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\HDIStuff.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="AbstractLD" Collapsed="true">
+    <Position X="26.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAAAACEAAAAAFCgEAAKBAgAAAAAAAABAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\HDIStuff.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TOOLS_PARAMS" Collapsed="true">
+    <Position X="33.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\ToolManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="OPT_IDX" Collapsed="true">
+    <Position X="28" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAAIgEAAQABAAgYAAAADCCACSBEBkABAAEAIIBUACA=</HashCode>
+      <FileName>BKSettPage_2.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CUSTOMVIEW_MODE" Collapsed="true">
+    <Position X="31.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RegDumpViewCPU.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="STATUS_FIELD" Collapsed="true">
+    <Position X="31.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAQAAAAAAAAAAAEAACCAAAAAAABAAAAIA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_042d_1" Collapsed="true">
+    <Position X="26.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CONF_SCREEN_RENDER" Collapsed="true">
+    <Position X="29.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAEAAAAAAAQAAAAQQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CONF_OSCILLOSCOPE_RENDER" Collapsed="true">
+    <Position X="28" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAACAQAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BK_DEV_MPI" Collapsed="true">
+    <Position X="35" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAACAAAQAIAAAAAAABAAQIAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CONF_BKMODEL" Collapsed="true">
+    <Position X="26.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAgCgAAACAQAABAEAgghAAAGCBAAAoQAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HDD_MODE" Collapsed="true">
+    <Position X="29.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAIAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="FDD_DRIVE" Collapsed="true">
+    <Position X="36.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAAAAApAEAAAA=</HashCode>
+      <FileName>devemu\Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PSW_BIT" Collapsed="true">
+    <Position X="29.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAEAAAAAAAAAAAAAAAIAAAgBBUEAE=</HashCode>
+      <FileName>devemu\CPU.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HDD_REGISTER" Collapsed="true">
+    <Position X="31.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4B8DAAA=</HashCode>
+      <FileName>devemu\HDD.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MSF_CONF" Collapsed="true">
+    <Position X="26.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAACACAAAAAAAAgQAAAAMAAAAAA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MSF_BLOCKTYPE" Collapsed="true">
+    <Position X="36.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAEgAAgAAABAQAABAAAACAIAIAAogA=</HashCode>
+      <FileName>devemu\MSF.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BKKeyType" Collapsed="true">
+    <Position X="36.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgAAAACAAAAAQAAAIBAAAgAAAAABAAAAAAAAAAAAIQA=</HashCode>
+      <FileName>emutools\BKKbdButn.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_045d_1" Collapsed="true">
+    <Position X="28" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIBAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\BreakPoint.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DISASM_LIST" Collapsed="true">
+    <Position X="33.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAABAEAAAAIAAAAAI=</HashCode>
+      <FileName>emutools\DisasmCtrl.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0461_1" Collapsed="true">
+    <Position X="29.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAACAAIAAAAAAACAAAAAAAAAEAAIAABAAAIAAAAIAA=</HashCode>
+      <FileName>emutools\Debugger.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0461_2" Collapsed="true">
+    <Position X="31.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAgAAAgAAABAIAAAAAACAIAAAAAAA=</HashCode>
+      <FileName>emutools\Debugger.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DUMP_DISPLAY_MODE" Collapsed="true">
+    <Position X="35" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>emutools\DumpListCtrl.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IMAGE_TYPE" Collapsed="true">
+    <Position X="33.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQAAAAEAABAAQAAgAgAAAQAAEAAAIAAAIAAAAAABAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\BKParseImage.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IMGIOSTATUS" Collapsed="true">
+    <Position X="35" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\HDIStuff.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ALD_ATTR" Collapsed="true">
+    <Position X="33.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAQAAAAAAAAgJBAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\HDIStuff.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="FIR_WINDOW" Collapsed="true">
+    <Position X="28" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIACAEIAEAAUAAAAAAAQAACAAAAAIAAgAAAAAgAGA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\libdspl-2.0.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="FIR_FILTER" Collapsed="true">
+    <Position X="26.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAIAAwAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\Projects\BKemu\shared\libdspl-2.0.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

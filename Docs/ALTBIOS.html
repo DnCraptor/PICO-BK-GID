@@ -1,0 +1,1845 @@
+<html>
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<link href="css/cmmn.css" rel="stylesheet">
+<link href="css/style11.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div id="content" class="content">
+	<h1>ТЕХНИЧЕСКОЕ ОПИСАНИЕ КОНТРОЛЛЕРОВ &quot;АЛЬТПРО&quot;<br>с доп. памятью
+	<span class="nmbr">64</span>-<span class="nmbr">512</span> Кб и версией ПЗУ 
+	не ниже <span class="nmbr">2</span>.<span class="nmbr">00</span></h1>
+	<p>Фирмой &quot;АльтПро&quot; (экс-&quot;Альтек&quot;) выпускаются контроллеры 
+	с дополнительной памятью <span class="nmbr">64</span>, <span class="nmbr">128</span>,
+	<span class="nmbr">256</span>, <span class="nmbr">512</span> Кб с одинаковой 
+	организацией. Все перечисленные контроллеры имеют <span class="nmbr">8</span>
+	<i><u>режимов</u></i> работы доп. ОЗУ, различающихся, главным образом, адресами 
+	подключения дополнительной памяти с выработкой соответствующих сигналов отключения 
+	основных ПЗУ/ОЗУ, а также наличием или отсутствием доступа к HALT-режиму процессора 
+	БК. Поскольку распределение основной памяти в разных моделях БК существенно 
+	различается, часть режимов предназначена для использования с БК0010(-<span class="nmbr">01</span>), 
+	часть - с БК11М. Причём тип машины автоматически распознаётся при включении 
+	питания, и сразу подключается необходимый для работы режим.</p>
+	<p>Работа с дополнительной памятью осуществляется через программные <i><u>запросы</u></i> 
+	к специальному диспетчеру, получившему название &quot;BIOS&quot; по аналогии 
+	с IBM. Все точки входа BIOS расположены в области ПЗУ выше
+	<span class="nmbr">167000</span> (эта часть получила название <i><u>ROM-BIOS</u></i>, 
+	она меняться не будет), обработка же запросов производится в загружаемой в ОЗУ 
+	части, называемой <i><u>RAM-BIOS</u></i>. Прямые обращения к этой части (кроме 
+	проверки наличия и считывания номера версии) не практикуются. Если RAM-BIOS 
+	в ОЗУ отсутствует, то большинство запросов будет вызывать <i><u>сигнал ошибки</u></i> 
+	- характерное затухающее подёргивание экрана с прерывистым звуковым сигналом.</p>
+	<p>BIOS обеспечивает бесконфликтное выделение памяти по запросу, освобождение 
+	памяти (обратная операция), пересылку либо обмен массивов, чтение/запись
+	<span class="nmbr">1</span> слова, вызов подпрограммы из доп. памяти или безусловную 
+	передачу управления (<span class="cmds">JMP</span>), изменение режима и др.</p>
+	<p>Корректное использование запросов BIOS обеспечивает взаимную совместимость 
+	программного обеспечения, переносимость программ на разные модели БК и контроллеров. 
+	Кроме того, использование запросов значительно упрощает и сокращает программы. 
+	(Короче, кто не использует запросы - тот сам виноват, такие программы распространять 
+	не будем и другим не советуем).</p>
+	<h2>УРОВНИ ЗАПРОСОВ BIOS</h2>
+	<p>В распоряжении программистов имеется <span class="nmbr">3</span> уровня запросов 
+	BIOS: высокий, средний и низкий. Выделение памяти может быть произведено только 
+	на высоком уровне (выделенный фрагмент называется <i><u>модулем</u></i>), информация 
+	о модулях и свободной памяти содержится во внутреннем каталоге BIOS'а.</p>
+	<p>На <i><u>высоком уровне</u></i> используется обращение по имени модуля, обработка 
+	запроса включает в себя поиск имени в каталоге и подстановку физического адреса, 
+	поэтому такие запросы выполняются наиболее медленно.</p>
+	<p>На <i><u>среднем уровне</u></i> используется обращение к памяти по <i><u>
+	логическому номеру сегмента</u></i> (вся память разбита на сегменты длиной
+	<span class="nmbr">20000</span> со сквозной нумерацией, несколько особых сегментов 
+	имеют меньшую длину). Такие запросы выполняются намного быстрее, так как отсутствует 
+	поиск в каталоге. При образовании модуля, используемого на среднем уровне, (при 
+	выделении памяти) необходимо установить признак неперемещаемости и затем с помощью 
+	спец. запроса получить фактическое значение логического номера сегмента.</p>
+	<p>На <i><u>низком уровне</u></i> используется обращение по коду режима и физическому 
+	адресу, что максимально быстро в рамках BIOS'а, но всё равно выполняется
+	<span class="nmbr">40</span>. чисто подготовительных операций (сохранение и 
+	восстановление регистров, вектора <span class="nmbr">4</span>, блокировка СТОП, 
+	распознавание запроса и переключение режимов) + до <span class="nmbr">20</span>. 
+	операций извлечения и контроля аргументов.</p>
+	<p>Поэтому в тех случаях, когда действительно нужна высокая скорость обращения 
+	к доп. памяти и при этом нельзя разместить используемые процедуры и данные просто 
+	внутри одного модуля, нужно вначале по запросу подключать требуемый модуль, 
+	затем работать с ним напрямую (по возможности без переключений), в конце возвращаться 
+	в исходный режим. Для максимально быстрого переключения режимов и страниц памяти 
+	служит особый запрос &quot;сверхнизкого&quot; уровня <span class="labl">CH$WRK</span>, 
+	который практически ничего не сохраняет и не проверяет, только переключает режим 
+	и передаёт управление, да ещё вписывает код нового рабочего режима в специальную 
+	ячейку @<span class="labl">WRK$</span>, что совершенно необходимо (для корректных 
+	возвратов) в том случае, если в процессе работы в новом режиме используются 
+	какие-либо запросы или могут происходить внешние прерывания, переключающие режимы. 
+	(При возвратах из других страниц и режимов код текущего рабочего режима извлекается 
+	из специального стека, расположенного внутри RAM-BIOS, ячейка
+	<span class="labl">WRK$</span> - указатель этого стека; в запросе
+	<span class="labl">CH$WRK</span> - <span class="nmbr">19</span>. операций, включая &quot;<span class="cmds">BEQ</span>&quot;, &quot;<span class="cmds">JMP</span>&quot;.)</p>
+	<p><i><u>При всех запросах, кроме оговорённых отдельно, стек не должен находиться 
+	выше <span class="nmbr">100000</span>.</u></i> Для выполнения этого условия 
+	рекомендуется использование запроса низкого уровня <b><span class="labl">NEW$SP</span></b>, 
+	обеспечивающего корректное образование нового стека.</p>
+	<h2>Запросы высокого и среднего уровней</h2>
+	<p>Запросы высокого и среднего уровней имеют одинаковые точки входа, тип запроса 
+	определяется значением старшего байта аргумента, именуемого ниже &quot;<span class="labl">NASEG</span>&quot;.</p>
+	<table class="border4 vtop">
+		<tr>
+			<td>
+			<p><span class="labl">NASEG</span></p>
+			</td>
+			<td>
+			<p>- аргумент, в котором содержится имя модуля либо логический номер 
+			сегмента (=NAME/SEGMENT). Имя модуля (<span class="nmbr">1</span> слово) 
+			представляет собой <span class="nmbr">2</span> символа (<span class="nmbr">1</span>-й 
+			- старший байт, <span class="nmbr">2</span>-й - младший!), в старшем 
+			байте - идентификатор автора модуля, младший идентифицирует сам модуль. 
+			Если старший байт = <span class="nmbr">0</span>, то это запрос среднего 
+			уровня и <span class="labl">NASEG</span> = логическому номеру сегмента; 
+			номера сегментов <span class="nmbr">376</span> и <span class="nmbr">
+			377</span> обозначают текущий и DOS-режим соответственно (текущий - 
+			режим, из которого пришел запрос, DOS - режим ДОС, в него происходит 
+			выход по запросу <span class="labl">EXIT$</span> - см. его описание).</p>
+			<p>Идентификатор автора модуля введён с целью предотвращения совпадения 
+			имён модулей разных авторов, список &quot;занятых&quot; знаков приведён 
+			в приложении <span class="nmbr">5</span> (просьба к программистам сообщать 
+			в АльтПро о &quot;занимаемых&quot; ими знаках).</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">ADRSME</span></p>
+			</td>
+			<td>
+			<p>- смещение от начала модуля, если это запрос высокого уровня, или 
+			от начала сегмента, если это запрос среднего уровня; если
+			<span class="labl">NASEG</span> = <span class="nmbr">376</span> или
+			<span class="nmbr">377</span>, то <span class="labl">ADRSME</span> - 
+			физический адрес.</p>
+			</td>
+		</tr>
+	</table>
+	<p><i>Описанные ниже запросы сохраняют <span class="regn">R3</span>-<span class="regn">R5</span>, 
+	остальные регистры, если это не оговорено отдельно, не сохраняются.</i></p>
+	<p><i>При вызове подпрограмм BIOS можно использовать только абсолютную адресацию!</i></p>
+	<h3>1. Копирование или обмен массивов ( <span class="labl">MOV$G</span> )</h3>
+	<pre>        <span class="cmds">MOV</span>     #<span class="labl">ADRSME1</span>,<span class="regn">R0</span>
+        <span class="cmds">MOV</span>     #<span class="labl">ADRSME2</span>,<span class="regn">R1</span>
+        <span class="cmds">MOV</span>     #<span class="labl">LEN</span>,<span class="regn">R2</span>
+        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">MOV$G</span>      <span class="cmmnt">;@#167520</span>
+        <span class="pscm">.WORD</span>   <span class="labl">NASEG1</span>,<span class="labl">NASEG2</span></pre>
+	<p>Под номером <span class="nmbr">1</span> - массив-источник, под номером
+	<span class="nmbr">2</span> - приёмник.</p>
+	<p>Отрицательное (NEG) значение <span class="labl">LEN</span> (длина в словах) 
+	обозначает обмен. Т.о., запрос обеспечивает обмен массивов длиной до
+	<span class="nmbr">200000</span> байт.</p>
+	<h3>2. Чтение или обмен одного слова ( <span class="labl">CHW$G</span> )</h3>
+	<pre>        <span class="cmds">JSR</span>     <span class="regn">R5</span>,<span class="labl">CHW$G</span>        <span class="cmmnt">;@#167517</span>
+        <span class="pscm">.WORD</span>   <span class="labl">ADRSME</span>,<span class="labl">NASEG</span></pre>
+	<p>Обмен происходит с регистром <span class="regn">R0</span>;
+	<span class="regn">R1</span> - флаг (<span class="nmbr">0</span> - обмен, иначе 
+	- чтение). Если <span class="regn">R1</span>=<span class="nmbr">0</span> при 
+	выходе - ошибка.</p>
+	<h3>3. Вызов подпрограммы из доп. памяти ( <span class="labl">CAL$G</span> )</h3>
+	<pre>        <span class="cmds">JSR</span>     <span class="regn">R5</span>,<span class="labl">CAL$G</span>        <span class="cmmnt">;@#167516</span>
+        <span class="pscm">.WORD</span>   <span class="labl">ADRSME</span>,<span class="labl">NASEG</span></pre>
+	<p>Подпрограмме передаются <span class="regn">R3</span>-<span class="regn">R5</span>, 
+	из подпрограммы возвращаются все регистры. Можно использовать стандартную передачу 
+	параметров через стек, нельзя только в подпрограмме использовать адрес возврата 
+	(@<span class="regn">SP</span>) - он изменён!</p>
+	<p>На время работы вызываемой п/п блокируются прерывания по вектору
+	<span class="nmbr">4</span> (программно - в @#<span class="nmbr">4</span> заносится 
+	#<span class="labl">STP$</span>, в @#<span class="nmbr">6</span> - #<span class="nmbr">200</span>, 
+	при возврате восстанавливаются прежние значения), и устанавливается высокий 
+	приоритет процессора (при возврате восстанавливается прежний).</p>
+	<p>Максимальная вложенность подпрограмм в RAM-BIOS v<span class="nmbr">3</span>.<span class="nmbr">01</span> 
+	- <span class="nmbr">20</span> (decimal).</p>
+	<p>Если <span class="regn">R1</span>=<span class="nmbr">0</span> при выходе, 
+	то произошла ошибка.</p>
+	<h3>4. Безусловный переход ( <span class="labl">JMP$G</span> )</h3>
+	<pre>        <span class="cmds">JSR</span>     <span class="regn">R5</span>,<span class="labl">JMP$G</span>        <span class="cmmnt">;@#167515</span>
+        <span class="pscm">.WORD</span>   <span class="labl">ADRSME</span>,<span class="labl">NASEG</span></pre>
+	<p>Аналогично блокируются прерывания по вектору <span class="nmbr">4</span> 
+	и устанавливается высокий приоритет процессора.</p>
+	<p>Если произошёл выход, то была ошибка, при этом <span class="regn">R1</span>=<span class="nmbr">0</span>.</p>
+	<h3>5. Работа с каталогом, создание, удаление модулей и др. (
+	<span class="labl">CAT$</span> )</h3>
+	<pre>        <span class="cmds">MOV</span>     #<span class="labl">NUMBER</span>,<span class="regn">R0</span>      <span class="cmmnt">;номер функции</span>
+        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">CAT$</span>       <span class="cmmnt">;@#167521</span></pre>
+	<p><span class="regn">R0</span>=<span class="nmbr">0</span> - создание модуля 
+	(создание записи о модуле в каталоге).</p>
+	<p>Аргументы:</p>
+	<table class="border2 vtop">
+		<tr>
+			<td>
+			<p><span class="regn">R1</span></p>
+			</td>
+			<td>
+			<p>- адрес записи, которую нужно занести в каталог (формат этой записи 
+			такой же, как у записи в каталоге - см. приложение
+			<span class="nmbr">3</span>; расположена она должна быть в основном 
+			ОЗУ - ниже <span class="nmbr">100000</span>);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="regn">R2</span></p>
+			</td>
+			<td>
+			<p>- код требуемого сегмента (см. прил. <span class="nmbr">2</span>.<span class="nmbr">2</span>), 
+			если нужен определённый сегмент, или <span class="nmbr">0</span> - любой. 
+			В процессе обработки <span class="regn">R2</span> очищается по маске 
+			#<span class="nmbr">74000</span>;</p>
+			</td>
+		</tr>
+	</table>
+	<p>Следующие <span class="nmbr">2</span> параметра &quot;предлагаемой&quot; 
+	записи, а также признак #<span class="nmbr">20</span>, учитываются только при 
+	установленном бите #<span class="nmbr">4</span> в &lt;<span class="argm">признаках</span>&gt; 
+	(см. прил.<span class="nmbr">3</span>). Это:</p>
+	<ul>
+		<li>
+		код сегмента (т.е. <span class="regn">R2</span> не равный
+		<span class="nmbr">0</span>);</li>
+		<li>
+		требуемое смещение модуля от начала сегмента (может быть равно
+		<span class="nmbr">0</span>) + <span class="nmbr">100000</span> - в слове &lt;<span class="argm">смещение</span>&gt; 
+		(см. прил.<span class="nmbr">3</span>).</li>
+	</ul>
+	<p>Если после выхода <span class="regn">R0</span>=<span class="nmbr">0</span>, 
+	то модуль не создан из-за недостатка памяти или переполнения каталога. Если
+	<span class="regn">R0</span>&lt;<span class="nmbr">0</span> - модуль под таким 
+	именем уже есть.</p>
+	<table class="border2 vtop">
+		<tr>
+			<td width="50">
+			<p><span class="regn">R0</span>=<span class="nmbr">2</span></p>
+			</td>
+			<td>
+			<p>- безусловное удаление модуля (без проверки признаков и запуска
+			<span class="labl">END</span>-<span class="nmbr">2</span>), в конце 
+			- переход к функции номер <span class="nmbr">6</span>.</p>
+			<p>Вход: <span class="regn">R1</span> - имя модуля;
+			<span class="regn">R0</span> сохраняется.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="regn">R0</span>=<span class="nmbr">4</span></p>
+			</td>
+			<td>
+			<p>- то же, но с вызовом <span class="labl">END</span>-<span class="nmbr">2</span>.</p>
+			</td>
+		</tr>
+	</table>
+	<p>Если в запросах #<span class="nmbr">2</span> и <span class="nmbr">4</span> 
+	после выхода <span class="regn">R2</span>=<span class="nmbr">0</span> - ошибка.</p>
+	<table class="border2 vtop">
+		<tr>
+			<td width="50">
+			<p><span class="regn">R0</span>=<span class="nmbr">6</span></p>
+			</td>
+			<td>
+			<p>- цикл удаления модулей, у которых отсутствуют родительские модули 
+			и которые не запрещено удалять в этом случае. <span class="regn">R0</span>,
+			<span class="regn">R2</span> сохраняются.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="regn">R0</span>=<span class="nmbr">10</span></p>
+			</td>
+			<td>
+			<p>- чтение/запись слова каталога (через <span class="regn">R1</span>); 
+			после команды (<span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">CAT$</span>) 
+			ещё два слова: имя, смещение (последнее – в записи каталога, см. ниже). 
+			Если в смещении установлен бит #<span class="nmbr">100000</span>, производится 
+			запись, иначе - чтение. Если <span class="regn">R0</span> равен нулю 
+			после выхода - ошибка.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="regn">R0</span>=<span class="nmbr">12</span></p>
+			</td>
+			<td>
+			<p>- возвращает информацию о RAM-BIOS. <span class="regn">R0</span> 
+			- номер версии. Текущая версия - <span class="nmbr">3</span>.<span class="nmbr">05</span> 
+			(#<span class="nmbr">305</span>). <span class="regn">R1</span> - физический 
+			адрес начала каталога модулей (он находится по данному адресу в системной 
+			странице в <span class="selc">SYS</span>-режиме, код включения = #<span class="nmbr">2160</span>),
+			<span class="regn">R2</span> - кол-во записей в каталоге.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="regn">R0</span>=<span class="nmbr">16</span></p>
+			</td>
+			<td>
+			<p>- получение кода режима и адреса для обращения на низком уровне. 
+			Сохраняется <span class="regn">R0</span>. После команды (<span class="cmds">JSR</span>
+			<span class="regn">R5</span>,@#<span class="labl">CAT$</span>) ещё
+			<span class="nmbr">2</span> слова: смешение, имя. Выход:
+			<span class="regn">R1</span> - физический адрес, <span class="regn">
+			R2</span> - код режима (из числа тех режимов, которые в двойной рамке 
+			в табл.<span class="nmbr">1</span>). Если <span class="regn">R2</span>=<span class="nmbr">0</span> 
+			- ошибка.</p>
+			</td>
+		</tr>
+	</table>
+	<h2>Общеупотребительные запросы низкого уровня</h2>
+	<h3>6. Сохранение области основной памяти ( <span class="labl">SAVE$</span> 
+	)</h3>
+	<pre>        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">SAVE$</span>      <span class="cmmnt">;@#167530</span></pre>
+	<p>Вход: <span class="regn">R0</span> - адрес вершины (т.е. адрес над областью);
+	<span class="regn">R1</span> - длина (вниз), байт; стек может быть в доп. памяти 
+	( <span class="regn">SP</span>&gt;<span class="nmbr">100000 </span>).</p>
+	<p>Нормальный выход: <span class="regn">R0</span>,<span class="regn">R1</span> 
+	не портятся. Нет места для сохранения: <span class="regn">R0</span>=<span class="nmbr">0</span>. 
+	Сохранение производится во внутреннем <i><u>стеке сохранения</u></i> RAM-BIOS, 
+	общий его объём в версии <span class="nmbr">3</span>.<span class="nmbr">01</span> 
+	- <span class="nmbr">1000</span> с небольшим байт.</p>
+	<p>Сохранение и восстановление (в резидентных программах) должно быть в одном 
+	вызове (прерывании), иначе может нарушиться порядок (LIFO: Last In - First Out).</p>
+	<h3>7. Восстановление области памяти, сохранённой по <span class="labl">SAVE$</span> 
+	(<span class="labl">RESTO$</span>)</h3>
+	<pre>        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">RESTO$</span>     <span class="cmmnt">;@#167531</span></pre>
+	<p>Регистры не портит, стек может быть в дополнительной памяти.</p>
+	<h3>8. Создание нового стека в основном ОЗУ с его (ОЗУ) сохранением (
+	<span class="labl">NEW$SP</span> )</h3>
+	<table class="border">
+		<tr>
+			<th>
+			<p>Вызов:</p>
+			</th>
+			<th>
+			<p>либо:</p>
+			</th>
+			<th>
+			<p>либо:</p>
+			</th>
+		</tr>
+		<tr>
+			<td>
+			<pre><span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">NEW$SP</span>
+<span class="pscm">.WORD</span>   <span class="labl">TOP</span>
+<span class="pscm">.WORD</span>   <span class="labl">LEN</span></pre>
+			</td>
+			<td>
+			<pre><span class="cmds">MOV</span> #<span class="labl">TOP</span>,<span class="regn">R0</span>
+<span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">NEW$SP</span>+2
+<span class="pscm">.WORD</span>   <span class="labl">LEN</span></pre>
+			</td>
+			<td>
+			<pre><span class="cmds">MOV</span> #<span class="labl">TOP</span>,<span class="regn">R0</span>
+<span class="cmds">MOV</span> #<span class="labl">LEN</span>,<span class="regn">R1</span>
+<span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">NEW$SP</span>+4</pre>
+			</td>
+		</tr>
+	</table>
+	<table class="border2">
+		<tr>
+			<td colspan="2">
+			<p><span class="labl">NEW$SP</span>=<span class="nmbr">167630</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td width="50">
+			<p><span class="labl">TOP</span></p>
+			</td>
+			<td>
+			<p>- адрес вершины нового стека (адрес над стеком);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">LEN</span></p>
+			</td>
+			<td>
+			<p>- длина, байт (вниз) (для сохранения ОЗУ)</p>
+			</td>
+		</tr>
+	</table>
+	<p>Старый стек может располагаться в доп. памяти (выше <span class="nmbr">100000</span>).</p>
+	<table class="border2 vtop">
+		<tr>
+			<td>
+			<p>НОРМАЛЬНЫЙ ВЫХОД:</p>
+			</td>
+			<td>
+			<p>разряд <span class="symb">Z</span>=<span class="nmbr">0</span> (т.е. &quot;не
+			<span class="nmbr">0</span>&quot;), <span class="regn">R0</span> не 
+			равно <span class="nmbr">0</span>;</p>
+			<p><span class="regn">SP</span> = #<span class="labl">TOP</span>-<span class="nmbr">2</span>, 
+			@<span class="regn">SP</span> = &lt;прежний <span class="regn">SP</span>&gt;; 
+			портит <span class="regn">R0</span>,<span class="regn">R1</span>.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>НЕТ МЕСТА ДЛЯ СОХРАНЕНИЯ:</p>
+			</td>
+			<td>
+			<p><span class="symb">Z</span>=<span class="nmbr">1</span>,
+			<span class="regn">R0</span>=<span class="nmbr">0</span>,
+			<span class="regn">SP</span> и <span class="regn">R1</span> не изменяются.</p>
+			</td>
+		</tr>
+	</table>
+	<p>Сохранение области ОЗУ происходит по <span class="labl">SAVE$</span> (см. 
+	выше) во внутреннем буфере BIOS'а стекового типа, его размер -
+	<span class="nmbr">1000</span> с небольшим. При создании нового стека необходимо 
+	дополнительно резервировать min <span class="nmbr">44</span> байта в связи с 
+	дребезгом СТОП (наблюдался случай, когда прерывание по вектору
+	<span class="nmbr">4</span> успевало произойти <span class="nmbr">8</span> раз, 
+	после чего подряд <span class="nmbr">8</span> <span class="cmds">RTI</span> 
+	и т.д.).</p>
+	<p><b>Возврат в старый стек с восстановлением ОЗУ:</b></p>
+	<pre>        <span class="cmds">MOV</span>     @<span class="regn">SP</span>,<span class="regn">SP</span>
+        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">RESTO$</span>     <span class="cmmnt">;@#167531</span></pre>
+	<h3>9. Быстрая установка/чтение кода текущего режима с передачей управления 
+	( <span class="labl">CH$WRK</span> )</h3>
+	<table class="border">
+		<tr>
+			<th>
+			<p>Вызов:</p>
+			</th>
+			<th>
+			<p>либо:</p>
+			</th>
+			<th>
+			<p>либо:</p>
+			</th>
+		</tr>
+		<tr>
+			<td>
+			<pre><span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">CH$WRK</span>
+<span class="pscm">.WORD</span>   <span class="oprt">mode</span>
+<span class="pscm">.WORD</span>   <span class="oprt">addr</span></pre>
+			</td>
+			<td>
+			<pre><span class="cmds">MOV</span> <span class="oprt">mode</span>,<span class="regn">R0</span>
+<span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">CH$WRK</span>+<span class="nmbr">2</span>
+<span class="pscm">.WORD</span>   <span class="oprt">addr</span></pre>
+			</td>
+			<td>
+			<pre><span class="cmds">MOV</span> <span class="oprt">mode</span>,<span class="regn">R0</span>
+<span class="cmds">JSR</span> <span class="regn">R5</span>,@#<span class="labl">CH$WRK</span>+<span class="nmbr">4</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p><span class="nmbr">3</span>-й вариант - без передачи управления (т.е. с возвратом 
+	на следующий за &quot;<span class="cmds">JSR</span>&quot; адрес).</p>
+	<table class="border2 vtop">
+		<tr>
+			<td colspan="2">
+			<p><span class="labl">CH$WRK</span>=<span class="nmbr">167734</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>ВХОД:</p>
+			</td>
+			<td>
+			<p>при <span class="oprt">mode</span> &lt;= <span class="nmbr">0</span> 
+			производится только считывание кода текущего режима (в
+			<span class="regn">R4</span>) без установки нового, на передачу управления 
+			это не влияет;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>ВЫХОД:</p>
+			</td>
+			<td>
+			<p><span class="regn">R4</span> = код текущего режима до выполнения
+			<span class="labl">CH$WRK</span>; <span class="regn">R5</span>,<span class="regn">R0</span> 
+			портятся (<span class="regn">R0</span>=<span class="nmbr">177130</span>).</p>
+			</td>
+		</tr>
+	</table>
+	<p>Ничего не проверяет, не блокирует прерывания, не пользуется стеком (кроме 
+	первых <span class="nmbr">2</span>-<span class="nmbr">3</span> команд ещё до 
+	переключений режимов - т.е. нормально работает, даже если в новом режиме
+	<span class="regn">SP</span> будет указывать на ПЗУ).</p>
+	<p>В подключаемом режиме в сегменте <span class="nmbr">160000</span>... должен 
+	присутствовать ROM-BIOS.</p>
+	<h3>10. Завершение работы программы и выход в ДОС ( <span class="labl">EXIT$</span> 
+	)</h3>
+	<pre>        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">EXIT$</span>      <span class="cmmnt">;@#167527</span></pre>
+	<p>Инициализирует RAM-BIOS (в частности, очищает <i><u>стек возвратов</u></i> 
+	из подпрограмм, вызванных по запросам <span class="labl">CAL$G</span> и
+	<span class="labl">CAL$N</span>) и выходит в режим &quot;DOS&quot;, обычно на
+	<span class="nmbr">100000</span> (см. прил.<span class="nmbr">6</span>). Таким 
+	образом, обеспечивается корректный выход в ДОС из любого режима. Также очищает 
+	стек сохранений (используемый запросами <span class="labl">SAVE$</span> и
+	<span class="labl">NEW$SP</span>).</p>
+	<p>Кроме того, удаляются модули, у которых установлен признак удаления по
+	<span class="labl">EXIT$</span>, а также все модули, у которых отсутствует родительский 
+	модуль и при этом их удалять не запрещено (&quot;удаление мусора&quot;).</p>
+	<h2>Прочие запросы низкого уровня</h2>
+	<h3>11. Пересылка или обмен массивов ( <span class="labl">MOV$N</span> )</h3>
+	<pre>        <span class="cmds">MOV</span>     <span class="oprt">sadr</span>,<span class="regn">R0</span>         <span class="cmmnt">;адрес источника</span>
+        <span class="cmds">MOV</span>     <span class="oprt">dadr</span>,<span class="regn">R1</span>         <span class="cmmnt">;адрес приёмника</span>
+        <span class="cmds">MOV</span>     <span class="oprt">n</span>,<span class="regn">R2</span>            <span class="cmmnt">;длина массива - n слов</span>
+        <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">MOV$N</span>      <span class="cmmnt">;@#167526</span>
+        <span class="pscm">.WORD</span>   <span class="oprt">smod</span>,<span class="oprt">dmod</span>       <span class="cmmnt">;коды режимов источника,приёмника</span></pre>
+	<p>Длина массива меньше <span class="nmbr">0</span> (NEG) означает обмен массивов, 
+	иначе - пересылка.</p>
+	<p>Коды режимов - это коды подключения режимов и страниц (см. прил.<span class="nmbr">1</span>) 
+	+ флаги:</p>
+	<table>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">100000</span></p>
+			</td>
+			<td>
+			<p>- &quot;любой режим&quot; (устанавливать, если массив в основном 
+			ОЗУ или ПЗУ);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">40000</span></p>
+			</td>
+			<td>
+			<p>- устанавливать, если в этом режиме в сегменте <span class="nmbr">
+			160000</span>... отсутствует ROM-BIOS (ПЗУ или его копия); в этом случае 
+			пересылка производится без обращения к ROM-BIOS (п/п пересылки - в стеке);</p>
+			</td>
+		</tr>
+	</table>
+	<p>Код режима = <span class="nmbr">0</span> означает текущий рабочий режим (берётся 
+	из ячейки @<span class="labl">WRK$</span> - при штатном использовании запросов 
+	BIOS, включая <span class="labl">CAL$</span>.., <span class="labl">JMP$</span>.., 
+	эта ячейка всегда содержит код текущего режима). Правильность установки флагов 
+	режимов не контролируется.</p>
+	<p>Все регистры сохраняются. Стек должен быть ниже <span class="nmbr">100000</span>. 
+	Перекрытие массивов приведёт к ошибке, если приёмник выше источника. Если заданы 
+	несовпадающие режимы и отсутствует флаг #<span class="nmbr">100000</span>, пересылка 
+	ведётся через основное ОЗУ (с адреса = <span class="regn">SP</span>) с его сохранением, 
+	перекрытия и пересылка <i><u>из ПЗУ</u></i> в этом случае недопустимы.</p>
+	<h3>12,13. Чтение и обмен слов ( <span class="labl">RDW$N</span> и CHW$N )</h3>
+	<pre>    <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">RDW$N</span> или @#<span class="labl">CHW$N</span>      <span class="cmmnt">;@#167524 или @#167525</span>
+    <span class="pscm">.WORD</span>   <span class="oprt">addr</span>, <span class="oprt">mode</span> &amp; <span class="oprt">flags</span></pre>
+	<p>Читает слово в <span class="regn">R0</span> или обменивает с
+	<span class="regn">R0</span>.</p>
+	<p>Флаги и <span class="nmbr">0</span> означают то же, что и в
+	<span class="labl">MOV$N</span>. В случае установки флага #<span class="nmbr">40000</span> 
+	чтение и обмен производятся в несколько раз медленнее, чем без него.</p>
+	<h3>14,15. Вызов подпрограммы и безусловный переход (<span class="labl">CAL$N</span> 
+	и <span class="labl">JMP$N</span>)</h3>
+	<pre>    <span class="cmds">JSR</span>     <span class="regn">R5</span>,@#<span class="labl">CAL$N</span> или @#<span class="labl">JMP$N</span>      <span class="cmmnt">;@#167522 или @#167523</span>
+    <span class="pscm">.WORD</span>   <span class="oprt">addr</span>,<span class="oprt">mode</span></pre>
+	<p>В отличие от предыдущих запросов учитывается только реальный код режима и 
+	страницы (флаги и <span class="nmbr">0</span> не интерпретируются);
+	<span class="labl">CAL$N</span> и <span class="labl">JMP$N</span> применимы 
+	только для тех режимов и страниц, в которых в сегменте <span class="nmbr">160000</span>... 
+	есть ROM-BIOS.</p>
+	<p>Подпрограмме передаются и из подпрограммы возвращаются все регистры. Можно 
+	использовать стандартную передачу параметров через стек, нельзя только в подпрограмме 
+	использовать адрес возврата (@<span class="regn">SP</span>) - он изменён!</p>
+	<p>На время работы вызываемой по <span class="labl">CAL$N</span> п/п блокируются 
+	прерывания по вектору <span class="nmbr">4</span> (программно - в @#<span class="nmbr">4</span> 
+	заносится #<span class="labl">STP$</span>, в @#<span class="nmbr">6</span> - 
+	#<span class="nmbr">200</span>, при возврате восстанавливаются прежние значения), 
+	и устанавливается высокий приоритет процессора (при возврате восстанавливается 
+	прежний).</p>
+	<p>Максимальная вложенность подпрограмм в RAM-BIOS v<span class="nmbr">3</span>.<span class="nmbr">01</span> 
+	- <span class="nmbr">20</span>.</p>
+	<h3>16-18. Точки входа переключения режимов ( MOD$, MOD$S, MOD$J )</h3>
+	<table class="border">
+		<tr>
+			<th>
+			<p>Подключение режима <span class="regn">R4</span></p>
+			<p>( @#<span class="nmbr">167754</span> ):</p>
+			</th>
+			<th>
+			<p>Подключение системного<br>&nbsp;режима (с RAMBIOS)</p>
+			<p>( @#<span class="nmbr">167744</span> ):</p>
+			</th>
+			<th>
+			<p>Подключение режима<br><span class="regn">R4</span> &amp;
+			<span class="cmds">JMP</span></p>
+			<p>( @#<span class="nmbr">167752</span> ):</p>
+			</th>
+		</tr>
+		<tr>
+			<td>
+			<pre><span class="cmds">JSR</span> <span class="regn">R4</span>,@#<span class="labl">MOD$</span></pre>
+			</td>
+			<td>
+			<pre><span class="cmds">JSR</span> <span class="regn">R4</span>,@#<span class="labl">MOD$S</span></pre>
+			</td>
+			<td>
+			<pre><span class="cmds">JSR</span>  <span class="regn">R4</span>,@#<span class="labl">MOD$J</span>
+<span class="pscm">.WORD</span>  ADDR</pre>
+			</td>
+		</tr>
+	</table>
+	<p>После физического переключения режима обращения к стеку отсутствуют, регистры 
+	(кроме <span class="regn">R4</span>) не портятся.</p>
+	<p>Приведённые запросы не меняют @<span class="labl">WRK$</span> (код текущего 
+	режима на вершине стека возвратов), программисты должны сами заботиться о том, 
+	чтобы при переключённом режиме не было прерываний (так как возврат из прерываний, 
+	переключающих режимы, будет происходить в режим @<span class="labl">WRK$</span> 
+	- а он другой).</p>
+	<p>Приведённые запросы выполняют только переключение и не содержат &quot;лишних&quot; 
+	операций, см. поставляемые в комплекте с документацией исходники.</p>
+	<h2>Использование стека запросами BIOS</h2>
+	<p>В процессе обработки запросов BIOS (только вызываемых по &quot;<span class="cmds">JSR</span>
+	<span class="regn">R5</span>,...&quot;, кроме <span class="labl">CH$WRK</span>) 
+	стек опускается на следующую глубину:</p>
+	<ul>
+		<li>общая обработка всех запросов опускает стек на <span class="nmbr">20</span> 
+		в максимуме, для простых запросов типа <span class="labl">RDW$N</span>,
+		<span class="labl">JMP$N</span>, <span class="labl">CAL$N</span> это и есть 
+		предельное опускание стека;</li>
+		<li>при обработке простых запросов высокого уровня в стек добавляется ещё 
+		несколько слов;</li>
+		<li>пересылка массивов между разными страницами доп. ОЗУ опускает стек на
+		<span class="nmbr">40</span> (всего - вместе с общей обработкой);</li>
+		<li>если при этом при подключении одной из страниц отсутствует ROM-BIOS, 
+		то подпрограмма пересылки записывается в стек, что опускает его дополнительно 
+		ещё на <span class="nmbr">44</span>;</li>
+		<li>при этом нужно ещё иметь резерв в <span class="nmbr">44</span> байта 
+		на случай нажатия в этот момент кнопки СТОП - в наихудшем случае нам доводилось 
+		наблюдать <span class="nmbr">8</span> прерываний подряд от одного нажатия 
+		СТОП.</li>
+	</ul>
+	<hr>
+	<h2>Приложение <span class="nmbr">1</span>. Режимы работы и распределение памяти.</h2>
+	<p>Память в контроллерах &quot;АльтПро&quot; разбита на страницы по
+	<span class="nmbr">32</span> Кб, части (сегменты) одной такой страницы подключаются 
+	в области адресов <span class="nmbr">100000</span>-<span class="nmbr">177777</span>, 
+	сегменты разных страниц одновременно подключить нельзя. Сегментами ниже называются 
+	фрагменты памяти по <span class="nmbr">10000</span> байт. Сегмент с номером 
+	X=<span class="nmbr">0</span>...<span class="nmbr">7</span> может быть подключён 
+	либо с адреса <span class="nmbr">1</span>X<span class="nmbr">0000</span>, либо 
+	с адреса <span class="nmbr">1</span>X<span class="nmbr">0000</span>±<span class="nmbr">40000</span> 
+	в зависимости от номера режима.</p>
+	<p>Распределение памяти в различных режимах приведено в табл.<span class="nmbr">1</span>, 
+	затем следуют пояснения общего характера, которые рекомендуется прочитать, и 
+	примечания специального характера, которые понадобятся тем, кто пишет некорректные 
+	программы; тем, кто пишет корректные программы, рекомендуем пользоваться запросами 
+	BIOS, значительно упрощающими работу с доп. памятью и предотвращающими конфликты.</p>
+	<center>
+	<table class="tpicc">
+		<caption>Таблица <span class="nmbr">1</span>. Режимы работы и распределение 
+		памяти.</caption>
+		<tr>
+			<td class="cst_blsdt">
+			<p>Название режима</p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">SYS</span></p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">Std10</span></p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">ОЗУ10</span></p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">All</span></p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">Std11</span></p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">ОЗУ11</span></p>
+			</td>
+			<td class="cst_blsdt" width="50">
+			<p><span class="selc">Hlt10</span></p>
+			</td>
+			<td width="50" class="cstrblsdt">
+			<p><span class="selc">Hlt11</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cst_blsdt">
+			<p>Код включения</p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">160</span></p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">60</span></p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">120</span></p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">20</span></p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">140</span></p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">40</span></p>
+			</td>
+			<td class="cst_blsdt">
+			<p><span class="nmbr">100</span></p>
+			</td>
+			<td class="cstrblsdt">
+			<p><span class="nmbr">20000</span></p>
+			</td>
+		</tr>
+		<tr class="cs_rbls">
+			<td colspan="9">
+			<p>Вырабатываемые сигналы</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs___ls">
+			<p>Откл.монитора БК10</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs_r_ls">
+			<p>+</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs___ls">
+			<p>Откл.монитора БК11М</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs_r_ls">
+			<p>+</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs___ls">
+			<p>Откл. верх.ОЗУ-11М</p>
+			</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">
+			<p>+</p>
+			</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs___ls">&nbsp;</td>
+			<td class="cs_r_ls">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="cst_blsdt">
+			<p>АДРЕСА</p>
+			</td>
+			<td class="cstrblsdt" colspan="8">
+			<p>номера подключаемых сегментов</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs___ls">
+			<p>HDD: <span class="nmbr">170</span>-<span class="nmbr">177000</span></p>
+			</td>
+			<td class="cs___ls">
+			<p>ПЗУ</p>
+			</td>
+			<td class="cs___ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs___ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs___ls">
+			<p><span class="nmbr">3</span></p>
+			</td>
+			<td class="cs___ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs___ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs___ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cstrblsdt">
+			<p><span class="nmbr">170</span>(<span class="nmbr">177000</span>hdd)-<span class="nmbr">0</span></p>
+			</td>
+			<td class="cstrblsdt">
+			<p>ПЗУ</p>
+			</td>
+			<td class="cstrblsdt">
+			<p>-</p>
+			</td>
+			<td class="cstrblsdt">
+			<p><span class="nmbr">7</span>W/-</p>
+			</td>
+			<td class="cstrblsdt">
+			<p><span class="nmbr">3</span>R</p>
+			</td>
+			<td class="cstrblsdt">
+			<p>-</p>
+			</td>
+			<td class="cstrblsdt">
+			<p>-</p>
+			</td>
+			<td class="cstrblsdt">
+			<p><span class="nmbr">7</span>W</p>
+			</td>
+			<td class="cstrblsdt">
+			<p><span class="nmbr">7</span>W</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_rbls">
+			<p><span class="nmbr">160000</span>-<span class="nmbr">170000</span></p>
+			</td>
+			<td class="cs__blsdb">
+			<p>ПЗУ</p>
+			</td>
+			<td class="cs__blsdb">
+			<p>ПЗУ</p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">6</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">2</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p>ПЗУ</p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">6</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">6</span>R/<span class="nmbr">6</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">6</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">150000</span>-<span class="nmbr">160000</span></p>
+			</td>
+			<td class="cs___ld">
+			<p><span class="nmbr">1</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">5</span></p>
+			</td>
+			<td class="cs___ld">
+			<p><span class="nmbr">5</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">1</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">5</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">5</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">5</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_rbls">
+			<p><span class="nmbr">140000</span>-<span class="nmbr">150000</span></p>
+			</td>
+			<td class="cs__blsdl">
+			<p><span class="nmbr">0</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">4</span></p>
+			</td>
+			<td class="cs__blsdlb">
+			<p><span class="nmbr">4</span></p>
+			</td>
+			<td class="cs__blsdb">
+			<p><span class="nmbr">0</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">4</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">4</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">4</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">130000</span>-<span class="nmbr">140000</span></p>
+			</td>
+			<td class="cs___ld">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">3</span></p>
+			</td>
+			<td class="cs___ld">
+			<p><span class="nmbr">3</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">7</span></p>
+			</td>
+			<td class="cs___ld">
+			<p>-</p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">3</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_rbls">
+			<p><span class="nmbr">120000</span>-<span class="nmbr">130000</span></p>
+			</td>
+			<td class="cs__blsdlb">
+			<p><span class="nmbr">6</span></p>
+			</td>
+			<td class="cs__blsdb">
+			<p><span class="nmbr">2</span></p>
+			</td>
+			<td class="cs__blsdl">
+			<p><span class="nmbr">2</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">6</span></p>
+			</td>
+			<td class="cs__blsdl">
+			<p>-</p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">2</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">110000</span>-<span class="nmbr">120000</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+			<td class="cs___ld">
+			<p><span class="nmbr">1</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">5</span></p>
+			</td>
+			<td class="cs___ld">
+			<p>-</p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+			<td class="cs_r_ls">
+			<p><span class="nmbr">1</span></p>
+			</td>
+			<td class="cs_r_ls">
+			<p>-</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cs_rbls">
+			<p><span class="nmbr">100000</span>-<span class="nmbr">110000</span></p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+			<td class="cs__blsdlb">
+			<p><span class="nmbr">0</span></p>
+			</td>
+			<td class="cs__blsdb">
+			<p><span class="nmbr">4</span></p>
+			</td>
+			<td class="cs__blsdl">
+			<p>-</p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+			<td class="cs_rbls">
+			<p><span class="nmbr">0</span>R</p>
+			</td>
+			<td class="cs_rbls">
+			<p>-</p>
+			</td>
+		</tr>
+	</table></center>
+	<p><u class="attnt">ПОЯСНЕНИЯ</u></p>
+	<p>Буква '<span class="selw">W</span>' после номера сегмента означает, что ОЗУ доступно только по записи, 
+	'<span class="selw">R</span>' - только по чтению, через дробную черту - старая версия контроллеров / новая 
+	(по номеру версии ПЗУ не определяется), '<span class="selw">-</span>' - не подключается ничего.</p>
+	<p>ПЗУ в контроллерах имеет объём <span class="nmbr">10000</span> байт, в режиме 
+	<span class="selc">SYS</span> одно и то же ПЗУ подключается и со <span class="nmbr">160000</span>, и со
+	<span class="nmbr">170000</span> (благодаря этому изменяется адрес запуска компьютера).</p>
+	<p>В контроллерах &quot;SMK&quot; (&quot;винтовых&quot;) во всех режимах, кроме 
+	<span class="selc">SYS</span>, в адресах <span class="nmbr">170000</span>-<span class="nmbr">177000</span> 
+	подключено ОЗУ, в дисководных - нет, выше <span class="nmbr">177000</span> - 
+	во всех одинаково.</p>
+	<p>Внутри таблицы в рамки выделены группы режимов и адресов, используемые при 
+	пересылке данных для доступа ко всем <span class="nmbr">8</span> сегментам страницы 
+	памяти (одна рамка для БК10, другая - БК11М: это области, неперекрывающиеся 
+	с ПЗУ и охватывающие всю страницу). Однако при размещении и вызовах подпрограмм 
+	на БК11М RAM-BIOS использует два первых режима (<span class="selc">SYS</span> и <span class="selc">Std10</span>) в окне
+	<span class="nmbr">120000</span>-<span class="nmbr">140000</span>, т.к. для 
+	работы с подпрограммами необходимо наличие ROM-BIOS в адресном пространстве.</p>
+	<p>РАСШИФРОВКА РЕЖИМОВ:</p>
+	<p><span class="selc">SYS</span> - используется для запуска, пересылки данных на БК10 и RAM-BIOS'ом (он 
+	- всегда в <span class="nmbr">0</span>-й странице);</p>
+	<p><span class="selc">Std10</span>, <span class="selc">Std11</span> - стандартные, традиционные режимы работы для БК10 и
+	<span class="nmbr">11</span>М соответственно, <span class="selc">Std10</span> используется также для пересылки 
+	данных на БК10;</p>
+	<p><span class="selc">ОЗУ10</span> - вместо монитора БК10 и ПЗУ-<span class="nmbr">160000</span> подключается 
+	ОЗУ (на многих БК10 требуется простая доработка, иначе доп. ОЗУ подключается 
+	параллельно ПЗУ монитора и приходится записывать в это ОЗУ копию монитора); 
+	используется также для доступа к доп. памяти на БК11М;</p>
+	<p><span class="selc">All</span> - позволяет на БК10 подключить ОЗУ ко всему адресному пространству, что 
+	используется для загрузки копии Вильнюсского Бейсика; применяется также для 
+	доступа к доп. памяти на БК11М;</p>
+	<p><span class="selc">ОЗУ11</span> - подключение ОЗУ вместо ПЗУ на БК11М, для отключения ПЗУ монитора 
+	БК11М простая доработка требуется всегда;</p>
+	<p><span class="selc">Hlt10</span>, <span class="selc">Hlt11</span> - открывают доступ к HALT-режиму процессора на БК10 и БК11М 
+	соответственно. Максимально &quot;продвинутые&quot; режимы: везде, где можно, 
+	подключается ОЗУ вместо ПЗУ и на БК10 нижняя часть ОЗУ монитора защищена от 
+	записи (квази-ПЗУ) для повышения глюкоустойчивости.</p>
+	<p>Доработки для отключения ПЗУ монитора описаны в файле &quot;СХЕМЫ.EDP&quot;.</p>
+	<p>На контроллерах с доп. ОЗУ менее <span class="nmbr">256</span> Кб на БК10 
+	может быть подключено ПЗУ Бейсика традиционно записью #<span class="nmbr">10</span> 
+	в <span class="nmbr">177130</span>, правда на режимы ОЗУ это никак не влияет.</p>
+	<p>При подключении ОЗУ параллельно чему-либо (ПЗУ, регистры) в случае конфликта 
+	данных (в одном - <span class="nmbr">0</span>, в другом - <span class="nmbr">
+	1</span>) в подавляющем большинстве случаев читается <span class="nmbr">1</span> 
+	(для микросхем такой конфликт не страшен, все они имеют внутреннюю защиту - 
+	хотя, конечно, конфликты снижают помехоустойчивость и потому нежелательны). 
+	Поэтому при параллельном подключении ОЗУ и ПЗУ в ОЗУ надо предварительно записывать 
+	копию ПЗУ, а при параллельном подключении ОЗУ и регистров в ОЗУ должны быть 
+	нули.</p>
+	<p>При включении режима &quot;<span class="selc">All</span>&quot; из режимов <span class="selc">Hlt10</span>, <span class="selc">Hlt11</span> (а на &quot;старых&quot; 
+	контроллерах ещё и из режима <span class="selc">ОЗУ10</span>) в ОЗУ режима &quot;<span class="selc">All</span>&quot; по адресу
+	<span class="nmbr">177130</span> вписывается &lt;<span class="nmbr">20</span> 
+	+ код страницы&gt;; при использовании запросов BIOS таких переключений не бывает.</p>
+	<p>КОДЫ ПОДКЛЮЧЕНИЯ СТРАНИЦ ОЗУ:</p>
+	<table class="border2 vtop">
+		<tr>
+			<td width="60">
+			<p class="right"><span class="nmbr">64</span> Кб -</p>
+			</td>
+			<td>
+			<p><span class="nmbr">0</span>,<span class="nmbr">2000</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="right"><span class="nmbr">128</span> Кб -</p>
+			</td>
+			<td>
+			<p><span class="nmbr">0</span>,<span class="nmbr">2000</span>,<span class="nmbr">4</span>,<span class="nmbr">2004</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="right"><span class="nmbr">256</span> Кб -</p>
+			</td>
+			<td>
+			<p><span class="nmbr">0</span>,<span class="nmbr">2000</span>,<span class="nmbr">4</span>,<span class="nmbr">2004</span>,<span class="nmbr">10</span>,<span class="nmbr">2010</span>,<span class="nmbr">14</span>,<span class="nmbr">2014</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="right"><span class="nmbr">512</span> Кб -</p>
+			</td>
+			<td>
+			<p><span class="nmbr">0</span>,<span class="nmbr">2000</span>,<span class="nmbr">4</span>,<span class="nmbr">2004</span>,<span class="nmbr">10</span>,<span class="nmbr">2010</span>,<span class="nmbr">14</span>,<span class="nmbr">2014</span>,<br>
+			<span class="nmbr">1</span>,<span class="nmbr">2001</span>,<span class="nmbr">5</span>,<span class="nmbr">2005</span>,<span class="nmbr">11</span>,<span class="nmbr">2011</span>,<span class="nmbr">15</span>,<span class="nmbr">2015</span>.
+			</p>
+			</td>
+		</tr>
+	</table>
+	<p>Объём памяти можно определить по байту <span class="nmbr">167777</span> ПЗУ 
+	контроллера (см. приложение <span class="nmbr">4</span>).</p>
+	<p>При переключениях коды режима и страницы необходимо складывать по 
+	<span class="cmds">BIS</span>.</p>
+	<h2>Приложение <span class="nmbr">2</span>.<span class="nmbr">1</span> Формат 
+	таблицы сегментов BIOS.</h2>
+	<p>Вся память разделена на сегменты длиной <span class="nmbr">20000</span> (несколько 
+	особых сегментов имеют меньшую длину). Соответствие логических номеров физическим 
+	кодам сегментов задано в таблице, где каждый сегмент описывается одним словом. 
+	Адрес таблицы можно получить следующим образом после запроса
+	<span class="labl">CAT$</span> (вызов #<span class="nmbr">12</span>, результат 
+	в <span class="regn">R1</span>) при условии подключения страницы с RAM-BIOS'ом:</p>
+	<pre>        <span class="cmds">SUB</span> -(<span class="regn">R1</span>),<span class="regn">R1</span>
+        <span class="cmds">MOV</span> (<span class="regn">R1</span>)+,<span class="regn">R2</span>        <span class="cmmnt">;R2 - кол-во сегментов
+                            ;R1 - адрес начала таблицы</span></pre>
+	<p>Кроме кода режима и кода страницы, которые мы упоминали ранее (см. также 
+	прил. <span class="nmbr">2</span>.<span class="nmbr">2</span>), используются 
+	следующие биты:</p>
+	<table class="border2 vtop">
+		<tr>
+			<td>
+			<p>#<span class="nmbr">100000</span></p>
+			</td>
+			<td>
+			<p>- сегмент подключается с адреса @#<span class="nmbr">120000</span>, 
+			иначе - с адреса <span class="nmbr">100000</span> на БК11М,
+			<span class="nmbr">140000</span> - на БК10. На БК11М означает также, 
+			что при используемом в BIOS подключении этого сегмента одновременно 
+			с ним будет подключено и ПЗУ (т.е.</p>
+			<p>будет доступен ROM-BIOS - используются режимы с кодами
+			<span class="nmbr">160</span> и <span class="nmbr">60</span>). Для размещения 
+			программ на БК11М используются именно такие сегменты, так как нужен 
+			доступ к ROM-BIOS.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">40000</span></p>
+			</td>
+			<td>
+			<p>- длина сегмента меньше на #<span class="nmbr">10000</span> (есть 
+			два стандартных случая установки этого бита: <span class="nmbr">10000</span> 
+			над RAM-BIOS'ом и <span class="nmbr">10000</span> перед
+			<span class="nmbr">4</span> Кб с таблицей разделов).</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">20000</span></p>
+			</td>
+			<td>
+			<p>- вычитание из длины сегмента #<span class="nmbr">650</span> (т.е.
+			<span class="nmbr">177130</span>-<span class="nmbr">177777</span>).</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">10000</span></p>
+			</td>
+			<td>
+			<p>- вычитание из длины сегмента #<span class="nmbr">350</span> (для 
+			модема без винчестера в HALT-режиме, устанавливается совместно с битом 
+			#<span class="nmbr">20000</span>).</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">4000</span></p>
+			</td>
+			<td>
+			<p>- начало сегмента смещено на <span class="nmbr">10000</span> (устанавливается 
+			совместно с битом #<span class="nmbr">40000</span>).</p>
+			</td>
+		</tr>
+	</table>
+	<h2>Приложение <span class="nmbr">2</span>.<span class="nmbr">2</span> Коды 
+	сегментов, используемые в BIOS.</h2>
+	<table class="border4 cntr2">
+		<tr>
+			<th width="180">
+			<p>Физические номера сегментов согласно табл.<span class="nmbr">1</span> 
+			приложения <span class="nmbr">1</span></p>
+			</th>
+			<th width="180">
+			<p>Для БК10</p>
+			</th>
+			<th width="180">
+			<p>Для БК11М</p>
+			</th>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">0</span>, <span class="nmbr">1</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">160</span> + код.страницы</p>
+			</td>
+			<td>
+			<p><span class="nmbr">20</span> + код.стр.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">2</span>, <span class="nmbr">3</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">100060</span> + код.страницы</p>
+			</td>
+			<td>
+			<p><span class="nmbr">100120</span> + код.стр.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">4</span>, <span class="nmbr">5</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">60</span> + код.страницы</p>
+			</td>
+			<td>
+			<p><span class="nmbr">120</span> + код.стр.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">6</span>, <span class="nmbr">7</span></p>
+			</td>
+			<td>
+			<p><span class="nmbr">100160</span> + код.страницы</p>
+			</td>
+			<td>
+			<p><span class="nmbr">100020</span> + код.стр.</p>
+			</td>
+		</tr>
+	</table>
+	<h2>Приложение <span class="nmbr">3</span>. Формат записи каталога модулей.</h2>
+	<p>Запись каталога имеет следующую структуру:</p>
+	<table class="border2 vtop">
+		<tr>
+			<td>
+			<p><span class="nmbr">00</span></p>
+			</td>
+			<td>
+			<p>слово</p>
+			</td>
+			<td>
+			<p>&lt;имя&gt;</p>
+			</td>
+			<td>
+			<p>- <span class="nmbr">1</span>-й байт - идентификатор автора модуля 
+			(старший байт), байт=#<span class="nmbr">0</span> используется для служебных 
+			целей; <span class="nmbr">2</span>-й байт - идентификатор модуля;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">02</span></p>
+			</td>
+			<td>
+			<p>слово</p>
+			</td>
+			<td>
+			<p>&lt;длина в словах&gt;</p>
+			</td>
+			<td>
+			<p>- меньше <span class="nmbr">100000</span> (в словах);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">04</span></p>
+			</td>
+			<td>
+			<p>слово</p>
+			</td>
+			<td>
+			<p>&lt;признаки&gt;:</p>
+			</td>
+			<td>
+			<table class="border2 vtop">
+				<tr>
+					<td>
+					<p>#<span class="nmbr">1</span></p>
+					</td>
+					<td>
+					<p>- можно удалять при нехватке памяти (пока не используется);</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">2</span></p>
+					</td>
+					<td>
+					<p>- модуль нельзя перемещать (<span class="nmbr">0</span> - 
+					можно). Необходимо устанавливать, если есть обращения к модулю 
+					на среднем или низком уровне;</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">4</span></p>
+					</td>
+					<td>
+					<p>- нельзя разбивать модуль на части (размещать в разных сегментах),
+					<span class="nmbr">0</span> - можно;</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">10</span></p>
+					</td>
+					<td>
+					<p>- удалять модуль по запросу <span class="labl">EXIT$</span> 
+					или перезапуску, <span class="nmbr">0</span> - да;</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">20</span></p>
+					</td>
+					<td>
+					<p>- возможность запуска модуля (<span class="nmbr">1</span> 
+					- да; актуально для модулей, содержащих программы). Установка 
+					этого признака приводит к размещению с адреса
+					<span class="nmbr">120000</span> до <span class="nmbr">140000</span>, 
+					что актуально для БК11М (см. прил. <span class="nmbr">2</span>.<span class="nmbr">1</span>), 
+					на БК10 этот бит предпочтительно не устанавливать;</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">40</span></p>
+					</td>
+					<td>
+					<p>- подлежит удалению, если родительский модуль в памяти (в 
+					каталоге) отсутствует ( <span class="nmbr">1</span> - да), реально 
+					автоматическое удаление таких модулей производится при запросах
+					<span class="labl">EXIT$</span>, <span class="labl">CAT$</span> 
+					при <span class="regn">R0</span>=#<span class="nmbr">2</span>,<span class="nmbr">4</span>,<span class="nmbr">6</span>, 
+					и сделано это для автоматического удаления мусора;</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">100</span></p>
+					</td>
+					<td>
+					<p>- перед удалением модуля запускать <span class="labl">END</span>-<span class="nmbr">2</span> 
+					(по <span class="cmds">CALL</span>);</p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<p>#<span class="nmbr">200</span></p>
+					</td>
+					<td>
+					<p>- есть расширенное имя внутри модуля (см. слово
+					<span class="nmbr">10</span>);</p>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">06</span></p>
+			</td>
+			<td>
+			<p>слово</p>
+			</td>
+			<td>
+			<p>&lt;имя родительского модуля&gt;</p>
+			</td>
+			<td>
+			<p>- формат такой же, как и у слова <span class="nmbr">00</span>; задаётся 
+			программистом при создании модуля; <span class="nmbr">0</span> - не 
+			определено - при удалениях равносильно тому, что родительский модуль 
+			всегда есть;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">10</span></p>
+			</td>
+			<td>
+			<p>слово</p>
+			</td>
+			<td>
+			<p>&lt;смещение до расширенного имени&gt;</p>
+			</td>
+			<td>
+			<p>- смещение от начала модуля до текста <span class="pscm">.ASCIZ</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">12</span></p>
+			</td>
+			<td>
+			<p>слово</p>
+			</td>
+			<td>
+			<p>&lt;смещение&gt;</p>
+			</td>
+			<td>
+			<p>- смещение от начала сегмента до начала модуля; </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">14</span></p>
+			</td>
+			<td>
+			<p>байт</p>
+			</td>
+			<td>
+			<p>&lt;сегмент&gt;</p>
+			</td>
+			<td>
+			<p>- логический номер сегмента начала модуля; </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">15</span></p>
+			</td>
+			<td>
+			<p>байт</p>
+			</td>
+			<td>
+			<p>&lt;резерв&gt;.</p>
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+	<h2>Приложение <span class="nmbr">4</span>. Кодировка версии контроллера.</h2>
+	<p>Номер версии доступен программно - он содержится в последнем слове ПЗУ (по 
+	адресу <span class="nmbr">167776</span>). В старшем байте содержится ключ и 
+	информация об объёме дополнительной памяти, в младшем байте - информация о типе 
+	контроллера и номере версии ПЗУ.</p>
+	<table class="border2 vtop">
+		<tr>
+			<td width="60">
+			<p><span class="nmbr">174000</span></p>
+			</td>
+			<td colspan="2">
+			<p>- A16;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">174400</span></p>
+			</td>
+			<td colspan="2">
+			<p>- A16 + контроллер &quot;винта&quot; с доп. ОЗУ
+			<span class="nmbr">4</span> Кб (<span class="nmbr">170</span>-<span class="nmbr">177000</span>);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">175000</span></p>
+			</td>
+			<td colspan="2">
+			<p>- A16M;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">175400</span></p>
+			</td>
+			<td colspan="2">
+			<p>- не используется;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td width="60">&nbsp;</td>
+			<td rowspan="5">
+			<p>если младший байт &gt; <span class="nmbr">0</span> - то это старая 
+			версия ПЗУ совмещённого контр. винчестера и дисковода SMK64 - её нужно 
+			заменить (ПЗУ установлено на панелях); если млад. байт имеет значение 
+			от <span class="nmbr">200</span> до <span class="nmbr">300</span> - 
+			то это контроллер SMK, если &gt; <span class="nmbr">300</span> - это 
+			дисководный контроллер A64M-A512M. </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">176000</span></p>
+			</td>
+			<td>
+			<p>- <span class="nmbr">64</span> Кб </p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">176400</span></p>
+			</td>
+			<td>
+			<p>- <span class="nmbr">128</span> Кб</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">177000</span></p>
+			</td>
+			<td>
+			<p>- <span class="nmbr">256</span> Кб</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="nmbr">177400</span></p>
+			</td>
+			<td>
+			<p>- <span class="nmbr">512</span> Кб</p>
+			</td>
+		</tr>
+	</table>
+	<p>В старой версии ПЗУ ( мл. байт &gt; <span class="nmbr">0</span> ) ROM-BIOS 
+	отсутствует.</p>
+	<p>Проверка на наличие не менее <span class="nmbr">64</span> Кб и современной 
+	версии ПЗУ осуществляется одной командой: <span class="cmds">CMP</span> @#<span class="nmbr">167776</span>,#<span class="nmbr">176200</span> 
+	\ <span class="cmds">BHIS</span> - Ok</p>
+	<p><b><u>Внимание!</u></b> Программисты, загружающие в ОЗУ с адреса
+	<span class="nmbr">160000</span> свою версию драйверов, должны область
+	<span class="nmbr">167460</span>-<span class="nmbr">170000</span> (точки входа 
+	BIOS и номер версии контроллера) копировать <span class="nmbr">1</span>:<span class="nmbr">1</span> 
+	из ПЗУ !</p>
+	<h2>Приложение <span class="nmbr">5</span>. Зарезервированные знаки в именах 
+	модулей.</h2>
+	<p>Для старшего байта имени модуля (идентификатор изготовителя) по состоянию 
+	на <span class="nmbr">1</span>.<span class="nmbr">06</span>.<span class="nmbr">98</span> 
+	г. зарезервированы следующие знаки:</p>
+	<p><span class="cmdk">$ % `(обратный апостроф) R L</span></p>
+	<p>Программисты, желающие закрепить за собой какой-либо другой символ, должны 
+	сообщить об этом в фирму-изготовитель (АльтПро) для предотвращения совпадений 
+	и программных конфликтов.</p>
+	<h2>Приложение <span class="nmbr">6</span>. Стек возвратов и режим DOS.</h2>
+	<p><b><i><u>Стек возвратов</u></i></b> из подпрограмм, вызываемых по запросам
+	<span class="labl">CAL$G</span> и <span class="labl">CAL$N</span> растёт вниз 
+	(каждый <span class="labl">CAL$</span> добавляет в стек <span class="nmbr">4</span> 
+	слова), в исходном состоянии (после загрузки или <span class="labl">EXIT$</span>) 
+	представляет собой следующее:</p>
+	<table class="border2 vtop">
+		<tr>
+			<td width="60">
+			<p><span class="labl">TOP</span>:</p>
+			</td>
+			<td width="120">
+			<p>&lt;<span class="argm">код режима (DOS)</span>&gt;</p>
+			</td>
+			<td>
+			<p>- код исходного режима, того, в котором работает ДОС с оболочкой; 
+			изначально это <span class="selc">Std10</span> или <span class="selc">Std11</span>, т.е. стандартный режим БК10 или
+			<span class="nmbr">11</span>М, коды <span class="nmbr">60</span> или
+			<span class="nmbr">140</span>; если программа перемещает ДОС в другой 
+			режим (например, Halt10 или Halt11), то она должна корректировать и 
+			эту ячейку (см.ниже);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">2</span>: </p>
+			</td>
+			<td>
+			<p>&lt; <span class="argm">old</span> <span class="regn">PC</span> &gt;</p>
+			</td>
+			<td>
+			<p>- псевдо-адрес возврата - <span class="nmbr">100000</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">4</span>: </p>
+			</td>
+			<td>
+			<p>&lt;<span class="regn">PS</span> &amp; @#<span class="nmbr">6</span>&gt;</p>
+			</td>
+			<td>
+			<p>- здесь - <span class="nmbr">0</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">6</span>: </p>
+			</td>
+			<td>
+			<p>&lt; @#<span class="nmbr">4</span> &gt;</p>
+			</td>
+			<td>
+			<p>- копия ячейки <span class="nmbr">4</span> для её восстановления 
+			- <span class="nmbr">100442</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">10</span>:</p>
+			</td>
+			<td>
+			<p>&lt;<span class="argm">код текущ. режима</span>&gt;</p>
+			</td>
+			<td>
+			<p>- при запуске и <span class="labl">EXIT$</span> устанавливается = 
+			коду режима DOS, указатель <span class="labl">WRK$</span> устанавливается 
+			= <span class="labl">TOP</span>-<span class="nmbr">10</span> (таким 
+			образом, <span class="labl">WRK$</span> указывает на ячейку с кодом 
+			текущего режима).</p>
+			</td>
+		</tr>
+	</table>
+	<p>Указатель стека возвратов <span class="labl">WRK$</span>, адрес =
+	<span class="nmbr">120016</span> в системной странице (код её включения - #<span class="nmbr">2160</span>), 
+	после запуска или <span class="labl">EXIT$</span> содержит #<span class="labl">TOP</span>-<span class="nmbr">10</span>, 
+	при каждом <span class="labl">CAL$</span> он опускается на
+	<span class="nmbr">10</span>; ячейка <span class="labl">DOS$</span> (адрес <span class="nmbr">120020</span> 
+	в системной странице), введённая для доступа к коду DOS-режима, всегда содержит 
+	#<span class="labl">TOP</span>.</p>
+	<p><i><u>После первого<b> <span class="labl">CAL$</span></b></u></i> (стек возвратов 
+	опускается на <span class="nmbr">10</span>):</p>
+	<table class="border2 vtop">
+		<tr>
+			<td width="60">
+			<p><span class="labl">TOP</span>-<span class="nmbr">10</span>:</p>
+			</td>
+			<td width="120">
+			<p>&lt;<span class="argm">код предыдущего режима</span>&gt;</p>
+			</td>
+			<td>
+			<p>- код режима, из которого был <span class="labl">CAL$</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">12</span>:</p>
+			</td>
+			<td>
+			<p>&lt;<span class="argm">old</span> <span class="regn">PC</span>&gt;</p>
+			</td>
+			<td>
+			<p>- адрес возврата;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">14</span>:</p>
+			</td>
+			<td>
+			<p>&lt;<span class="regn">PS</span> &amp; @#<span class="nmbr">6</span>&gt;</p>
+			</td>
+			<td>
+			<p>- сохранённые слово состояния процессора и @#<span class="nmbr">6</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">16</span>:</p>
+			</td>
+			<td>
+			<p>&lt; @#<span class="nmbr">4</span> &gt;</p>
+			</td>
+			<td>
+			<p>- сохранённая при запросе <span class="labl">CAL$</span> ячейка
+			<span class="nmbr">4</span>;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span class="labl">TOP</span>-<span class="nmbr">20</span>:</p>
+			</td>
+			<td>
+			<p>&lt;<span class="argm">код текущ. режима</span>&gt;</p>
+			</td>
+			<td>
+			<p>- код нового режима.</p>
+			</td>
+		</tr>
+	</table>
+	<p>При включении питания компьютера и при перезапуске без логической обработки 
+	включается стандартный режим (<span class="selc">Std10</span> или <span class="selc">Std11</span>), в нем обычно загружается ДОС, 
+	и он же объявляется режимом &quot;DOS&quot; при инсталляции RAM-BIOS. Однако 
+	в дальнейшем в ряде случаев (например, при подключении HALT-режима), DOS-режим 
+	меняется программами типа WINDOWS, OS/A, HALT-DRIVER. Короче, программисты могут 
+	изменять содержимое ячеек <span class="labl">TOP</span> - <span class="labl">
+	TOP</span>-<span class="nmbr">6</span>, используя доступ через ячейку 
+	<span class="labl">DOS$</span>.</p>
+	<h2>Приложение <span class="nmbr">7</span>. Обработка ошибок.</h2>
+	<p>В случае возникновения ошибки BIOS вписывает код ошибки в байт 
+	<span class="labl">ERR$</span> =
+	<span class="nmbr">120004</span> в системной странице (код её включения - #<span class="nmbr">2160</span>) 
+	при условии, что RAM-BIOS в этой странице имеется, после чего выдаёт <i><u>сигнал 
+	ошибки</u></i> - характерное затухающее подёргивание экрана с прерывистым звуковым 
+	сигналом.</p>
+	<p>Признак наличия RAM-BIOS: в ячейке <span class="nmbr">120010</span> системной 
+	страницы содержится #<span class="nmbr">120012</span>.</p>
+	<p>Коды ошибок (на <span class="nmbr">1</span>.<span class="nmbr">06</span>.<span class="nmbr">98</span> 
+	г.):</p>
+	<table>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">100</span></p>
+			</td>
+			<td>
+			<p>- разрушен конец RAM-BIOS;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">1</span></p>
+			</td>
+			<td>
+			<p>- несуществующий запрос BIOS;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">2</span></p>
+			</td>
+			<td>
+			<p>- нарушение или переполнение стека возвратов; переполнение фиксируется 
+			при <span class="labl">CAL$</span>, если адрес в ячейке
+			<span class="labl">WRK$</span> (<span class="nmbr">120016</span>) ниже, 
+			чем содержимое <span class="labl">WRKLIM</span> (<span class="nmbr">120014</span>);</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p>#<span class="nmbr">340</span></p>
+			</td>
+			<td>
+			<p>- ошибка при попытке восстановления области памяти по
+			<span class="labl">RESTO$</span> (нарушение стека сохранения).</p>
+			</td>
+		</tr>
+	</table>
+	<p>Признак целостности байта <span class="labl">ERR$</span>: байт <span class="nmbr">120005</span> =
+	<span class="nmbr">111</span> (octal).</p>
+	<h2>Приложение <span class="nmbr">8</span>. Стандартные адреса и константы BIOS.</h2>
+	<p>1) В области ROM-BIOS:</p>
+	<pre><span class="labl">BEGIN$</span>=<span class="nmbr">167342</span>   <span class="cmmnt">;начало ROM-BIOS; здесь располагаются подпрогра-
+                ;ммы пересылки массивов, стандартное обращение к
+                ;которым бывает только при  подключенном  ПЗУ  -
+                ;поэтому при переносе ROM-BIOS в ОЗУ  эту  часть
+                ;можно не копировать;</span>
+<span class="labl">BEG$R5</span>=<span class="nmbr">167460</span>   <span class="cmmnt">;начало точек входа запросов BIOS - эту часть  и
+                ;всё, что ниже, при переносе ROM-BIOS в ОЗУ нуж-
+                ;но копировать;</span>
+<span class="labl">STP$</span>=<span class="nmbr">167712</span>     <span class="cmmnt">;стандартная подпрограмма блокировки кнопки СТОП</span>
+<span class="labl">ARTI$</span>=<span class="nmbr">167714</span>    <span class="cmmnt">;в этой ячейке находится команда RTI</span>
+<span class="labl">DIR1</span>$=<span class="nmbr">167720</span>    <span class="cmmnt">;3 &quot;прямых&quot; точки входа (не по JSR</span> <span class="cmmnt">R5,...) - на-</span>
+<span class="labl">DIR2</span>$=<span class="nmbr">167724</span>    <span class="cmmnt">;пример, для обработки прерываний в доп. ОЗУ;  в</span>
+<span class="labl">DIR3</span>$=<span class="nmbr">167730</span>    <span class="cmmnt">;версии RAM-BIOS 3</span>.<span class="cmmnt">05 - не задействованы: для их
+                ;использования надо поместить адрес  обработчика
+                ;пользователя в  таблицу  подпрограмм  обработки
+                ;запросов в системной странице...</span>
+<span class="labl">MOD$S</span>=<span class="nmbr">167744</span>    <span class="cmmnt">;3 точки входа переключения  режимов  на  низком</span>
+<span class="labl">MOD$J</span>=<span class="nmbr">167752</span>    <span class="cmmnt">;уровне (используются при заблокированных преры-</span>
+<span class="labl">MOD$</span>=<span class="nmbr">167754</span>     <span class="cmmnt">;ваниях;</span>
+<span class="labl">VERS$</span>=<span class="nmbr">167776</span>    <span class="cmmnt">;номер версии ПЗУ и код контроллера</span>
+&nbsp;
+<span class="labl">JMP$G</span>=<span class="nmbr">167515</span>    <span class="cmmnt">;ТОЧКИ ВХОДА ЗАПРОСОВ по  JSR</span> <span class="cmmnt">R5,@#_имя_</span>
+<span class="labl">CAL$G</span>=<span class="nmbr">167516</span>
+<span class="labl">CHW$G</span>=<span class="nmbr">167517</span>
+<span class="labl">MOV$G</span>=<span class="nmbr">167520</span>
+<span class="labl">CAT$</span>=<span class="nmbr">167521</span>
+<span class="labl">CAL$N</span>=<span class="nmbr">167522</span>
+<span class="labl">JMP$N</span>=<span class="nmbr">167523</span>
+<span class="labl">RDW$N</span>=<span class="nmbr">167524</span>
+<span class="labl">CHW$N</span>=<span class="nmbr">167525</span>
+<span class="labl">MOV$N</span>=<span class="nmbr">167526</span>
+<span class="labl">EXIT$</span>=<span class="nmbr">167527</span>
+<span class="labl">SAVE$</span>=<span class="nmbr">167530</span>
+<span class="labl">RESTO$</span>=<span class="nmbr">167531</span>
+<span class="labl">NEW$SP</span>=<span class="nmbr">167630</span>
+<span class="labl">CH$WRK</span>=<span class="nmbr">167734</span></pre>
+	<p>2) В области RAM-BIOS (в системной странице доп. ОЗУ):</p>
+	<pre><span class="labl">R$VERS</span>=<span class="nmbr">120002</span>   <span class="cmmnt">;содержит номер версии RAM-BIOS;</span>
+<span class="labl">ERR$</span>=<span class="nmbr">120004</span>     <span class="cmmnt">;мл.байт - код ошибки, ст.байт = 111</span>;
+<span class="labl">PZP$</span>=<span class="nmbr">120006</span>     <span class="cmmnt">;содержит адрес подпрограммы  обработки  нестан-
+                ;дартного перезапуска;</span>
+<span class="labl">CTRL0$</span>=<span class="nmbr">120010</span>   <span class="cmmnt">;содержит #120012 - по этой константе проверяет-
+                ;ся целостность начала RAM-BIOS;</span>
+<span class="labl">MAIN$</span>=<span class="nmbr">120012</span>    <span class="cmmnt">;содержит адрес диспетчера запросов;</span>
+<span class="labl">WRK$</span>=<span class="nmbr">120016</span>     <span class="cmmnt">;указатель стека режимов</span>
+<span class="labl">DOS$</span>=<span class="nmbr">120020</span>     <span class="cmmnt">;указатель на ячейку с кодом DOS-режима</span></pre>
+	<h2>Приложение <span class="nmbr">9</span>. Краткие сведения о HALT-режиме.</h2>
+	<p>Необходимым условием работы HALT-режима является наличие ОЗУ по записи по 
+	адресу <span class="nmbr">177674</span>, где в <span class="nmbr">2</span> последовательных 
+	ячейках сохраняется <span class="regn">PC</span> и <span class="regn">PS</span> 
+	при HALT-прерывании. Кнопка СТОП всегда вызывает именно это прерывание, но из-за 
+	отсутствия указанного ОЗУ вслед за HALT-прерыванием происходит прерывание по 
+	вектору <span class="nmbr">4</span> (причём, в результате этого
+	<span class="regn">PC</span> в стеке оказывается на <span class="nmbr">2</span> 
+	больше, чем надо).</p>
+	<p>HALT-прерывание происходит по вектору <span class="nmbr">160002</span>, совместить 
+	это с драйвером дисковода возможно, подключив со <span class="nmbr">160000</span> 
+	ОЗУ вместо ПЗУ (см. реализации WIN-DEMO и OS/A WASP).</p>
+	<p>В ячейке <span class="nmbr">160004</span> (new <span class="regn">PS</span>) 
+	должен быть установлен бит #<span class="nmbr">2000</span> - &quot;высокий приоритет 
+	процессора для HALT-режима&quot; - чтобы заблокировать прерывания от дребезга 
+	кнопки СТОП, и обработчик HALT-прерывания должен некоторое время не делать никаких 
+	операций, изменяющих <span class="regn">PS</span>, поскольку при &quot;обычных&quot; 
+	операциях бит #<span class="nmbr">2000</span> в <span class="regn">PS</span> 
+	всегда сбрасывается.</p>
+	<p>Итак, алгоритм обработки HALT-прерывания в программах типа WIN-DEMO, OS/A 
+	WASP (работающих по СТОП+клавиша) в первом приближении 
+	(ориентировочно!) следующий:</p>
+	<ol>
+		<li>Задержка против дребезга СТОП и против запаздывания появления признака 
+		нажатой клавиши (последнее случается величиной до <span class="nmbr">40000</span> 
+		SOB'ов при <span class="nmbr">6</span> МГц - от момента нажатия).</li>
+		<li>Переключение режимов и извлечение адреса возврата и
+		<span class="regn">PS</span>.</li>
+		<li>Команда по &lt;адресу возврата - <span class="nmbr">2</span>&gt; вызывает 
+		HALT-прерывание (<span class="nmbr">0</span> и ещё кое-какие)? Если да, 
+		то сэмулировать прерывание по век тору <span class="nmbr">4</span>.</li>
+		<li>Клавиша нажата? Если нет, то прибавить <span class="nmbr">2</span> к 
+		адресу возврата и сэмулировать прерывание по вектору <span class="nmbr">
+		4</span>.</li>
+		<li>Собственно обработка прерывания.</li>
+	</ol>
+	<p>&nbsp;</p>
+	<p class="right">(с) В.Е.Новак, А.И.Глускер <span class="nmbr">1997</span>-<span class="nmbr">98</span> 
+	гг.</p>
+</div>
+
+</body>
+
+</html>

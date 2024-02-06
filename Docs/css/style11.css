@@ -1,0 +1,434 @@
+﻿/*оглавление*/
+#toc ul, .toc ul {
+	margin: .3em 0;
+}
+#toc #toctitle, .toc #toctitle {
+	direction: ltr;
+	text-align: center;
+	font-size: large;
+}
+#toc, .toc {
+	border: 1px solid #aaa;
+	background-color: #f9f9f9;
+	padding: 5px;
+	font-size: 95%;
+	width: 86%;
+}
+#toc h2, .toc h2 {
+	display: inline;
+	border: none;
+	padding: 0;
+	font-size: 100%;
+	font-weight: bold;
+}
+#toc ul, .toc ul {
+	list-style-type: none;
+	list-style-image: none;
+	margin-left: 0;
+	padding: 0;
+	text-align: left;
+}
+#toc ul ul, .toc ul ul {
+	margin: 0 0 0 2em;
+}
+/*индивидуальное оформление*/
+.mw-content-ltr .toc ul, .mw-content-ltr #toc ul {
+	text-align: left;
+}
+.mw-content-ltr .toc ul ul, .mw-content-ltr #toc ul ul {
+	margin: 0 0 0 2em;
+}
+.mw-content-ltr * dd p {
+	text-indent: 0;
+}
+.visualClear {
+	clear: both;
+}
+div#content {
+	font: 11pt sans-serif;
+	margin: 0 auto 2em;
+	padding: 1em;
+	z-index: 2;
+	background: white;
+	color: black;
+	border: 1px solid #aaa;
+	width: 55em;
+}
+a {
+	text-decoration: none;
+	color: #0645ad;
+	color: #002bb8;
+	background: none;
+}
+a:visited {
+	color: #5a3696; /*#0b0080;*/
+}
+a:active {
+	color: #faa700;
+}
+a:hover, a:focus {
+	text-decoration: underline;
+}
+body {
+	color: black;
+	background: #eee;
+	direction: ltr;
+	unicode-bidi: embed;
+}
+img {
+	border: none;
+	vertical-align: middle;
+	max-width: 100%;
+}
+h1, h2, h3, h4, h5 {
+	color: black;
+	background: none;
+	font-weight: normal;
+	font-style: normal;
+	margin: 0;
+	overflow: hidden;
+	padding-top: .5em;
+	padding-bottom: .17em;
+	border-bottom: 1px solid #aaa;
+	width: auto;
+}
+h1 {
+	font-size: 188%;
+}
+h2 {
+	font-size: 150%;
+}
+h1, h2 {
+	margin-bottom: .6em;
+}
+h3, h4 {
+	border-bottom: none;
+	font-weight: bold;
+}
+h3 {
+	font-size: 132%;
+}
+h4 {
+	font-size: 116%;
+}
+h3, h4, h5 {
+	margin-bottom: .3em;
+}
+p {
+	margin: .4em 0 .5em 0;
+	text-indent: 1cm;
+	text-align:justify
+}
+dl {
+	margin-left:1cm;
+}
+dt {
+	margin-top: .4em;
+	margin-bottom:.5em;
+	text-align:left;
+	font-weight:bold;
+}
+dd {
+	margin-top: .4em;
+	margin-bottom:.5em;
+	text-align:justify;
+	border-top: 1px solid #e3e3e3;
+}
+
+ul {
+	list-style-type: square;
+	margin: 0.3em 0 0 1.5cm;
+	padding: 0;
+}
+ol {
+	margin: 0.3em 0 0 2cm;
+	padding: 0;
+	list-style-image: none;
+}
+li {
+	margin-bottom: .1em;
+}
+div#content * li {
+	text-align:justify
+}
+table * ol {
+	margin-left:1.1cm;
+}
+pre, svg {
+	padding: 1em;
+}
+center {
+	margin: 12pt auto;
+}
+.icode {
+	padding-left: 6pt;
+	padding-right: 6pt;
+	display: inline;
+}
+.bcode {
+	padding-left: 6pt;
+	padding-right: 6pt;
+	display: block;
+}
+.bcode, .icode, pre, svg {
+	font-family: "Courier New", Courier, monospace;
+	border: 1px dashed #2f6fab;
+	color: black;
+	background-color: #f9f9f9;
+}
+.preblk {
+	font-family: "Courier New", Courier, monospace;
+}
+.ltnomr {
+	margin-left: 0;
+}
+.lfcell {
+	width: 100px;
+	white-space: nowrap;
+}
+/*таблицы*/
+table {
+	font-size: 100%;
+}
+table * p {
+	text-indent: 0;
+	text-align: left;
+}
+table th p {
+	text-indent: 0;
+	text-align: center;
+}
+
+th {
+	background-color: #A9D9D9;
+	vertical-align: middle;
+}
+
+.brdr, .border, .border2, .border3, .border4 {
+	font: 11pt sans-serif;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	empty-cells: show;
+}
+table.border td, table.border th {
+	padding: 2px 4px;
+	border: 1px solid #000;
+	vertical-align: middle;
+}
+table.border th {
+	font-weight: bold;
+	padding: 6px 4px;
+}
+
+
+table.border2 td{
+	padding: 2px 4px;
+	border: none;
+}
+table.border2 th {
+	padding: 6px 4px;
+	border: none;
+}
+
+table.border3 td{
+	padding: 2px 4px;
+	border: 1px solid #000;
+	vertical-align: top;
+}
+table.border3 th {
+	font-weight: bold;
+	border: 1px solid #000;
+	padding: 6px 4px;
+}
+
+table.border4 td, table.border4 th {
+	padding: 2px 4px;
+	border: 1px solid #dedede;
+	vertical-align: top;
+}
+table.border4 th {
+	font-weight: bold;
+	padding: 6px 4px;
+}
+
+
+.vtop {
+	width:100%;
+}
+table.vtop td, table.vtop2 td  {
+	vertical-align:top;
+}
+table.clltid p{
+	text-indent: 0;
+	margin: auto 1em auto auto;
+}
+.cntr, .cntr2 {
+	align-self: center;
+}
+table.cntr * p, table.cntr td, table.cntr2 * p, table.cntr2 td {
+	text-align: center;
+}
+
+table.cntr th
+{
+	text-align: center;
+	background: #f0f0f0;
+	font-weight:normal;
+	vertical-align:middle;
+}
+
+.mcmd{
+	font-size: inherit;
+}
+table.mcmd th {
+	text-align: left;
+	vertical-align:top;
+}
+table.mcmd th p{
+	text-align: center;
+	text-indent: 0;
+}
+table.mcmd td p{
+	margin: auto 1em;
+}
+
+.leftcell1 td:nth-child(1) p {
+	text-align:left;
+}
+.leftcell2 td:nth-child(2) p {
+	text-align:left;
+}
+.leftcell3 td:nth-child(3) p {
+	text-align:left;
+}
+.leftcell4 td:nth-child(4) p {
+	text-align:left;
+}
+.leftcell5 td:nth-child(5) p {
+	text-align:left;
+}
+.leftcell6 td:nth-child(6) p {
+	text-align:left;
+}
+.leftcell7 td:nth-child(7) p {
+	text-align:left;
+}
+.leftcell8 td:nth-child(8) p {
+	text-align:left;
+}
+
+.cntrcell1 td:nth-child(1) p {
+	text-align:center;
+}
+.cntrcell2 td:nth-child(2) p {
+	text-align:center;
+}
+.cntrcell3 td:nth-child(3) p {
+	text-align:center;
+}
+.cntrcell4 td:nth-child(4) p {
+	text-align:center;
+}
+.cntrcell5 td:nth-child(5) p {
+	text-align:center;
+}
+.cntrcell6 td:nth-child(6) p {
+	text-align:center;
+}
+.cntrcell7 td:nth-child(7) p {
+	text-align:center;
+}
+.cntrcell8 td:nth-child(8) p {
+	text-align:center;
+}
+
+
+.rghtcell1 td:nth-child(1) p {
+	text-align:right;
+}
+.rghtcell2 td:nth-child(2) p {
+	text-align:right;
+}
+.rghtcell3 td:nth-child(3) p {
+	text-align:right;
+}
+.rghtcell4 td:nth-child(4) p {
+	text-align:right;
+}
+.rghtcell5 td:nth-child(5) p {
+	text-align:right;
+}
+.rghtcell6 td:nth-child(6) p {
+	text-align:right;
+}
+.rghtcell7 td:nth-child(7) p {
+	text-align:right;
+}
+.rghtcell8 td:nth-child(8) p {
+	text-align:right;
+}
+
+
+.firstHeading, #firstHeading {
+	margin-bottom: .1em;
+	padding-bottom: 0;
+}
+/*общие классы*/
+.ann {
+	font-size: 9pt;
+	text-indent: 0;
+	text-align: center;
+}
+.attnt {
+	font-weight: bold;
+	color: #003300;
+	letter-spacing: 6pt;
+}
+
+.ann30 {
+	font-size:85%;
+	text-indent:0;
+	margin-left:30%;
+	font-weight:bold;
+}
+.udk {
+	font-size:85%;
+	text-indent:0;
+	font-weight:bold;
+}
+.offnote
+{
+	font-size:85%;
+}
+
+.colmacr {
+	width: 30em;
+}
+/*svg style*/
+.style0 {
+	stroke: #000;
+	fill: none;
+}
+.style3 {
+	stroke: #ccc;
+	fill: none;
+}
+
+.style1, .style2 {
+	writing-mode: lr-tb;
+	letter-spacing: 0pt;
+	word-spacing: 0pt;
+	fill: #000000;
+
+}
+.style1 {
+	text-anchor: start;
+	text-align: start;
+}
+.style2 {
+	text-anchor: middle;
+	text-align: center;
+}
+.nmbr {
+	fill: #FF6600;
+}

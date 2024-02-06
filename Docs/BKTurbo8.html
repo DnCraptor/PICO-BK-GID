@@ -1,0 +1,5591 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Кросс Ассемблер БК Турбо 8</title>
+<link href="css/cmmn.css" rel="stylesheet">
+<link href="css/style11.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div id="content">
+	<div class="mw-content-ltr">
+		<h1 id="firstHeading" class="firstHeading">Кросс Ассемблер БК Турбо8.</h1>
+		<p>Сделан на основе алгоритмов <span class="selc">Turbo8DK</span> для
+		<span class="selc">Andos</span>. Хотя, теперь уже от оригинала мало что 
+		осталось, название да пара идей.</p>
+		<table class="border2 vtop">
+			<tr>
+				<td>
+				<p>Комплект:</p>
+				</td>
+				<td>
+				<ol>
+					<li><span class="selc">BKTurbo8.exe </span>- кросс компилятор, 
+					линковщик.</li>
+					<li><span class="selc">BKbin2obj.exe</span> - конвертер массивов 
+					данных в объектные модули чтобы прилинковывать их к скомпилированным 
+					ассемблерным программам.</li>
+					<li><span class="selc">ARIFM.ASM</span> - модуль выполнения 
+					команд расширенной арифметики, при необходимости, скомпилировать 
+					в объектный файл и слинковать со своей программой.</li>
+					<li><span class="selc">BKTurbo8.html</span> - этот файл документации. 
+					Этот файл создан на основе оригинальной документации к
+					<span class="selc">Turbo8DK</span>, добавлено от себя и взято 
+					немного таблиц из других мест, поэтому разница в стилистике 
+					и формулировках прямо бросаются в глаза.</li>
+					<li>Примеры применения и использования.</li>
+				</ol>
+				</td>
+			</tr>
+		</table>
+		<p>Максимальная длина исходного текста не ограничена.</p>
+		<p>Максимальная длина получаемой программы - <span class="nmbr">0177000</span> 
+		байтов.</p>
+		<p>Формат объектного файла <span class="selw">не совместим</span> с форматом 
+		оригинального <span class="selc">Turbo8DK</span> из-за того, что в кросс 
+		ассемблере применяются метки неограниченной длины и полноценные 
+		арифметические выражения.</p>
+		<div id="toc" class="toc">
+			<div id="toctitle">
+				<h2>Оглавление</h2>
+			</div>
+			<ul>
+				<li class="toclevel-1"><a href="#toc_p1">ОБЩИЕ СВЕДЕНИЯ</a>
+				<ul>
+					<li class="toclevel-2"><a href="#toc_p1_1">Некоторые особенности 
+					ассемблера серии Turbo.</a></li>
+					<li class="toclevel-2"><a href="#toc_p1_3">Отличия от оригинальной 
+					программы и дополнения.</a></li>
+					<li class="toclevel-2"><a href="#toc_p1_2">Недостатки и ограничения:</a></li>
+					<li class="toclevel-2"><a href="#toc_p1_4">Режим работы:</a><ul>
+						<li class="toclevel-3"><a href="#toc_p2_4">1. Режим компиляции.</a></li>
+						<li class="toclevel-3"><a href="#toc_p2_5">2. Режим линковки.</a></li>
+					</ul>
+					</li>
+				</ul>
+				</li>
+				<li class="toclevel-1"><a href="#toc_p2">АССЕМБЛЕР</a></li>
+				<li class="toclevel-1"><a href="#toc_p3">ПРЯМОЕ ПРИСВАИВАНИЕ.</a></li>
+				<li class="toclevel-1"><a href="#toc_p4">ИМЕНА РЕГИСТРОВ.</a></li>
+				<li class="toclevel-1"><a href="#toc_p5">АРИФМЕТИЧЕСКИЕ ВЫРАЖЕНИЯ.</a></li>
+				<li class="toclevel-1"><a href="#toc_p6">МЕТОДЫ АДРЕСАЦИИ, КОМАНДЫ.</a></li>
+				<li class="toclevel-1"><a href="#toc_p10">ПСЕВДОКОМАНДЫ.</a></li>
+				<li class="toclevel-1"><a href="#toc_p11">Описание работы со скриптами.</a>
+				<ul>
+					<li class="toclevel-2"><a href="#toc_p11_1">Что такое скрипт 
+					и зачем он нужен.</a></li>
+					<li class="toclevel-2"><a href="#toc_p11_2">Формат скрипта.</a></li>
+					<li class="toclevel-2"><a href="#toc_p11_3">Команды скрипта.</a>
+					<ul>
+						<li class="toclevel-3"><a href="#toc_p11_3_1">Двухоперандные 
+						команды.</a></li>
+						<li class="toclevel-3"><a href="#toc_p11_3_2">Однооперандные 
+						команды.</a></li>
+						<li class="toclevel-3"><a href="#toc_p11_3_3">Команды ветвления.</a></li>
+						<li class="toclevel-3"><a href="#toc_p11_3_4">Команда цикла</a></li>
+						<li class="toclevel-3"><a href="#toc_p11_3_5">Команды установки/сброса 
+						признаков</a></li>
+						<li class="toclevel-3"><a href="#toc_p11_3_6">Адресации</a></li>
+						<li class="toclevel-3"><a href="#toc_p11_3_7">Пример</a></li>
+					</ul>
+					</li>
+				</ul>
+				</li>
+				<li class="toclevel-1"><a href="#toc_p7">Примеры работы с блоком 
+				расширенной арифметики.</a></li>
+				<li class="toclevel-1"><a href="#toc_p8">КОМПИЛЯЦИЯ</a>
+				<ul>
+					<li class="toclevel-2"><a href="#toc_p8_1">Пример команд для 
+					компиляции оверлейной программы.</a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1"><a href="#toc_p8_2">ОШИБКИ ПРИ ТРАНСЛЯЦИИ</a></li>
+				<li class="toclevel-1"><a href="#toc_p9">Конвертер бинарных объектов 
+				в объектные модули кросс ассемблера Turbo8.</a></li>
+			</ul>
+		</div>
+		<h2><a name="toc_p1"></a>ОБЩИЕ СВЕДЕНИЯ</h2>
+		<p>Оригинальная система программирования на языке Ассемблера
+		<span class="selc">Turbo8DK</span> являлась дальнейшим развитием ассемблеров 
+		серии <span class="selc">TURBO</span> (<span class="selc">MicroWS</span>,
+		<span class="selc">TURBO4H</span>, <span class="selc">TURBO5M</span>,
+		<span class="selc">TURBO6M</span>) и предназначалась для работы на
+		<span class="selc">БК10</span> с дополнительным ОЗУ <span class="nmbr">16</span>К 
+		и на <span class="selc">БК11</span>.</p>
+		<p>Кросс ассемблер <span class="selc">БКТурбо8</span> предназначен для компиляции 
+		ассемблерных программ и создания исполняемых бинарных модулей, которые потом 
+		можно запускать на <span class="selc">БК-0010(-01)</span> и
+		<span class="selc">БК-0011(М)</span>.</p>
+		<p>Кросс ассемблер системонезависимый и вообще ни от чего не зависимый. 
+		При успешной компиляции создаётся бинарник, который будет работать так и 
+		там, как и где задумано разработчиком компилируемой программы. Т.е. хоть 
+		под набор <span class="cmds">EMT</span>ов БК-0010, хоть - БК-0011, а хоть 
+		и RT-11, правда без макросов это сильно неудобно и кросс ассемблер предназначен совсем 
+		не для RT-11.</p>
+		<p>Генерируется <span class="selc selw">.bin</span> файл, у которого первым 
+		словом идёт адрес загрузки, вторым - размер файла, совместимый с эмуляторами. 
+		Этот файл можно закинуть в образ с помощью <span class="selc">BKDE</span> или прямо запустить его в эмуляторе. 
+		Так же возможна генерация <span class="selc selw">.raw</span> файла без 
+		заголовка <span class="selc selw">.bin</span> для нужд пользователя.</p>
+		<h3><a name="toc_p1_1"></a>Некоторые особенности ассемблера серии Turbo.</h3>
+		<p>Это касается оригинальной версии Turbo8DK.</p>
+		<ol>
+			<li>В арифметике над метками введено деление на <span class="nmbr">2</span>, 
+			что удобно для работы с массивами слов.</li>
+			<li>Отсутствуют не сильно нужные псевдокоманды <span class="pscm">.TTYIN</span>,
+			<span class="pscm">.TTYOUT</span>, <span class="pscm">.ENABL</span>,
+			<span class="pscm">.DSABL</span> и присвоение имён регистрам.</li>
+			<li>Добавлена псевдокоманда <span class="pscm">.ADDR</span>.</li>
+			<li>При трансляции проверяется чётность адреса команды и величина аргумента
+			<span class="pscm">.BLKB</span> и <span class="pscm">.BLKW</span>.</li>
+			<li>Программа транслируется с адреса <span class="nmbr">01000</span> 
+			по умолчанию, либо с адреса, указанного псевдокомандой
+			<span class="pscm">.LA</span>.</li>
+			<li>Во всех случаях правильно работает арифметика над метками.</li>
+		</ol>
+		<h3><a name="toc_p1_3"></a>Отличия от оригинальной программы и дополнения.</h3>
+		<ol>
+			<li>Реализована регистронезависимость для меток, команд ассемблера, 
+			псевдокоманд, имён регистров и вообще всего, что не является строковым 
+			аргументом псевдокоманд <span class="pscm">.ASCII</span>,
+			<span class="pscm">.ASCIZ</span>, <span class="pscm">.RAD50</span>, 
+			операторов <span class="symb">&#39;</span> и <span class="symb">&quot;</span>.</li>
+			<li>В присваиваниях, арифметических выражениях, перечислениях между 
+			аргументами допускаются пробелы и табуляции для улучшения наглядности 
+			и читабельности текста.</li>
+			<li>Длина метки ничем не ограничена, буквально. Т.е. ограничена объёмом 
+			типа <i><span class="cmds">std::string</span></i>. Надо бы ввести какие-то 
+			разумные ограничения, но пока нет смысла, будем надеяться на благоразумность 
+			пользователей.</li>
+			<li>Присваивания типа <i><span class="selc">name = &lt;выражение&gt;</span></i> 
+			можно использовать в любом месте текста, а не только в начале.</li>
+			<li>Адрес трансляции программы можно задать ключом командной строки 
+			"<span class="selc">-s</span>". Данный ключ имеет меньший приоритет 
+			перед псевдокомандой <span class="pscm">.LA</span>.</li>
+			<li>Псевдокоманде <span class="pscm">.LA </span>добавлен синоним <span class="pscm">.LINK</span>. 
+			Можно писать и так, и сяк.</li>
+			<li>Можно писать так: <span class="pscm">.byte</span> <i>
+			<span class="selc">&lt;выражение&gt;</span></i>, но результат должен 
+			вмещаться в байт, иначе ошибка.</li>
+			<li>Можно писать так: <span class="pscm">.blkb</span> <i>
+			<span class="selc">&lt;выражение&gt;</span></i> / <span class="pscm">
+			.blkw</span> <i><span class="selc">&lt;выражение&gt;</span></i>, но 
+			при этом метки и константы выражения должны быть определены, иначе ошибка. 
+			Т.к. эти псевдокоманды влияют на изменение текущего адреса компиляции.</li>
+			<li>Добавлена псевдокоманда <span class="pscm">.org</span> <i>
+			<span class="selc">&lt;выражение&gt;</span></i>. Она выравнивает текущий 
+			указатель адреса по результату выражения. Допускается нечётное значение. 
+			Если результат выражения меньше текущего указателя - ничего не происходит. 
+			Но эту команду нельзя использовать в линкуемых объектных модулях. Т.к. 
+			она влияет на изменение текущего адреса компиляции, и результат получается 
+			некорректный.</li>
+			<li>Точку (указатель на текущий адрес) теперь можно использовать в модулях, 
+			которые компилируются в режиме <span class="cmdm">CL</span>.</li>
+			<li>Введены C-подобные комментарии '<span class="cmmnt">//</span>' (аналогично 
+			обычному комментарию '<span class="cmmnt">;</span>') и многострочный комментарий
+			<span class="cmmnt">/**/</span>. (Просто так. В качестве эксперимента, 
+			что и как ещё можно расширить и улучшить при используемых алгоритмах.)</li>
+			<li>Добавлены расширенные форматы записи чисел, имеющие синтаксис Си 
+			и MACRO-11.</li>
+			<li>Добавлены псевдокоманды <span class="pscm">.flt2</span> и
+			<span class="pscm">.flt4</span> для работы с плавающими числами, а так 
+			же поддержка ассемблерных инструкций EIS, FIS, FPU.</li>
+			<li>Добавлено включение текстов в текст псевдокомандой 
+			<span class="pscm">.include</span>, вложенность 
+			не ограничена, сделана защита от рекурсивной вложенности, включённые 
+			ранее файлы повторно не включаются.</li>
+			<li>Добавлены скрипты для модификации бинарного файла сразу после компиляции.</li>
+			<li>Реализованы полноценные арифметические выражения со скобками. В 
+			выражениях в качестве аргумента можно использовать локальные метки (с 
+			некоторыми ограничениями).</li>
+			<li>Добавлены назад команды <span class="pscm">.ENABL</span>,
+			<span class="pscm">.DSABL</span>.</li>
+			<li>Добавлено назад присваивание имён-синонимов регистрам, а так же 
+			к регистрам можно обращаться по их базовым именам:
+			<span class="regn">%0</span> .. <span class="regn">%7</span>.</li>
+		</ol>
+		<h3><a name="toc_p1_2"></a>Недостатки и ограничения:</h3>
+		<ol>
+			<li>Объектный модуль кросс ассемблера имеет собственный формат и не 
+			совместим вообще ни с чем, и что самое досадное - с оригинальным форматом
+			<span class="selc">Turbo8DK</span>. Хотя, это уже, наверное, не 
+			столь досадно.</li>
+			<li>Отсутствует пакетная обработка из файлов, содержащих списки обрабатываемых 
+			файлов. Приходится писать портянки из однородной копипасты в
+			<span class="selc">bat</span> файлах.</li>
+		</ol>
+		<h3><a name="toc_p1_4"></a>Режим работы.</h3>
+		<p>Кросс ассемблер представляет собой консольную программу, принимающую 
+		все необходимые параметры с командной строки. Краткий список параметров 
+		можно узнать у самого кросс ассемблера командой <i><span class="selc">-? 
+		(--help)</span></i>.</p>
+		<p>Имеется два режима работы. </p>
+		<ul>
+			<li>Режим компиляции, с созданием объектных модулей и/или исполняемого 
+			файла.</li>
+			<li>Режим линковки объектных модулей.</li>
+		</ul>
+		<h4><a name="toc_p2_4"></a>1. Режим компиляции.</h4>
+		<p class="selc"><i>BKTurbo8 [-i&lt;c&gt;][-v][-r][-l[name]][-o[name]][-t[name]][-s&lt;0addr&gt;] &lt;cmd&gt; &lt;file_1 
+		*[ file_n]&gt;</i></p>
+		<table class="border2 vtop">
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-i&lt;c&gt; (--input &lt;c&gt;)</span></i> 
+				- задать кодировку исходного файла.</p>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 100px"></td>
+				<td>
+				<p>Возможные кодировки:</p>
+				<ul>
+					<li><b>a</b> - автоопределение (по умолчанию)</li>
+					<li><b>k</b> - KOI8-R</li>
+					<li><b>o</b> - OEM CP866</li>
+					<li><b>w</b> - ANSI CP1251</li>
+					<li><b>8</b> - UTF8</li>
+					<li><b>u</b> - UNICODE UTF16LE</li>
+				</ul>
+				<p>Если автоопределение определило кодировку некорректно, необходимо 
+				вручную задать верную кодировку данным ключом. </p>
+				<p>Если в тексте очень мало русских букв, то кодировка очень часто 
+				определяется неверно. UTF8 без BOM тоже, как правило, определяется 
+				неверно.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-v (--verbose)</span></i> - вывод большего 
+				количества информации на экран.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>На данный момент дополнительно выводится таблица меток программы.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-r (--raw)</span></i> - создавать просто 
+				бинарный массив, не использовать формат <span class="selc selw">
+				.bin</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-l[name] (--listing[=name])</span></i> 
+				- генерировать файл листинга программы с расширением lst.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Если имя файла задано, то используется оно для генерации листинга, 
+				если нет - то берётся имя файла исходного текста.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-o[name] (--object[=name])</span></i> - 
+				генерировать объектный файл.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Если имя файла задано, то используется оно для генерации объектного 
+				файла, если нет - то берётся имя файла исходного текста.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-t[name] (--table[=name])</span></i> - 
+				создавать особый объектный файл, в котором содержатся только глобальные 
+				метки.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Создаётся файл с именем <i><span class="selc">name_tbl.obj</span></i> 
+				– чтобы ни с чем не перепутать. Это необходимо в экзотических случаях, 
+				когда собираются отдельные оверлейные модули, работающие в заданных 
+				окнах БК11, но при этом использующие подпрограммы из основного тела 
+				программы, расположенной в странице 0, или каком-то другом постоянном 
+				месте.</p>
+				<p>О назначении и способе использования см. в разделе
+				<a href="#toc_p8">КОМПИЛЯЦИЯ</a>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">-s&lt;0addr&gt; (--address &lt;0addr&gt;)</span></i> 
+				- задать начальный адрес компиляции.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Адрес задаётся в восьмеричном виде, цифра <span class="nmbr">0</span> впереди обязательна. 
+				Этот адрес не имеет приоритета, и если в тексте программы используется 
+				псевдокоманда <span class="pscm">.LA</span>, то применяется адрес 
+				псевдокоманды.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">&lt;cmd&gt;</span></i> - команда компиляции:</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p><span class="cmdm">CO</span> - полная компиляция. В результате, 
+				при отсутствии ошибок создаётся бинарный исполняемый файл и опционально 
+				заданные соответствующими ключами дополнительные файлы. Эта команда 
+				выполняет действия аналогичные командам <span class="cmdm">CL</span> 
+				+ <span class="cmdm">LI</span>.</p>
+				<p><span class="cmdm">CL</span> - компиляция в объектный файл для 
+				дальнейшей линковки с другими объектными файлами. В результате, 
+				при отсутствии ошибок, всегда создаётся объектный файл. Бинарный 
+				файл не создаётся.</p>
+				<p>Файл листинга создаётся в любом случае, при наличии ошибок, код 
+				ошибки и его текстовое пояснение помещаются перед строкой листинга, 
+				вызвавшей ошибку.</p>
+				<p>В конец файла листинга записывается таблица глобальных меток, 
+				а также список ссылок на неопределённые метки, если они есть.</p>
+				<p><strong>N.B.</strong> В этом режиме все ссылки на метки считаются 
+				неопределёнными, т.к. компоновка производится только для команд 
+				ветвления и <span class="cmds">SOB</span> поэтому не нужно удивляться 
+				огромным спискам неопределённых меток.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">&lt;file_1 *[ file_n]&gt;</span></i> - 
+				список исходных файлов, перечисленных через пробел.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Допускаются маски файлов.</p>
+				</td>
+			</tr>
+		</table>
+		<h4><a name="toc_p2_5"></a>2. Режим линковки.</h4>
+		<p class="selc"><i>BKTurbo8 [-v][-r][-l[name]][-o[name]][-t[name]][-s&lt;0addr&gt;] 
+		LI &lt;outfile&gt; &lt;file_1 *[ file_n]&gt;</i></p>
+		<table class="border2 vtop">
+			<tr>
+				<td style="width: 100px"></td>
+				<td>
+				<p>Ключ <i><span class="selc">-i</span></i> не используется.</p>
+				<p>Ключи <i><span class="selc">-v</span></i>, <i>
+				<span class="selc">-r</span></i>, <i><span class="selc">-l</span></i>,
+				<i><span class="selc">-o</span></i>, <i><span class="selc">-t</span></i> 
+				и <i><span class="selc">-s</span></i> имеют тот же смысл, что и 
+				в режиме компиляции.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="height: 33px">
+				<p>Команда линковки - <span class="cmdm">LI</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Команда линковки - <span class="cmdm">LI</span>, за командой 
+				следует обязательное имя выходного файла <i><span class="selc">&lt;outfile&gt;</span></i>, 
+				маска файла не допускается. А затем список файлов объектных модулей, 
+				перечисленных через пробелы.</p>
+				<p>Листинг программы при этом не создаётся, потому что не из чего, 
+				но если задан ключ <i><span class="selc">-l</span></i>, в файл листинга 
+				сохраняется список меток, а так же список ссылок на неопределённые 
+				метки, если они есть.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><i><span class="selc">&lt;file_1 *[ file_n]&gt;</span></i> - 
+				список исходных файлов, перечисленных через пробел.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p>Допускаются маски файлов.</p>
+				</td>
+			</tr>
+		</table>
+		<p>Порядок следования ключей командной строки не имеет значения, но команда 
+		всегда должна располагаться после всех ключей. После команды
+		<span class="cmdm">LI</span> первый аргумент - имя создаваемого файла. Если 
+		про это забыть, то будет создан выходной файл с именем
+		<span class="selc">file_1</span>, а файл <span class="selc">file_1.obj</span> 
+		не будет слинкован и вообще будет перезаписан, что вообще плохо. Мало того, 
+		что вы получите неверный результат, вам придётся ещё и заново создавать 
+		потерянный объектный файл.</p>
+		<p>Если используются длинные имена ключей, то тут есть нюанс: есть ключи 
+		с опциональными параметрами и есть с обязательными. Оказалось, что парсер 
+		командной строки не может опознать опциональный параметр длинного ключа, 
+		если он записан через пробел за ключом. С обязательными параметрами такой 
+		проблемы нет. Поэтому задавать параметр надо через знак '=' (равно). Вот 
+		так: "--listing=filename". Ну, или не париться и использовать короткие имена 
+		ключей.</p>
+		<h2><a name="toc_p2"></a>АССЕМБЛЕР</h2>
+		<p>Исходная программа записывается в виде последовательности команд, причём 
+		в одной строке может быть несколько команд или псевдокоманд, разделённых 
+		пробелами. Между меткой и командой, между командой и операндами, а также 
+		между операндами и комментарием может быть произвольное количество пробелов 
+		(не менее одного). Операнды разделяются запятыми, между которыми могут быть 
+		пробелы для улучшения читабельности. Метка не обязательно должна быть в 
+		одной строке с командой или псевдокомандой, она может быть в предыдущей 
+		строке.</p>
+		<pre><span class="labl">МЕТКА:</span> <span class="cmds">КОМАНДА</span>(<span class="pscm">ПСЕВДОКОМАНДА</span>) <b>ОПЕРАНДЫ </b><span class="cmmnt">;КОММЕНТАРИЙ</span></pre>
+		<pre><span class="labl">МЕТКА1:</span> <span class="labl">МЕТКА2:</span> <span class="cmmnt">//КОММЕНТАРИЙ</span></pre>
+		<p>Примеры использования многострочного комментария:</p>
+		<pre class="cmmnt"> /*
+Пример многострочного
+комментария
+*/</pre>
+		<pre><span class="cmds">Mov</span> <span class="regn">R0</span>,<span class="regn">R1</span> <span class="cmmnt">/*пересылка*/</span> <span class="cmds">inc</span> <span class="regn">R0</span></pre>
+		<p>Да, вот так, комментарий <span class="cmmnt">/**/</span> можно использовать 
+		как инлайн комментарий, и за ним может располагаться команда. Однако этот 
+		комментарий нельзя использовать внутри команды и её операндов.</p>
+		<p><span class="labl">МЕТКА:</span> - Имя, определяемое пользователем, которому 
+		соответствует адрес трансляции. Длина метки ничем не ограничена, метка ограничивается 
+		двоеточием (<span class="symb">:</span>), пробелы между меткой и двоеточием 
+		недопустимы. Метка может содержать латинские буквы &#39;<span class="symb">A</span>&#39;..&#39;<span class="symb">Z</span>&#39;, 
+		цифры &#39;<span class="symb">0</span>&#39;..&#39;<span class="symb">9</span>&#39;, 
+		а также знаки &#39;<span class="symb">_</span>&#39;, &#39;<span class="symb">.</span>&#39;, &#39;<span class="symb">$</span>&#39;.</p>
+		<p><b>Глобальная метка</b> - любое допустимое слово, начинающееся с символов &#39;<span class="symb">A</span>&#39;..&#39;<span class="symb">Z</span>&#39;, &#39;<span class="symb">_</span>&#39; 
+		или &#39;<span class="symb">$</span>&#39;.</p>
+		<p><b>Локальная метка</b> - любое допустимое слово, начинающееся с цифры &#39;<span class="symb">0</span>&#39;..&#39;<span class="symb">9</span>&#39;. 
+		В отличие от <span class="selc">MACRO-11</span>, где локальные метки состоят 
+		только из цифр и завершаются знаком &#39;<span class="symb">$</span>&#39;, 
+		здесь в локальной метке могут быть и буквы, и остальные допустимые знаки. 
+		Ещё одно хорошее отличие - возможен переход по локальной метке вперёд через 
+		глобальную, но это справедливо только для команд ветвления. Однако, в арифметических 
+		выражениях можно использовать только локальные метки, оканчивающиеся знаком 
+		'<span class="symb">$</span>', по которому и определяется, что это локальная 
+		метка.</p>
+		<p>Метка не может начинаться с символа &#39;<span class="symb">.</span>&#39; 
+		(точка), но потом этот символ можно использовать в неограниченном количестве 
+		в обоих типах меток. </p>
+		<p>В командах из двух или трёх слов можно использовать как глобальные метки, 
+		так и локальные. Однако диапазон видимости локальных меток ограничен глобальными 
+		метками. Просмотр вперёд, через глобальную метку невозможен.</p>
+		<p>В поле меток может быть несколько меток, которые будут иметь одно и то 
+		же значение.</p>
+		<p>Если при трансляции встречается ранее определённая метка или присваивание, 
+		то выдаётся сообщение об ошибке.</p>
+		<p>Не может быть совпадающих имён метки и присваивания. Это считается ошибкой.</p>
+		<p>Метку можно поставить перед любой командой или псевдокомандой. Если её 
+		поставить перед псевдокомандой <span class="pscm">.END</span>, то её адрес 
+		будет следующим после последнего адреса программы.</p>
+		<p>Пример:</p>
+		<pre><span class="labl">START:STOP:</span>  <span class="cmds">BIC</span>  #<span class="nmbr">177770</span>, <span class="regn">R0</span>
+             <span class="cmds">CALL</span> <span class="labl">RE</span>
+             . . . . .
+<span class="labl">RE:</span>          <span class="cmds">CMP</span>  <span class="regn">R0</span> , #<span class="nmbr">7</span></pre>
+		<p>Здесь метки <span class="labl">START</span> и <span class="labl">STOP</span> 
+		имеют одно и то же значение, и обращение может производиться по любой из 
+		них. </p>
+		<h2><a name="toc_p3"></a>ПРЯМОЕ ПРИСВАИВАНИЕ.</h2>
+		<p>Присваивает имени определённое значение. Имя принимает абсолютное значение. 
+		Присваивание допустимо в любом месте текста программы, значения меток, которые 
+		являются аргументами присваивания, могут быть не определёнными на момент 
+		присваивания. В таком случае присваивание не считается действительным до 
+		момента полного вычисления арифметического выражения.</p>
+		<p>Если и после финальной компоновки выражение не сможет быть вычислено, 
+		то присваивание будет считаться неопределённой меткой.</p>
+		<p>Пример:</p>
+		<pre><span class="labl">START</span>=<span class="nmbr">1000</span>
+<span class="labl">STOP</span> = <span class="labl">START</span> + <span class="nmbr">2000</span></pre>
+		<h2><a name="toc_p4"></a>ИМЕНА РЕГИСТРОВ.</h2>
+		<p>Обращение к регистру можно делать по его базовому имени:</p>
+		<p class="regn">%0 %1 %2 %3 %4 %5 %6 %7</p>
+		<p>Либо по общепринятым именам:</p>
+		<p class="regn">R0 R1 R2 R3 R4 R5 SP PC</p>
+		<p>К регистрам <span class="regn">SP</span> и <span class="regn">PC</span> 
+		можно обращаться так же и по именам <span class="regn">R6</span> и
+		<span class="regn">R7</span> соответственно. Эта возможность оставлена на 
+		всякий случай, для частичной совместимости с другими диалектами ассемблеров
+		<span class="selc">БК</span>, например, <span class="selc">Micro</span>.</p>
+		<p>А также есть возможность присвоить имени регистра своё обозначение, называемое 
+		синонимом имени регистра.</p>
+		<p>Синонимов можно назначить неограниченное количество, повторяющиеся синонимы 
+		- игнорируются. И одновременно обращаться к регистру по любому из них.</p>
+		<p>Назначение можно делать в любом месте программы, но обращаться по 
+		новому имени можно будет, естественно, только после назначения.</p>
+		<p>При желании можно назначить каждому регистру много синонимов и 
+		сделать программу максимально запутанной.</p>
+		<p>А можно назначить нескольким регистрам одинаковые синонимы и сделать 
+		программу неработоспособной.</p>
+		<p>Присвоение делается так:</p>
+		<p><span class="regn">%n</span> = <span class="labl">имя</span></p>
+		<p>Т.е. базовому имени, и только ему, присваивается новое имя. Имя может 
+		начинаться только с буквы и знаков '<span class="symb">_</span>' и '<span class="symb">$</span>', которые тоже считаются буквами, 
+		затем может содержать любые допустимые символы: буквы, цифры и точку.</p>
+		<p>Однако есть ограничение - синоним не должен совпадать с именем метки 
+		или присваивания. Проверок на этот счёт не делается, но у имени регистра 
+		приоритет, поэтому такое имя, если оно одно единственное в аргументе (например относительная адресация) будет считаться регистром и будет у вас скомпилировано 
+		совсем не то, что ожидалось. А в арифметических операциях, особенно в 
+		скобках - это имя уже рассматривается как имя метки.</p>
+		<p>Пример.</p>
+		<pre><span class="cmmnt">; Пример назначения синонимов регистрам на примере
+; реальной проги "Загрузчик сдаточных тестов"</span>
+
+    <span class="regn">%0</span> = <span class="labl">AX</span>
+    <span class="regn">%1</span> = <span class="labl">BX</span>
+    
+        <span class="cmds">mov</span>     #<span class="nmbr">100</span>, @#<span class="nmbr">177660</span>
+        <span class="cmds">mov</span>     #<span class="nmbr">100000</span>, <span class="regn">AX</span>     <span class="cmmnt">;сперва переместим перемещатель</span>
+        <span class="cmds">mov</span>     #<span class="labl">mover_end</span>, <span class="regn">BX</span>  <span class="cmmnt">;в верхние адреса</span>
+<span class="locl">1$</span>:     <span class="cmds">mov</span>     -(<span class="regn">BX</span>), -(<span class="regn">AX</span>)
+        <span class="cmds">cmp</span>     <span class="regn">BX</span>, #<span class="labl">mover_begin</span>
+        <span class="cmds">bhi</span>     <span class="locl">1$</span>
+        <span class="cmds">jmp</span>     (<span class="regn">AX</span>)            <span class="cmmnt">;запустим перемещатель</span>
+
+    <span class="regn">%1</span> = <span class="labl">SRC</span>
+    <span class="regn">%0</span> = <span class="labl">DST</span>
+
+<span class="labl">mover_begin</span>:
+        <span class="cmds">mov</span>     #<span class="labl">TST_BEGIN</span>, <span class="regn">SRC</span> <span class="cmmnt">;начало массива тестов</span>
+        <span class="cmds">mov</span>     #<span class="labl">TST_END</span>, <span class="regn">%2</span>    <span class="cmmnt">;конец массива тестов</span>
+        <span class="cmds">clr</span>     <span class="regn">DST</span>             <span class="cmmnt">;адрес, куда переместить массив</span>
+<span class="locl">1$</span>:     <span class="cmds">mov</span>     (<span class="regn">SRC</span>)+, (<span class="regn">DST</span>)+
+        <span class="cmds">cmp</span>     <span class="regn">SRC</span>, <span class="regn">%2</span>
+        <span class="cmds">blo</span>     <span class="locl">1$</span>
+        <span class="cmds">mov</span>     @#<span class="nmbr">24</span>, <span class="regn">DST</span>       <span class="cmmnt">;берём точку входа</span>
+        <span class="cmds">jmp</span>     (<span class="regn">DST</span>)           <span class="cmmnt">;запускаем тест</span>
+        <span class="cmds">mov</span>     #<span class="locl">2$</span>, <span class="regn">DST</span>        <span class="cmmnt">;это тест использования локальных меток</span>
+        <span class="cmds">mov</span>     <span class="locl">2$</span>(<span class="regn">DST</span>), <span class="regn">DST</span>    <span class="cmmnt">;в арифметическом выражении, случайно сюда попал</span>
+        <span class="pscm">.blkb</span>   <span class="nmbr">10</span>
+<span class="locl">2$</span>:
+<span class="labl">mover_end</span>:
+<span class="labl">TST_BEGIN</span>:
+        <span class="pscm">.org</span> <span class="nmbr">1400</span>
+<span class="labl">TST_END</span>:
+        <span class="pscm">.end</span>
+</pre>
+		<h2><a name="toc_p5"></a>АРИФМЕТИЧЕСКИЕ ВЫРАЖЕНИЯ.</h2>
+		<p>Практически везде, где возможно, можно писать полноценные арифметические 
+		выражения: в ассемблерных командах, в псевдокомандах, в присваиваниях.</p>
+		<p>Операндами арифметического выражения могут быть числа, метки глобальные 
+		и локальные и определения (присваивания).</p>
+		<p>Операторы в порядке повышения приоритета:</p>
+		<ul>
+			<li>Логическое ИЛИ ( | ), Логическое ИСКЛЮЧАЮЩЕЕ ИЛИ ( ^ ).</li>
+			<li>Логическое И ( &amp; ).</li>
+			<li>Сложение ( + ), Вычитание ( - ).</li>
+			<li>Умножение ( * ), Деление ( / ), Остаток от деления ( % ), Арифметический 
+			сдвиг влево ( &lt;&lt; ), Арифметический сдвиг вправо ( &gt;&gt; ).</li>
+			<li>Унарный плюс ( + ), Унарный минус ( - ), Унарное инвертирование 
+			( ~ ).</li>
+		</ul>
+		<p>Для изменения приоритета можно использовать скобки. Треугольные ( &lt;, &gt; 
+		), как в MACRO-11, или прямоугольные ( [, ] ). Но если скобок много, и они 
+		вложенные - треугольные скобки конфликтуют с арифметическими сдвигами. Поэтому 
+		их использовать не рекомендуется. Либо можно чередовать их, но нельзя смешивать. 
+		Если открывающая скобка была треугольной, то и закрывающая должна быть треугольной.</p>
+		<p>Примеры:</p>
+		<pre><span class="pscm">.word</span> [[[<span class="labl">VAL1</span>+<span class="nmbr">3</span>]*[<span class="nmbr">4</span>+<span class="labl">VAL2</span>]] +<span class="nmbr">5</span>] &lt;&lt; [<span class="labl">VAL3</span>-<span class="nmbr">2</span>] <span class="cmmnt">; когда много скобок, треугольные закрывающие скобки
+                                      ; интерпретируются как shr, поэтому используем квадратные</span>
+<span class="pscm">.word</span> &lt;<span class="labl">VAL4</span>*<span class="nmbr">5</span>-<span class="nmbr">6</span>/<span class="labl">VAL5</span>&gt; ^ [<span class="labl">VAL6</span>|<span class="nmbr">1</span>]
+</pre>
+		<p>В общем, можно использовать какие хочешь вычисления и ни в чём себе не 
+		отказывать.</p>
+		<h3>Форматы чисел.</h3>
+		<p>Числом считается последовательность цифр от <span class="nmbr">0</span> 
+		до <span class="nmbr">7</span> по умолчанию в восьмеричной форме счисления.</p>
+		<p>Если на конце числа стоит <strong>точка</strong>, то это признак десятичного 
+		числа, ну и там уже можно использовать цифры <span class="nmbr">8</span> 
+		и <span class="nmbr">9</span>.</p>
+		<p>Например:</p>
+		<p><span class="cmds">MOV</span> #<span class="nmbr">10</span>.,
+		<span class="regn">R1</span> аналогично <span class="cmds">MOV</span> #<span class="nmbr">12</span>,
+		<span class="regn">R1</span></p>
+		<p>Кроме обычной записи восьмеричных и десятичных чисел с точкой на конце 
+		добавлены следующие возможные записи чисел:</p>
+		<ul>
+			<li>С-подобная префиксная форма записи
+			<ul>
+				<li><span class="keywd">0x</span><span class="nmbr">abcd </span>
+				- <span class="nmbr">16</span>-ричное число</li>
+				<li><span class="keywd">0d</span><span class="nmbr">9999</span> 
+				- десятичное число (не знаю зачем, но такое возможно)</li>
+				<li><span class="keywd">0b</span><span class="nmbr">1111</span> 
+				- двоичное число</li>
+			</ul>
+			<p class="contn">При этом форма записи <span class="nmbr">0123</span>. 
+			- хоть и начинается с нуля и должно по сишной логике быть восьмеричным 
+			числом, но из-за точки на конце распознаётся как десятичное, потому 
+			что по-другому не получается, чтобы не ломать всю логику парсинга и 
+			совместимость. Поэтому же из-за точки не распознаются числа с плавающей 
+			точкой. </p>
+			</li>
+			<li>префиксная форма из <span class="selc">MACRO-11</span>
+			<ul>
+				<li><span class="keywd">^x</span><span class="nmbr">abcd</span>,
+				<span class="keywd">^h</span><span class="nmbr">abcd</span> -
+				<span class="nmbr">16</span>-ричное число</li>
+				<li><span class="keywd">^d</span><span class="nmbr">9999</span> 
+				- десятичное число</li>
+				<li><span class="keywd">^b</span><span class="nmbr">1111</span> 
+				- двоичное число</li>
+				<li><span class="keywd">^o</span><span class="nmbr">7777</span> 
+				- восьмеричное число (просто до кучи, чтобы всё было)</li>
+				<li><span class="keywd">^f</span><span class="nmbr">12</span>.<span class="nmbr">3</span> 
+				- число с плавающей точкой однословное.</li>
+				<li><span class="keywd">^r</span><span class="strn">ABC</span> - 
+				три символа в кодировке <span class="selc">RADIX-50</span></li>
+			</ul>
+			</li>
+		</ul>
+		<p>Для совместимости оставлен унарный оператор инвертирования
+		<span class="keywd">^c</span> из <span class="selc">MACRO-11</span>, который 
+		инвертирует следующий за ним операнд (это может быть, как число в любой 
+		из перечисленных выше форм записи, так и метка и абсолютный адрес, что, в 
+		общем-то, бессмысленно, но синтаксически допустимо). Он полностью аналогичен 
+		унарному оператору ~. Между оператором и операндом допускаются пробелы для 
+		улучшения читабельности.</p>
+		<p>Примеры:</p>
+		<pre>
+<span class="cmds">mov</span>     #<span class="keywd">0x</span><span class="nmbr">dead</span>, <span class="regn">R0</span>
+<span class="cmds">mov</span>     #<span class="keywd">0b</span><span class="nmbr">1111000011110000</span>, <span class="regn">R0</span>
+<span class="cmds">mov</span>     #<span class="keywd">^x</span><span class="nmbr">faad</span>, <span class="regn">R0</span>
+
+<span class="pscm">.word</span>   <span class="keywd">^h</span><span class="nmbr">FFFF</span>, <span class="keywd">^b</span><span class="nmbr">1110001111000010</span>
+<span class="pscm">.word</span>   <span class="keywd">^o</span><span class="nmbr">777</span>, <span class="keywd">^r</span><span class="strn">ONE</span>
+
+<span class="cmds">mov</span>     #<span class="keywd">^f</span><span class="nmbr">256</span>.<span class="nmbr">0</span>, <span class="regn">R1</span>
+
+<span class="cmds">mov</span>     #<span class="keywd">^c</span><span class="nmbr">101</span>, <span class="regn">R1</span>
+<span class="cmds">mov</span>     #<span class="keywd">^c</span> <span class="keywd">0x</span><span class="nmbr">85</span>, <span class="regn">R1</span>
+
+<span class="pscm">.word</span>   <span class="keywd">^c</span> <span class="nmbr">25.</span> + <span class="keywd">^c</span> <span class="symb">"</span><span class="strn">YE</span>   </pre>
+		<p>Естественно, можно записывать отрицательные числа, они рассматриваются 
+		как арифметические выражения с унарным минусом. Так же можно писать 
+		перед числом унарный плюс, хоть этого никто и не делает. К тому же 
+		унарных знаков может быть неограниченное количество: "<span class="icode">--~--~+-+++-^c-+-+-++-^c-3</span>" 
+		- эта чудовищная конструкция синтаксически верна.</p>
+		<p>Примеры:</p>
+		<pre>
+<span class="cmds">mov</span>     #-<span class="keywd">0x</span><span class="nmbr">dead</span>, <span class="regn">R0</span>
+<span class="cmds">mov</span>     #-<span class="keywd">0b</span><span class="nmbr">1111000011110000</span>, <span class="regn">R0</span>
+<span class="cmds">mov</span>     #-<span class="keywd">^x</span><span class="nmbr">faad</span>, <span class="regn">R0</span>
+
+<span class="pscm">.word</span>   -<span class="keywd">^h</span><span class="nmbr">FFFF</span>, -<span class="keywd">^b</span><span class="nmbr">1110001111000010</span>
+<span class="pscm">.word</span>   -<span class="keywd">^o</span><span class="nmbr">777</span>, -<span class="keywd">^r</span><span class="strn">ONE</span>
+
+<span class="cmds">mov</span>     #-<span class="keywd">^f</span><span class="nmbr">256</span>.<span class="nmbr">0</span>, <span class="regn">R1</span>
+
+<span class="cmds">mov</span>     #-<span class="keywd">^c</span><span class="nmbr">101</span>, <span class="regn">R1</span>
+<span class="cmds">mov</span>     #-<span class="keywd">^c</span> <span class="keywd">0x</span><span class="nmbr">85</span>, <span class="regn">R1</span>
+
+<span class="pscm">.word</span>   <span class="keywd">^c</span>-<span class="nmbr">25.</span> + -<span class="keywd">^c</span> <span class="symb">"</span><span class="strn">YE</span></pre>
+		<p>Так же числом считается запись одного кода <span class="selc">ASCII</span>, 
+		как число ( '<span class="strn">A </span>) и запись двух кодов
+		<span class="selc">ASCII</span>, как число ( "<span class="strn">AB
+		</span>) и знак <span class="macro">Точка</span> - значение адреса первого 
+		слова команды (а не текущего слова, куда должен быть сохранён результат).</p>
+		<p>Например:</p>
+		<p><span class="cmds">MOV</span> #&#39;<span class="strn">A</span>,<span class="regn">R1</span> 
+		то же, что <span class="cmds">MOV</span> #<span class="nmbr">101</span>,<span class="regn">R1</span></p>
+		<p>Можно использовать в любом случае вместо числа, например:</p>
+		<p><span class="cmds">TRAP</span> &#39;<span class="strn">&amp;</span> вместо
+		<span class="cmds">TRAP</span> <span class="nmbr">46</span>.</p>
+		<p>Вообще, аргумент команд <span class="cmds">TRAP</span> и
+		<span class="cmds">EMT</span> может быть полноценным арифметическим выражением, 
+		в котором запрещены локальные метки, но разрешены неопределённые, и результат 
+		должен укладываться в байт, иначе будет ошибка переполнения и некорректный 
+		результат.</p>
+		<p>То же касается и команды <span class="cmds">MARK</span>, но в арифметическом 
+		выражении её аргумента запрещены как локальные, так и неопределённые метки, 
+		т.к. выражение должно быть вычислено немедленно, чтобы сформировать опкод 
+		команды.</p>
+		<p><span class="cmds">MOV</span> #&quot;<span class="strn">AB</span>,<span class="regn">R1</span> 
+		(два байта)</p>
+		<p><span class="macro">Точку</span> удобно использовать для задания смещения 
+		для перехода.</p>
+		<p><span class="attnt">ПРИМЕЧАНИЕ:</span> точка может быть использована 
+		в качестве любого аргумента команды, даже можно использовать точку с именами 
+		меток при трансляции объектного модуля (<span class="cmdm">CL</span>).</p>
+		<p>Кроме присваивания точке нового значения (например <span class="pscm">
+		.</span> = <span class="nmbr">30000</span> или <span class="pscm">.</span> 
+		= <span class="pscm">.</span> + <span class="nmbr">100</span>). Это выражение 
+		в объектном файле, который линкуется к другому объектному файлу, приведёт 
+		к неверному результату. Потому что имеет абсолютное значение и вычисляется 
+		сразу, а не во время линковки, и приводит к изменению значения текущего 
+		PC.</p>
+		<p>Примеры: </p>
+		<pre><span class="labl">START:</span>  <span class="cmds">MOV</span> <span class="regn">  R2</span>,<span class="regn">R1</span>
+        <span class="cmds">BCS</span>   .-<span class="nmbr">2</span>   <span class="cmmnt">      ; переход на метку START.</span>
+        <span class="cmds">HALT</span>
+<span class="labl">ST:</span>     <span class="cmds">MOV</span>   <span class="regn">PC</span>,<span class="regn">R1</span>
+        <span class="cmds">ADD</span>   (<span class="regn">PC</span>)+,<span class="regn">R1</span>
+        <span class="pscm">.WORD</span> <span class="labl">END</span>-.+<span class="nmbr">2</span>
+
+<span class="labl">   </span>     <span class="cmds">MOV</span>   <span class="regn">PC</span>,<span class="regn">R1</span>
+        <span class="cmds">ADD</span>   #<span class="labl">END</span>-.,<span class="regn">R1</span>   <span class="cmmnt">;или прямо в строке команды</span>
+<span class="labl">END:</span>    <span class="pscm">.END</span></pre>
+		<p>Чтобы не использовать точку, этот текст можно записать в следующем виде:</p>
+		<pre><span class="labl">ST:</span>     <span class="cmds">MOV</span>   <span class="regn">PC</span>,<span class="regn">R1</span>
+        <span class="cmds">ADD</span>   (<span class="regn">PC</span>)+,<span class="regn">R1</span>
+        <span class="pscm">.WORD</span> @<span class="labl">END</span>+<span class="nmbr">2</span>
+<span class="labl">END:</span>    <span class="pscm">.END</span></pre>
+		<p>Или можно использовать псевдокоманду <span class="pscm">.ADDR </span>
+		</p>
+		<pre>        <span class="pscm">.ADDR</span> <span class="regn">R1</span>,<span class="labl">END</span></pre>
+		<h3>Особенности реализации.</h3>
+		<p>В арифметическом выражении можно использовать локальные метки, кроме 
+		присваиваний, в присваиваниях - нельзя. Видимость локальной метки ограничена 
+		глобальными, так что этим надо пользоваться с осторожностью, не стоит злоупотреблять.</p>
+		<p>Для совместимости со старым BKTurbo оставлен вариант деления метки на 
+		два такого вида: /<span class="labl">MET</span>, это полностью аналогично 
+		операции <span class="labl">MET</span>/<span class="nmbr">2</span>.</p>
+		<p>Для совместимости со старым BKTurbo в командах ветвления и
+		<span class="cmds">SOB</span> принято следующее допущение: если не используются 
+		скобки, то самый первый аргумент всегда интерпретируется как метка, даже 
+		если выглядит как число в синтаксисе Си. Однако число в формате MACRO-11 
+		всё-таки опознаётся как число, из-за своего префикса '<span class="symb">^</span>'. Это 
+		сделано для того, чтобы без лишних телодвижений можно было компилировать 
+		тексты, в которых локальные метки были обычными числами.</p>
+		<p>Например: </p>
+		<p><span class="cmds">BR</span> <span class="locl">100</span> ; переход 
+		на метку <span class="locl">100</span>, а не на адрес <span class="nmbr">
+		100</span></p>
+		<p><span class="cmds">BR</span> &lt;<span class="nmbr">100</span>&gt; или <span class="cmds">BR</span> 
+		^o<span class="nmbr">100</span> ; 
+		переход на абсолютный адрес <span class="nmbr">100</span></p>
+		<p><span class="cmds">BR</span> <span class="locl">0x100</span>+<span class="nmbr">4</span> 
+		; переход на метку <span class="labl">0x100</span> плюс <span class="nmbr">
+		4</span> байта</p>
+		<p><span class="cmds">BR</span> &lt;<span class="nmbr">100</span> +
+		<span class="labl">MET</span>&gt; ; переход на метку <span class="labl">
+		MET</span> плюс <span class="nmbr">100</span> байтов.</p>
+		<p>В псевдокоманде <span class="pscm">.word</span> можно задавать 
+		смещение к адресу, для этого служит символ @:</p>
+		<p><span class="pscm">.word</span> @<span class="labl">met</span></p>
+		<p>Вместо <span class="labl">met</span> в общем случае может стоять арифметическое 
+		выражение:</p>
+		<p><span class="pscm">.word</span> @&lt;<span class="cmdm">aripm</span>&gt;</p>
+		<p>&nbsp;В результате будет рассчитано смещение до результата арифметического 
+		выражения. Однако, нельзя писать конструкции такого вида:</p>
+		<p><span class="pscm">.word</span> @<span class="labl">met</span> + @<span class="labl">met2</span>
+		<span class="cmmnt">; это считается синтаксической ошибкой.</span></p>
+		<p>Но можно перечислять смещения через запятую:</p>
+		<p><span class="pscm">.word</span> @<span class="labl">met</span>, @<span class="labl">met2</span>
+		<span class="cmmnt">; в этом случае всё вычисляется корректно.</span></p>
+		<p>&nbsp;</p>
+		<ol>
+			<li>Пример:<pre>        <span class="pscm">.ADDR</span> <span class="regn">R0</span>, <span class="labl">START</span>
+        <span class="cmds">MOV</span>  #<span class="nmbr">140000</span>, <span class="regn">R1</span>
+        <span class="cmds">MOV</span>  #/<span class="labl">END</span> - /<span class="labl">START</span>, <span class="regn">R2</span>
+<span class="locl">1$:</span>     <span class="cmds">MOV</span>  (<span class="regn">R0</span>)+,(<span class="regn">R1</span>)+
+        <span class="cmds">SOB</span>  <span class="regn">R2</span>,<span class="locl">1$</span>
+<span class="labl">START:</span>  . . . . .
+        . . . . .
+<span class="labl">END:</span>    <span class="pscm">.END</span></pre>
+			<p>Здесь массив от метки <span class="labl">START</span> до метки
+			<span class="labl">END</span> пересылается на адрес
+			<span class="nmbr">140000</span>. Знак деления ( <span class="symb">
+			/</span> ) означает, что адрес метки делится на <span class="nmbr">2</span>, 
+			что в результате даёт в <span class="regn">R2</span> длину массива в 
+			словах.</p>
+			<p>Пересылка словами в два раза быстрее, чем байтами. Использование 
+			деления возможно везде, где возможно использовать арифметические выражения. 
+			По директиве <span class="pscm">.ADDR</span> мы получаем в
+			<span class="regn">R0</span> абсолютный адрес метки
+			<span class="labl">START</span>, даже если программа перемещаемая.</p>
+			</li>
+			<li>Запись байта числа в строку букв.
+			<pre><span class="labl">CR</span> = <span class="nmbr">12</span>
+<span class="labl">LF</span> = <span class="nmbr">15</span>
+<span class="pscm">.ASCII</span> /<span class="strn">ABC</span>/&lt;<span class="labl">CR</span>&gt;&lt;<span class="labl">LF</span>&gt; <span class="cmmnt">; в строку дописать коды ПС,ВК</span></pre>
+			<p>В общем случае, в угловых скобках можно записать упрощенное арифметическое 
+			выражение, в котором запрещены скобки, и результат должен укладываться 
+			в байт, иначе будет ошибка переполнения и некорректный результат.</p>
+			</li>
+		</ol>
+		<h2><a name="toc_p6"></a>МЕТОДЫ АДРЕСАЦИИ, КОМАНДЫ.</h2>
+		<p>Методы адресации аналогичны системе команд ЭЛЕКТРОНИКИ-60.</p>
+		<table class="border clltid">
+			<tr>
+				<th style="width: 160px">Пример написания</th>
+				<th style="width: 160px">Код адресации</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="nmbr">67</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">MOV</span> #<span class="labl">MET</span>,<span class="regn">R1</span></p>
+				</td>
+				<td>
+				<p class="nmbr">27</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> @#<span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="nmbr">37</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> @<span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="nmbr">77</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> <span class="labl">MET</span>(<span class="regn">R1</span>)</p>
+				</td>
+				<td>
+				<p><span class="nmbr">6</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> @<span class="labl">MET</span>(<span class="regn">R1</span>)</p>
+				</td>
+				<td>
+				<p><span class="nmbr">7</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> <span class="regn">R1</span></p>
+				</td>
+				<td>
+				<p><span class="nmbr">0</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> (<span class="regn">R1</span>)</p>
+				<p><span class="cmds">CLR</span> @<span class="regn">R1</span></p>
+				</td>
+				<td>
+				<p><span class="nmbr">1</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> -(<span class="regn">R1</span>)</p>
+				</td>
+				<td>
+				<p><span class="nmbr">4</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> @-(<span class="regn">R1</span>)</p>
+				</td>
+				<td>
+				<p><span class="nmbr">5</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> (<span class="regn">R1</span>)+</p>
+				</td>
+				<td>
+				<p><span class="nmbr">2</span>n</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span> @(<span class="regn">R1</span>)+</p>
+				</td>
+				<td>
+				<p><span class="nmbr">3</span>n</p>
+				</td>
+			</tr>
+		</table>
+		<p>&nbsp;</p>
+		<table class="border vtop clltid">
+			<tr>
+				<td colspan="2">
+				<p><b>Обозначения в тексте:</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>ss</p>
+				</td>
+				<td>
+				<p>поле источника (<span class="nmbr">6</span> бит)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>поле приёмника (<span class="nmbr">6</span> бит)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>R</p>
+				</td>
+				<td>
+				<p>регистр общего назначения (<span class="nmbr">3</span> бита)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>xx</p>
+				</td>
+				<td>
+				<p>смещение (<span class="nmbr">8</span> бит), +<span class="nmbr">127</span> 
+				.. -<span class="nmbr">128</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>n</p>
+				</td>
+				<td>
+				<p>цифра (<span class="nmbr">3</span> бита)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>M</p>
+				</td>
+				<td>
+				<p>маска (<span class="nmbr">4</span> бита)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>nn</p>
+				</td>
+				<td>
+				<p>число (<span class="nmbr">6</span> бит)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>\</p>
+				</td>
+				<td>
+				<p>резервный/неизвестный код</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>eis</p>
+				</td>
+				<td>
+				<p>EIS инструкция</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>fis</p>
+				</td>
+				<td>
+				<p>FIS инструкция</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>fpu</p>
+				</td>
+				<td>
+				<p>FPU инструкция</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>cis</p>
+				</td>
+				<td>
+				<p>CIS инструкция</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><b>src</b>, S</p>
+				</td>
+				<td>
+				<p>операнд - источник</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><b>dst</b>, D</p>
+				</td>
+				<td>
+				<p>операнд - приёмник</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>offset</p>
+				</td>
+				<td>
+				<p>смещение</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>CC</p>
+				</td>
+				<td>
+				<p>коды условий (биты в слове состояния процессора)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="regn">PC</span>=<span class="regn">R7</span>=регистр</p>
+				</td>
+				<td>
+				<p>счётчик команд</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="regn">SP</span>=<span class="regn">R6</span>=регистр</p>
+				</td>
+				<td>
+				<p>указатель стека</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="regn">PSW</p>
+				</td>
+				<td>
+				<p>слово состояния процессора</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>::</p>
+				</td>
+				<td>
+				<p>каждое двоеточие - произвольная (восьмеричная) цифра</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>mmg</p>
+				</td>
+				<td>
+				<p>инструкция диспетчера памяти</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>si</p>
+				</td>
+				<td>
+				<p>специальная инструкция: уникальна для указанного процессора</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><b>Установки кодов условий:</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>не изменяется</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>действия над битом в описании конкретной инструкции.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="nmbr">1</p>
+				</td>
+				<td>
+				<p>всегда устанавливается в <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>всегда очищается</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>устанавливается/чистится в соответствии с общими правилами:</p>
+				<p><span class="symb selw">N</span> - устанавливается, если старший 
+				бит результата установлен, иначе чистится;<br>
+				<span class="symb selw">Z</span> - устанавливается при нулевом результате, 
+				иначе чистится;<br><span class="symb selw">V</span> - устанавливается 
+				при арифметическом переполнении, иначе чистится;<br>
+				<span class="symb selw">C</span> - устанавливается при переносе 
+				из старшего разряда, иначе очищается;</p>
+				</td>
+			</tr>
+		</table>
+		<p><b>Двухоперандные:</b></p>
+		<table class="border vtop">
+			<tr>
+				<th rowspan="2" style="width: 100px">Команда</th>
+				<th rowspan="2" style="width: 100px">Мнемоника</th>
+				<th colspan="4" style="width: 100px">Флаги</th>
+				<th rowspan="2">Описание</th>
+			</tr>
+			<tr>
+				<th style="width: 20px">N</th>
+				<th style="width: 20px">Z</th>
+				<th style="width: 20px">V</th>
+				<th style="width: 20px">C</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">MOV</span>[<span class="cmds">B</span>] S,D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]1ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p><span class="nmbr">0</span></p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>пересылка:</p>
+				<p><b>(dst) &larr; (src);</b></p>
+				<p><span class="cmds">MOVB </span><b>ss</b>,<span class="regn">Rn</span> 
+				(пересылка в регистр общего назначения), единственная среди байтовых 
+				инструкций, распространяет знаковый бит источника в старшем байте 
+				приёмника; при пересылке байта в регистр результат всегда пересылается 
+				в младший байт регистра. Все остальные байтовые пересылки работают 
+				с байтами в точности как словные со словами.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CMP</span>[<span class="cmds">B</span>] S,D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]2ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>сравнение <b>src</b> с <b>dst</b> и установка кодов условий
+				<span class="regn">PSW</span>:</p>
+				<p><b>(src) - (dst);</b></p>
+				<p><span class="symb selw">V</span> = <span class="nmbr">1</span>, 
+				если операнды были разных знаков, и знак приёмника был тот же, что 
+				и знак результата (разности операндов), иначе чистится;</p>
+				<p><span class="symb selw">C</span> = <span class="nmbr">0</span>, 
+				если был перенос из старшего разряда, иначе устанавливается.</p>
+				<p>Операция не изменяет исходных операндов.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BIT</span>[<span class="cmds">B</span>] S,D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]3ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>проверка бит <b>dst</b> по маске <b>src</b> и установка кодов 
+				условий:</p>
+				<p><b>(src) &amp; (dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BIC</span>[<span class="cmds">B</span>] S,D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]4ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>очистка бит <b>dst</b> по маске <b>src</b>:</p>
+				<p><b>(dst) &larr; ~(src) &amp; (dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BIS</span>[<span class="cmds">B</span>] S,D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]5ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>установка бит <b>dst</b> по маске <b>src</b>:</p>
+				<p><b>(dst) &larr; (src) | (dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">XOR</span> <span class="regn">Rn</span>,D</p>
+				</td>
+				<td>
+				<p class="opcd">074Rdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) исключающее &#39;или&#39;:</p>
+				<p><b>(dst)&larr; R xor (dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ADD</span> S,D</p>
+				</td>
+				<td>
+				<p class="opcd">06ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p><b>(dst) &larr; (src) + (dst);</b></p>
+				<p><span class="symb selw">V</span> устанавливается, если оба операнда 
+				были одного знака, а результат - противоположного, иначе - чистится</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SUB</span> S,D</p>
+				</td>
+				<td>
+				<p class="opcd">16ssdd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p><b>(dst) &larr; (dst) - (src);</b></p>
+				<p><span class="symb selw">V</span> устанавливается, если операнды 
+				были различных знаков, а знак источника был таким же, как и знак 
+				результата, иначе чистится;</p>
+				<p><span class="symb selw">C</span> чистится, если был перенос из 
+				старшего разряда, иначе - устанавливается</p>
+				</td>
+			</tr>
+		</table>
+		<p><b>Однооперандные:</b></p>
+		<table class="border vtop">
+			<tr>
+				<th rowspan="2" style="width: 100px">Команда</th>
+				<th rowspan="2" style="width: 100px">Мнемоника</th>
+				<th colspan="4" style="width: 100px">Флаги</th>
+				<th rowspan="2">Описание</th>
+			</tr>
+			<tr>
+				<th style="width: 20px">N</th>
+				<th style="width: 20px">Z</th>
+				<th style="width: 20px">V</th>
+				<th style="width: 20px">C</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]050dd</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">1</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>обнуление приёмника:</p>
+				<p><b>(dst) &larr; <span class="nmbr">0</span></b></p>
+				<p>Перед обнулением, как и для всех однооперандных команд, происходит 
+				чтение из приёмника</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">COM</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]051dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">1</p>
+				</td>
+				<td>
+				<p>побитовое инвертирование операнда:</p>
+				<p><b>(dst) &larr; ~(dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">INC</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]052dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>прибавление <span class="nmbr">1</span> к операнду:</p>
+				<p><b>(dst) &larr; (dst) + <span class="nmbr">1</span>;</b></p>
+				<p><span class="symb selw">V</span> устанавливается если превышает
+				<span class="nmbr">077777</span>, иначе чистится</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">DEC</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]053dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>вычитание <span class="nmbr">1</span> из операнда:</p>
+				<p><b>(dst) &larr; (dst) - <span class="nmbr">1</span>;</b></p>
+				<p><span class="symb selw">V</span> устанавливается, если <b>(dst)</b> 
+				было <span class="nmbr">100000</span>, иначе чистится.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">NEG</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]054dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>заменяет источник его дополнением до <span class="nmbr">1</span> 
+				(меняет знак числа):</p>
+				<p><b>(dst) &larr; -(dst);</b></p>
+				<p><span class="symb selw">V</span> устанавливается, если результат 
+				стал <span class="nmbr">100000</span>, иначе чистится;</p>
+				<p><span class="symb selw">C</span> чистится, если получен результат
+				<span class="nmbr">0</span>, иначе устанавливается</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ADC</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]055dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>прибавление к операнду бита переноса (для длинной арифметики):</p>
+				<p><b>(dst) &larr; (dst) + <span class="symb selw">C</span></b></p>
+				<p><span class="symb selw">V</span> устанавливается, если <b>(dst)</b> 
+				был <span class="nmbr">077777 </span>и <span class="symb selw">C</span> 
+				был установлен, иначе чистится;</p>
+				<p><span class="symb selw">C</span> устанавливается, если <b>(dst)</b> 
+				был <span class="nmbr">177777 </span>и <span class="symb selw">C</span> 
+				был установлен, иначе чистится</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SBC</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]056dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>вычитание из операнда бита переноса (для длинной арифметики):</p>
+				<p><b>(dst) &larr; (dst) – <span class="symb selw">C</span></b></p>
+				<p><span class="symb selw">V</span> = <span class="nmbr">1</span>, 
+				если <b>(dst)</b> был <span class="nmbr">100000</span> и
+				<span class="symb selw">C</span> был установлен, иначе чистится;</p>
+				<p><span class="symb selw">C</span> = <span class="nmbr">1</span>, 
+				если <b>(dst)</b> был <span class="nmbr">0</span>, и
+				<span class="symb selw">C</span> был установлен, иначе чистится</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">TST</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]057dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>установка битов условий <span class="regn">PSW</span>, соответствующих 
+				операнду</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ROR</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]060dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>кольцевой сдвиг вправо: вращает все биты операнда на одну позицию 
+				вправо; старший бит загружается из бита переноса, младший бит, выдвинутый 
+				из операнда, загружается в бит переноса;</p>
+				<p><span class="symb selw">V</span> = <span class="symb selw">C</span>
+				<span class="selc">xor</span> <span class="symb selw">N</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ROL</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]061dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>кольцевой сдвиг влево: вращает все биты операнда на одну позицию 
+				влево; младший бит грузится из бита переноса, выдвинутый старший 
+				бит загружается в бит переноса;</p>
+				<p><span class="symb selw">V</span> = <span class="symb selw">C</span>
+				<span class="selc">xor</span> <span class="symb selw">N</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ASR</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]062dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>арифметический сдвиг вправо: содержимое операнда сдвигается на 
+				одну позицию вправо; старший (знаковый) бит остаётся неизменным; 
+				бит переноса грузится содержимым выдвинутого бита;</p>
+				<p><span class="symb selw">V</span> = <span class="symb selw">C</span>
+				<span class="selc">xor</span> <span class="symb selw">N</span>.</p>
+				<p>Операцию можно трактовать как целочисленное деление операнда 
+				пополам, с остатком, остающимся в бите переноса.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ASL</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]063dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>арифметический сдвиг влево: содержимое операнда сдвигается на 
+				одну позицию влево, младший бит чистится, выдвинутый знаковый бит 
+				грузится бит переноса;</p>
+				<p><span class="symb selw">V</span> = <span class="symb selw">C</span>
+				<span class="selc">xor</span> <span class="symb selw">N</span>.</p>
+				<p>Операцию можно рассматривать как целочисленное умножение операнда 
+				на <span class="nmbr">2</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SWAB</span> D</p>
+				</td>
+				<td>
+				<p class="opcd">0003dd</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>обмен байтов в слове:</p>
+				<p><b>byte1/byte0 &larr; byte0/byte1</b></p>
+				<p><span class="symb selw">N</span>, <span class="symb selw">Z</span> 
+				устанавливаются по младшему байту результата</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SXT</span> D</p>
+				</td>
+				<td>
+				<p class="opcd">0067dd</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) распространение знака:</p>
+				<p><b>(dst) &larr; <span class="nmbr">0</span></b> если бит
+				<span class="symb selw">N</span> очищен</p>
+				<p><b>(dst) &larr; <span class="nmbr">177777</span></b> если бит
+				<span class="symb selw">N</span> установлен</p>
+				<p><span class="symb selw">Z</span> устанавливается, если бит
+				<span class="symb selw">N</span> очищен</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">MTPS</span> S</p>
+				</td>
+				<td>
+				<p class="opcd">1064ss</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>запись в слово состояния:</p>
+				<p><span class="regn">PSW</span> &larr; ss</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">MFPS</span> D</p>
+				</td>
+				<td>
+				<p class="opcd">1067dd</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>чтение слова состояния:</p>
+				<p><b>(dst) &larr; <span class="regn">PSW</span></b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">PUSH</span>[<span class="cmds">B</span>] S</p>
+				</td>
+				<td>
+				<p class="opcd">[1]1ss46</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>это команда <span class="cmds">MOV</span>[<span class="cmds">B</span>] 
+				ss, -(<span class="regn">SP</span>),</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">POP</span>[<span class="cmds">B</span>] D</p>
+				</td>
+				<td>
+				<p class="opcd">[1]126dd</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>это команда <span class="cmds">MOV</span>[<span class="cmds">B</span>] 
+				(<span class="regn">SP</span>)+, dd</p>
+				</td>
+			</tr>
+		</table>
+		<p><b>Ветвления:</b></p>
+		<table class="border vtop">
+			<tr>
+				<th rowspan="2" style="width: 100px">Команда</th>
+				<th rowspan="2" style="width: 100px">Мнемоника</th>
+				<th colspan="4" style="width: 100px">Флаги</th>
+				<th rowspan="2">Описание</th>
+			</tr>
+			<tr>
+				<th style="width: 20px">N</th>
+				<th style="width: 20px">Z</th>
+				<th style="width: 20px">V</th>
+				<th style="width: 20px">C</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BR</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0004xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход безусловный. Смещение xx автоматически умножается на
+				<span class="nmbr">2</span>, и складывается с <span class="regn">
+				PC</span>:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span>*offset)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BNE</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0010xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход по не нулю:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">Z</span> =<span class="nmbr"> 0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BEQ</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0014xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход по нулю:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">Z</span> =<span class="nmbr"> 1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BGE</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0020xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход по больше или равно:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">N</span> xor <span class="symb selw">V</span> 
+				= <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLT</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0024xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход по меньше:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">N</span> xor <span class="symb selw">V</span> 
+				=<span class="nmbr"> 1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BGT</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0030xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход по больше:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * xx)</b> if
+				<span class="symb selw">Z</span> | (<span class="symb selw">N</span> 
+				xor <span class="symb selw">V</span>) = <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLE</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">0034xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход по меньше или равно:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * xx)</b> if
+				<span class="symb selw">Z</span> | (<span class="symb selw">N</span> 
+				xor <span class="symb selw">V</span>) = <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BPL</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1000xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если плюс:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">N</span> = <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BMI</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1004xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если минус:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">N</span> = <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BHI</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1010xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если выше:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">C</span> &amp; <span class="symb selw">Z</span> 
+				= <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLOS</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1014xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если ниже или равно:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">C</span> | <span class="symb selw">Z</span> 
+				= <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BVC</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1020xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если нет переполнения:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">V</span> = <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BVS</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1024xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если переполнение:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">V</span> = <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BCC</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1030xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если не было переноса:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">C</span> = <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BCS</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1034xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если был перенос:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">C</span> = <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BHIS</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1030xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если выше или равно:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">C</span> = <span class="nmbr">0</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLO</span> <span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">1034xx</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход, если ниже:</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">PC</span> 
+				+ (<span class="nmbr">2</span> * offset)</b> if
+				<span class="symb selw">C</span> = <span class="nmbr">1</span></p>
+				</td>
+			</tr>
+		</table>
+		<p><b>Управления:</b></p>
+		<table class="border vtop">
+			<tr>
+				<th rowspan="2" style="width: 100px">Команда</th>
+				<th rowspan="2" style="width: 100px">Мнемоника</th>
+				<th colspan="4" style="width: 100px">Флаги</th>
+				<th rowspan="2">Описание</th>
+			</tr>
+			<tr>
+				<th style="width: 20px">N</th>
+				<th style="width: 20px">Z</th>
+				<th style="width: 20px">V</th>
+				<th style="width: 20px">C</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">JMP</span> D</p>
+				</td>
+				<td>
+				<p class="opcd">0001dd</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>Переход. Грузит <span class="regn">PC</span> из источника, используя 
+				адресацию dd. Код адресации <span class="nmbr">0</span> (попытка 
+				выполнить команду, записанную в регистре общего назначения) на большинстве 
+				типов процессоров приводит к <b>TRAP TO 4</b>;</p>
+				<p><b><span class="regn">PC </span>&larr; (dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SOB</span> <span class="regn">Rn</span>,<span class="labl">MET</span></p>
+				</td>
+				<td>
+				<p class="opcd">077Rnn</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>)</p>
+				<p><b><span class="regn">R </span>&larr;<span class="regn"> R</span> 
+				- <span class="nmbr">1</span>; если не <span class="nmbr">0</span>, 
+				то <span class="regn">PC </span>&larr; <span class="regn">PC</span>-<span class="nmbr">2</span>*offset</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">JSR</span> <span class="regn">Rn</span>,D</p>
+				</td>
+				<td>
+				<p class="opcd">004Rdd</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>переход на подпрограмму:</p>
+				<p><b>-(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				R</span>, <span class="regn">R </span>&larr;<span class="regn"> 
+				PC</span>, <span class="regn">PC </span>&larr; (dst)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">RTS</span> <span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">00020R</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>Возврат из подпрограммы.</p>
+				<p><b><span class="regn">PC</span> &larr; <span class="regn">R</span>,
+				<span class="regn">R</span> &larr; (<span class="regn">SP</span>)</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">MARK</span> n</p>
+				</td>
+				<td>
+				<p class="opcd">0064nn</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>чистка стека:</p>
+				<p><b><span class="regn">SP </span>&larr; <span class="regn">PC
+				</span>+<span class="nmbr"> 2</span>*nn, <span class="regn">PC
+				</span>&larr;<span class="regn"> R5</span>, <span class="regn">R5
+				</span>&larr; (<span class="regn">SP</span>)+;</b></p>
+				<p><b>nn </b>- число параметров.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">TRAP</span> n</p>
+				</td>
+				<td>
+				<p><span class="opcd">104000</span>-<span class="opcd">104377</span></p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p><b>-(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PSW</span>; -(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PC</span>; <span class="regn">PC </span>&larr; (<span class="nmbr">34</span>);
+				<span class="regn">PSW </span>&larr; (<span class="nmbr">36</span>)</b></p>
+				<p><span class="symb selw">N</span>,<span class="symb selw">Z</span>,<span class="symb selw">V</span>,<span class="symb selw">C</span>: 
+				грузятся из вектора прерывания</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">EMT</span> n</p>
+				</td>
+				<td>
+				<p><span class="opcd">103400</span>-<span class="opcd">103777</span></p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p><b>-(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PSW</span>; -(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PC</span>; <span class="regn">PC </span>&larr; (<span class="nmbr">30</span>);
+				<span class="regn">PSW </span>&larr; (<span class="nmbr">32</span>)</b></p>
+				<p><span class="symb selw">N</span>,<span class="symb selw">Z</span>,<span class="symb selw">V</span>,<span class="symb selw">C</span>: 
+				грузятся из вектора прерывания</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">NOP</span></p>
+				</td>
+				<td>
+				<p class="opcd">000240</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>Ничего не делает, точнее, чистит никакие биты условий в
+				<span class="regn">PSW</span> (<span class="selc selw">M</span>=<span class="nmbr">0</span>, 
+				см. таблицу команд условий).</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">BPT</p>
+				</td>
+				<td>
+				<p class="opcd">000003</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>Отладочное прерывание по <span class="nmbr">14</span> ячейке.</p>
+				<p><b>-(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PSW</span>, -(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PC</span>, <span class="regn">PC </span>&larr; (<span class="nmbr">14</span>),
+				<span class="regn">PSW </span>&larr; (<span class="regn">16</span>)</b></p>
+				<p><span class="symb selw">N</span>,<span class="symb selw">Z</span>,<span class="symb selw">V</span>,<span class="symb selw">C</span>: 
+				загружаются из вектора прерывания</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">IOT</p>
+				</td>
+				<td>
+				<p class="opcd">000004</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>Программное прерывание ввода-вывода по <span class="nmbr">20</span> 
+				ячейке.</p>
+				<p><b>-(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PSW</span>, -(<span class="regn">SP</span>) &larr;<span class="regn"> 
+				PC</span>, <span class="regn">PC </span>&larr; (<span class="nmbr">20</span>),
+				<span class="regn">PSW </span>&larr; (<span class="nmbr">22</span>);</b></p>
+				<p><span class="symb selw">N</span>,<span class="symb selw">Z</span>,<span class="symb selw">V</span>,<span class="symb selw">C</span> 
+				грузятся из вектора прерывания</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">WAIT</p>
+				</td>
+				<td>
+				<p class="opcd">000001</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>Инструкция ожидания прерывания. Процессор останавливается и освобождает 
+				системную магистраль до первого незамаскированного прерывания.
+				<span class="regn">PC</span> указывает на следующую за
+				<span class="cmds">WAIT</span> команду. После возврата из прерывания 
+				выполнение программы продолжается со следующей за
+				<span class="cmds">WAIT</span> команды.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">RESET</p>
+				</td>
+				<td>
+				<p class="opcd">000005</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>Сброс внешних устройств. Процессорами, имеющими диспетчер памяти, 
+				в моде <span class="selc">USER / SUPERVISOR</span> исполняется как
+				<span class="cmds">NOP</span>. Выставляет сигнал сброса внешних 
+				устройств на магистраль. Время выполнения зависит от типа процессора 
+				и его тактовой частоты.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">HALT</p>
+				</td>
+				<td>
+				<p class="opcd">000000</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>Выводит процессор из активного режима: прерывается выполнение 
+				команд текущей программы, <span class="regn">PC</span> указывает 
+				на следующую за прерванной команду, <span class="regn">PC</span> 
+				отображается на консоли, разрешена работа консоли. На разных процессорах 
+				реализована различно: <span class="selc">1801ВМ1,2,3, 1811
+				</span>переводит в программу обслуживания останова. </p>
+				<p>Для <span class="selc">1801ВМ1</span> (<span class="nmbr">177716</span>) &larr;<span class="nmbr"> 
+				000010 </span>| (<span class="nmbr">177716</span>), (<span class="nmbr">177676</span>) &larr; 
+				(<span class="regn">PSW</span>), (<span class="nmbr">177674</span>) &larr; 
+				(<span class="regn">PC</span>), (<span class="regn">PC</span>) &larr; 
+				(<span class="nmbr">160002</span>), (<span class="regn">PSW</span>) &larr; 
+				(<span class="nmbr">160004</span>); </p>
+				<p>* Здесь и далее адреса системных регистров приводятся для главного 
+				процессора; предполагается, что системное ПЗУ расположено с адреса
+				<span class="nmbr">160000</span>.</p>
+				<p>Для <span class="selc">ВМ2</span> в пользовательском режиме вызывает 
+				прерывание в моду <span class="cmds">HALT</span> по вектору останова, 
+				то же в моде <span class="cmds">HALT</span> при разрешённом
+				<span class="cmds">HALT</span>, при запрещённых выполняется как
+				<span class="cmds">NOP</span>. В других процессорах: если нет диспетчера 
+				памяти, и процессор соответствует старым стандартам
+				<span class="selc">DEC</span>, процессор останавливается, и может 
+				быть перезапущен с точки останова, либо с набранного с пульта адреса 
+				пультовым переключателем; если есть диспетчер памяти, и команда 
+				выполнялась не в моде <span class="selc">KERNEL</span>, то происходит 
+				прерывание и переход в моду <span class="selc">KERNEL</span> по 
+				резервной инструкции; в моде <span class="selc">KERNEL</span> останавливает 
+				процессор, если он не <span class="selc">1801/06 ВМ3</span>. Для 
+				них <span class="cmds">HALT</span> в моде <span class="selc">KERNEL</span> 
+				переводит процессор в моду <span class="cmds">HALT</span>: стек 
+				пультовой моды устанавливается с адреса <span class="nmbr">100000</span>, 
+				далее в этот стек заносятся <span class="regn">PC</span>,
+				<span class="regn">PSW</span>; загружает <span class="regn">PSW</span> 
+				константой <span class="nmbr">340</span>, включает диспетчер памяти 
+				на преобразование адресов в <span class="nmbr">22</span>-разрядные 
+				и стартует с адреса <span class="nmbr">0</span> пультового ОЗУ (скрытого 
+				от пользователя).</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">RTI</p>
+				</td>
+				<td>
+				<p class="opcd">000002</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>Возврат из прерывания.</p>
+				<p><span class="regn">PC </span>&larr; (<span class="regn">SP</span>)+,
+				<span class="regn">PSW </span>&larr; (<span class="regn">SP</span>)+, 
+				грузит все доступные биты слова состояния из стека</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">RTT</p>
+				</td>
+				<td>
+				<p class="opcd">000006</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) Аналогична
+				<span class="cmds">RTI</span>, но при установленном бите
+				<span class="symb selw">T</span> в <span class="regn">PSW</span> 
+				прерывание после неё не возникает до окончания следующей команды.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CALL</span> D</p>
+				</td>
+				<td>
+				<p class="opcd">0047dd</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>это команда <span class="cmds">JSR</span> <span class="regn">
+				PC</span>,dd</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">RETURN</p>
+				</td>
+				<td>
+				<p class="opcd">207</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>-</p>
+				</td>
+				<td>
+				<p>это команда <span class="cmds">RTS</span> <span class="regn">
+				PC</span></p>
+				</td>
+			</tr>
+		</table>
+		<p><b>Условия:</b></p>
+		<table class="border vtop">
+			<tr>
+				<th rowspan="2" style="width: 100px">Команда</th>
+				<th rowspan="2" style="width: 100px">Мнемоника</th>
+				<th colspan="4" style="width: 100px">Флаги</th>
+				<th rowspan="2">Описание</th>
+			</tr>
+			<tr>
+				<th style="width: 20px">N</th>
+				<th style="width: 20px">Z</th>
+				<th style="width: 20px">V</th>
+				<th style="width: 20px">C</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CL</span>&lt;<span class="cmds">NZVC</span>&gt;</p>
+				</td>
+				<td>
+				<p class="opcd">00024M</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>чистит биты <span class="regn">PSW</span> (<span class="symb selw">N</span>,<span class="symb selw">Z</span>,<span class="symb selw">V</span>,<span class="symb selw">C</span>) 
+				по маске из <span class="nmbr">4</span> младших битов кода команды.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLC</p>
+				</td>
+				<td>
+				<p class="opcd">000241</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0001</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLV</p>
+				</td>
+				<td>
+				<p class="opcd">000242</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0010</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLVC</p>
+				</td>
+				<td>
+				<p class="opcd">000243</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0011</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLZ</p>
+				</td>
+				<td>
+				<p class="opcd">000244</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0100</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLZC</p>
+				</td>
+				<td>
+				<p class="opcd">000245</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0101</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLZV</p>
+				</td>
+				<td>
+				<p class="opcd">000246</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0110</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLZVC</p>
+				</td>
+				<td>
+				<p class="opcd">000247</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0111</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLN</p>
+				</td>
+				<td>
+				<p class="opcd">000250</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1000</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLNC</p>
+				</td>
+				<td>
+				<p class="opcd">000251</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1001</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLNV</p>
+				</td>
+				<td>
+				<p class="opcd">000252</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1010</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLNVC</p>
+				</td>
+				<td>
+				<p class="opcd">000253</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1011</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLNZ</p>
+				</td>
+				<td>
+				<p class="opcd">000254</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1100</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLNZC</p>
+				</td>
+				<td>
+				<p class="opcd">000255</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1101</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CLNZV</p>
+				</td>
+				<td>
+				<p class="opcd">000256</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1110</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">CCC</p>
+				</td>
+				<td>
+				<p class="opcd">000257</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1111</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SE</span>&lt;<span class="cmds">NZVC</span>&gt;</p>
+				</td>
+				<td>
+				<p class="opcd">00026M</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>устанавливает биты <span class="regn">PSW</span> (<span class="symb selw">N</span>,<span class="symb selw">Z</span>,<span class="symb selw">V</span>,<span class="symb selw">C</span>) 
+				по маске из <span class="nmbr">4</span> младших битов кода команды.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEC</p>
+				</td>
+				<td>
+				<p class="opcd">000261</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0001</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEV</p>
+				</td>
+				<td>
+				<p class="opcd">000262</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0010</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEVC</p>
+				</td>
+				<td>
+				<p class="opcd">000263</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0011</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEZ</p>
+				</td>
+				<td>
+				<p class="opcd">000264</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0100</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEZC</p>
+				</td>
+				<td>
+				<p class="opcd">000265</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0101</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEZV</p>
+				</td>
+				<td>
+				<p class="opcd">000266</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0110</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEZVC</p>
+				</td>
+				<td>
+				<p class="opcd">000267</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">0111</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SEN</p>
+				</td>
+				<td>
+				<p class="opcd">000270</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1000</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SENC</p>
+				</td>
+				<td>
+				<p class="opcd">000271</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1001</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SENV</p>
+				</td>
+				<td>
+				<p class="opcd">000272</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1010</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SENVC</p>
+				</td>
+				<td>
+				<p class="opcd">000273</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1011</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SENZ</p>
+				</td>
+				<td>
+				<p class="opcd">000274</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1100</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SENZC</p>
+				</td>
+				<td>
+				<p class="opcd">000275</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1101</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SENZV</p>
+				</td>
+				<td>
+				<p class="opcd">000276</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1110</span>)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmds">SCC</p>
+				</td>
+				<td>
+				<p class="opcd">000277</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<span class="selc selw">M</span> = <span class="keywd">^B</span><span class="nmbr">1111</span>)</p>
+				</td>
+			</tr>
+		</table>
+		<p><b>Расширенной арифметики:</b></p>
+		<table class="border vtop">
+			<tr>
+				<th rowspan="2" style="width: 100px">Команда</th>
+				<th rowspan="2" style="width: 100px">Мнемоника</th>
+				<th colspan="4" style="width: 100px">Флаги</th>
+				<th rowspan="2">Описание</th>
+			</tr>
+			<tr>
+				<th style="width: 20px">N</th>
+				<th style="width: 20px">Z</th>
+				<th style="width: 20px">V</th>
+				<th style="width: 20px">C</th>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">MUL</span> S,<span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">070Rss</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) Содержимое регистра назначения, 
+				и источника, рассматриваемые как целые числа в дополнительном коде, 
+				перемножаются и запоминаются в регистре - приёмнике, и следующем 
+				(по номеру) регистре, если номер регистра - приёмника чётный. Если 
+				номер регистра нечётный, запоминается только младшая часть произведения.</p>
+				<p><span class="regn">Rn:R(n|1)</span> = <span class="regn">Rn</span> 
+				* (<span class="opcd">SS</span>)</p>
+				<p>В <span class="regn">Rn:</span> содержится старшая часть результата, 
+				в <span class="regn">R(n|1)</span> - младшая.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">DIV</span> S,<span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">071Rss</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) <span class="nmbr">32</span>-битовое 
+				целое в дополнительном коде, находящееся в регистрах
+				<span class="regn">Rn:R(n|1)</span>, делится на значение операнда 
+				- источника. Деление будет произведено так, что остаток будет одного 
+				знака с делимым. Номер регистра должен быть чётным.</p>
+				<p><span class="symb selw">N</span> устанавливается, если результат 
+				отрицателен, иначе чистится;</p>
+				<p><span class="symb selw">Z</span> устанавливается, если результат 
+				нулевой, иначе чистится;</p>
+				<p><span class="symb">V</span> устанавливается, если делимое равно 
+				нулю, либо если значение регистра по модулю больше абсолютной величины 
+				делителя: в этом случае деление не выполняется, поскольку результат 
+				выйдет за разрядную сетку.</p>
+				<p><span class="symb selw">C</span> устанавливается, если делитель 
+				равен нулю, иначе очищается.</p>
+				<p>В <span class="regn">Rn:</span> содержится старшая часть делимого, 
+				в <span class="regn">R(n|1)</span> - младшая.</p>
+				<p><span class="regn">Rn</span> = <span class="regn">Rn:R(n|1)</span> 
+				\ (<span class="opcd">SS</span>) - целая часть деления</p>
+				<p><span class="regn">R(n|1)</span> = <span class="regn">Rn:R(n|1)</span> 
+				% (<span class="opcd">SS</span>) - остаток от деления</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">ASH</span> S,<span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">072Rss</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) Содержимое регистра сдвигается 
+				вправо или влево на число позиций, указанное в операнде - источнике. 
+				Счётчиком позиций являются <span class="nmbr">6</span> младших бит 
+				источника. Отрицательное значение счётчика сдвига означает сдвиг 
+				вправо, положительное - влево. При правом сдвиге распространяется 
+				старший бит, при левом - младший грузится нулём.</p>
+				<p><span class="symb selw">V</span> устанавливается, когда знак 
+				регистра менялся во время операции, иначе чистится;</p>
+				<p><span class="symb selw">C</span> загружается последним битом, 
+				выдвинутым из регистра.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">ASHC</span> S,<span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">073Rss</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>+</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">eis</span></i>) Содержимое регистра, и 
+				регистра с номером, полученным установкой младшего бита в номере 
+				указанного регистра, рассматривается как одно <span class="nmbr">
+				32</span> - битовое слово, причём в регистре с большим номером содержатся 
+				младшие биты, а регистре с меньшим - старшие, сдвигается влево или 
+				вправо на число позиций, указанное счётчике сдвига. Счётчиком сдвига 
+				являются младшие <span class="nmbr">6</span> бит операнда - источника. 
+				Отрицательное значение счётчика вызывает сдвиг вправо, положительное 
+				- влево. Если номер регистра - приёмника нечётный, правый сдвиг 
+				становится вращением. <span class="nmbr">16</span>-разрядное слово 
+				вращается вправо на число позиций, указанное в счётчике сдвига. 
+				При правом сдвиге распространяется старший бит, при левом сдвиге 
+				младший бит грузится нулём.</p>
+				<p><span class="symb selw">V</span> устанавливается, если при сдвиге 
+				изменялся знак операнда, иначе чистится;</p>
+				<p><span class="symb selw">C</span> загружается последним выдвинутым 
+				из <span class="nmbr">32</span>-битового операнда битом.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">FADD</span> <span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">07500R</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">fis</span></i>)</p>
+				<table class="border2">
+					<tr>
+						<td colspan="3">&nbsp; initial state:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand A bits 16-31</td>
+					</tr>
+					<tr>
+						<td>(R)+6</td>
+						<td>=&gt; </td>
+						<td>operand A bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">After operation floating point stack looks:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">result = A+B</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">FSUB</span> <span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">07501R</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">fis</span></i>)</p>
+				<table class="border2">
+					<tr>
+						<td colspan="3">&nbsp; initial state:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand A bits 16-31</td>
+					</tr>
+					<tr>
+						<td>(R)+6</td>
+						<td>=&gt; </td>
+						<td>operand A bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">After operation floating point stack looks:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">result = A-B</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">FMUL</span> <span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">07502R</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">fis</span></i>)</p>
+				<table class="border2">
+					<tr>
+						<td colspan="3">&nbsp; initial state:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand A bits 16-31</td>
+					</tr>
+					<tr>
+						<td>(R)+6</td>
+						<td>=&gt; </td>
+						<td>operand A bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">After operation floating point stack looks:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">result = A*B</td>
+					</tr>
+				</table>
+				<p>if the result &lt; 2E-128 then the result is treated as zero.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmdf">FDIV</span> <span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p class="opcd">07503R</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p>*</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p class="nmbr">0</p>
+				</td>
+				<td>
+				<p>(<i><span class="selc">fis</span></i>) </p>
+				<table class="border2">
+					<tr>
+						<td colspan="3">&nbsp; initial state:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand A bits 16-31</td>
+					</tr>
+					<tr>
+						<td>(R)+6</td>
+						<td>=&gt; </td>
+						<td>operand A bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">After operation floating point stack looks:</td>
+					</tr>
+					<tr>
+						<td>R</td>
+						<td>=&gt;</td>
+						<td>operand B bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>operand B bits 0-15</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 16-31</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>result bits 0-15</td>
+					</tr>
+					<tr>
+						<td colspan="3">result = A/B</td>
+					</tr>
+				</table>
+				<p>if the result &lt; 2E-128 then the result is treated as zero.</p>
+				</td>
+			</tr>
+		</table>
+		<p><span class="attnt">ПРИМЕЧАНИЕ:</span> Нельзя использовать относительную 
+		адресацию (<span class="nmbr">67</span>,<span class="nmbr">77</span>) при 
+		обращении к внешним, по отношению к транслируемой программе, адресам при 
+		трансляции в перемещаемом формате. Нужно использовать абсолютную адресацию.</p>
+		<p>Т.е. использовать то можно, но работать такая программа практически не 
+		будет.</p>
+		<p>Примеры:</p>
+		<pre><span class="cmds">MOV</span>   <span class="regn">R0</span>,@#<span class="nmbr">177714</span> <span class="cmmnt">;Ограничений нет.</span>
+<span class="cmds">MOV</span>   <span class="regn">R0</span>,<span class="nmbr">177714</span>   <span class="cmmnt">;Можно транслировать только в абсолютном формате (CO).</span></pre>
+		<p>Если нужно транслировать по <span class="cmdm">CL</span>, то можно сделать 
+		таким образом:</p>
+		<pre><span class="labl">PORT</span>=<span class="nmbr">177714</span> <span class="cmmnt">;Перед началом программы.</span>
+. . . .
+. . . .
+<span class="cmds">MOV</span> <span class="regn">R0</span>,<span class="labl">PORT</span></pre>
+		<h2><a name="toc_p10"></a>ПСЕВДОКОМАНДЫ.</h2>
+		<table class="border vtop">
+			<tr>
+				<td style="width: 150px">
+				<p><span class="pscm">.LA</span> <i><span class="selc">выражение</span></i><br>
+				синоним<br><span class="pscm">.LINK</span> <i>
+				<span class="selc">выражение</span></i></p>
+				</td>
+				<td>
+				<p>- псевдокоманда, задающая адрес начала трансляции неперемещаемой 
+				программы, эта команда должна быть самой первой командой. Её допустимо 
+				подавать после начальных присвоений.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.BLKB</span> <i><span class="selc">выражение</span></i></p>
+				</td>
+				<td>
+				<p>- резервирование количества байт, которое получается в результате 
+				вычисления выражения.</p>
+				<p>В выражении нельзя использовать неопределённых меток и определений. 
+				Потому что выражение вычисляется сразу и изменяет текущий счётчик 
+				указателя команд.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.BLKW</span> <i><span class="selc">выражение</span></i></p>
+				</td>
+				<td>
+				<p>- резервирование количества слов, которое получается в результате 
+				вычисления выражения.</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+				<p><span class="attnt">ПРИМЕЧАНИЕ:</span> Если аргумент этих псевдокоманд 
+				слишком велик, то возможно сообщение об ошибке (см. в начале описания).</p>
+				<p>В качестве аргумента можно использовать арифметическое выражение, 
+				в составе которого есть имена переменных и метки, значения которых 
+				должны быть определены, иначе будет ошибка <span class="errm">111</span>.</p>
+				<p>Потому что выражение вычисляется сразу и изменяет текущий счётчик 
+				указателя команд.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.WORD</span> <i><span class="selc">N,N,...,N</span></i></p>
+				</td>
+				<td>
+				<p>- где <i><span class="selc">N</span></i> - допустимое арифметическое 
+				выражение. Запись слова (число или имя). Если нужно записать смещение 
+				к метке, то это делается (<span class="labl">MET</span>-<span class="pscm">.</span>) 
+				или (@<span class="labl">MET</span>), что означает из адреса метки 
+				вычесть текущее значение счётчика. Операнды разделяются запятыми.</p>
+				<p>Пример:</p>
+				<pre><span class="pscm">.WORD</span> <span class="nmbr">1</span>, -<span class="nmbr">1</span> , @<span class="labl">START</span>, <span class="labl">START </span>- <span class="pscm">.</span> , <span class="labl">START </span>+ <span class="labl">STOP </span>- <span class="labl">END</span>, &#39;<span class="strn">A</span>, &quot;<span class="strn">BC</span></pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.BYTE</span> <i><span class="selc">N,N,...,N</span></i></p>
+				</td>
+				<td>
+				<p>- где <i><span class="selc">N</span></i> - допустимое арифметическое 
+				выражение. Запись байта (число).</p>
+				<pre><span class="pscm">.BYTE</span> <span class="nmbr">1</span>, -<span class="nmbr">177776</span>, &#39;<span class="strn">A</span>, &#39;<span class="strn">B</span>, <span class="labl">A$END</span>-<span class="labl">A$BGN</span>, <span class="labl">BLKLEN</span></pre>
+				<p>При записи числа надо учитывать, что, например, -<span class="nmbr">1</span>=<span class="nmbr">177777
+				</span>и в байт это число записать нельзя, а -<span class="nmbr">177776</span>=<span class="nmbr">2</span> 
+				и в байт записать можно.</p>
+				<p>То же касается арифметических выражений, если результат умещается 
+				в байт, то всё нормально, иначе - ошибка.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="pscm">.EVEN</p>
+				</td>
+				<td>
+				<p>- если содержание счётчика команд нечётное, то добавляется нуль, 
+				иначе игнорируется.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.ASCII</span> /.../</p>
+				</td>
+				<td>
+				<p>- запись строки символов в память. Строка может ограничиваться 
+				любыми знаками пунктуации, кроме угловых скобок (символами с кодами 
+				<span class="nmbr">041</span>..<span class="nmbr">057</span>, 
+				<span class="nmbr">072</span>..<span class="nmbr">0100</span>, 
+				<span class="nmbr">0133</span>..<span class="nmbr">0177</span>, 
+				<span class="nmbr">0173</span>..<span class="nmbr">0177</span>). Знаки в начале и конце 
+				строки должны быть одинаковыми, и естественно, этих знаков не должно 
+				быть внутри строки. Символ в числовой форме заключается в угловые 
+				скобки.</p>
+				<p>Пример:</p>
+				<pre><span class="pscm">.ASCII</span> /<span class="strn">ВЫХОД В МОНИТОР ?</span>/&lt;<span class="nmbr">40</span>&gt;&lt;<span class="nmbr">40</span>&gt;&quot;<span class="strn">Да/Нет:</span>&quot;&lt;<span class="nmbr">12</span>&gt;</pre>
+				<p>В первом случае для ограничения строки использована дробная черта, 
+				во втором, поскольку она есть в строке, использованы кавычки.</p>
+				<p>Вместо числа в угловых скобках можно использовать арифметические 
+				выражения, но скобки в них запрещены.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.ASCIZ</span> /.../</p>
+				</td>
+				<td>
+				<p>- то же с добавлением в конце строки нуля.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.RAD50</span> /.../</p>
+				</td>
+				<td>
+				<p>- запись строки в коде <span class="selc">RADIX-50</span> в память, 
+				причём в поле операнда допустимо наличие пробелов. Строка может 
+				ограничиваться теми же любыми знаками пунктуации, что и для
+				<span class="pscm">.ascii</span>, и так же кроме угловых скобок.</p>
+				<pre><span class="pscm">.RAD50</span> /<span class="strn">HALT</span>/</pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.PRINT</span> #<span class="strn">TXT</span></p>
+				</td>
+				<td>
+				<p>- расшифровывается как:</p>
+				<pre><span class="cmds">MOV</span> #<span class="labl">TXT</span>,<span class="regn">R1</span>
+<span class="cmds">CLR</span> <span class="regn">R2</span>
+<span class="cmds">EMT</span> <span class="nmbr">20</span></pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.ADDR</span> <span class="regn">Rn</span>,<span class="labl">МЕТ</span></p>
+				</td>
+				<td>
+				<p>- получение в регистре <span class="regn">Rn</span> абсолютного 
+				адреса метки <span class="labl">МЕТ</span>, расшифровывается как:</p>
+				<pre><span class="cmds">MOV</span> <span class="regn">  PC</span>,<span class="regn">Rn</span>
+<span class="cmds">ADD</span>   (<span class="regn">PC</span>)+,<span class="regn">Rn</span>
+<span class="pscm">.WORD</span> @<span class="labl">MET</span>+<span class="nmbr">2</span></pre>
+				<p>Пример:</p>
+				<pre><span class="labl">START:</span>  <span class="pscm">.ADDR</span> <span class="regn">R1</span>,<span class="labl">TEXT</span>
+        <span class="cmds">CLR</span> <span class="regn">R2</span>
+        <span class="cmds">EMT</span> <span class="nmbr">20</span>
+        <span class="cmds">HALT</span>
+<span class="labl">TEXT:</span>   <span class="pscm">.ASCIZ</span> &lt;<span class="nmbr">234</span>&gt;/<span class="strn">ERROR !</span>/&lt;<span class="nmbr">234</span>&gt;
+        <span class="pscm">.EVEN</span></pre>
+				<p>Аналогично <span class="icode"><span class="pscm">.PRINT</span> 
+				#<span class="labl">TEXT</span></span>, но <span class="icode">
+				<span class="pscm">.PRINT</span> #<span class="labl">TEXT</span></span> 
+				нельзя использовать в перемещаемой программе.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.ORG</span> <i><span class="selc">выражение</span></i></p>
+				</td>
+				<td>
+				<p>- выравнивает текущий указатель адреса по результату выражения.</p>
+				<p>Допускается нечётное значение. Если результат меньше текущего 
+				указателя - ничего не происходит.</p>
+				<p><span class="attnt">Внимание!</span> Эта псевдокоманда неправильно 
+				работает в объектных модулях. Т.е. её нельзя применять, если планируется 
+				компилировать код в режиме <span class="cmdm">CL</span>, и прилинковывать 
+				его к другому модулю.</p>
+				<p>Она как и <span class="pscm">.blkb</span>(<span class="pscm">w</span>) 
+				сразу выполняет операцию выравнивания, а не во время линковки. В 
+				результате при линковке объектного модуля с этой псевдокомандой 
+				получается полная фигня.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.FLT2</span> <i><span class="selc">число</span></i></p>
+				</td>
+				<td>
+				<p>- упаковка текстового представления числа с плавающей запятой 
+				в два слова. Число может быть задано в обычной и экспоненциальной 
+				форме. Пригодно для использования с инструкциями FIS.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.FLT4</span> <i><span class="selc">число</span></i></p>
+				</td>
+				<td>
+				<p>- упаковка текстового представления числа с плавающей запятой 
+				в четыре слова. Число может быть задано в обычной и экспоненциальной 
+				форме. Пригодно для использования с инструкциями математического 
+				сопроцессора 1801ВМ4.</p>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+				<p><span class="pscm">.INCLUDE</span> "<span class="strn">имя файла</span>"</p>
+				</td>
+				<td>
+				<p>- в исходный код включается код из заданного файла. Особенности:</p>
+				<ul>
+					<li>Именем файла считается вся строка символов после псевдокоманды, 
+					конец строки - начало комментария или пробельные символы, или 
+					символ конца строки. </li>
+					<li>Имя файла можно не заключать в кавычки, если оно не содержит 
+					пробелов, иначе - кавычки обязательны. В этом случае, ограничителем 
+					строки считается заключительная кавычка, и в этой же строке 
+					можно располагать ещё одну команду.</li>
+					<li>Поиск файла начинается с директории, в которой находится 
+					файл, содержащий псевдокоманду <span class="pscm">.INCLUDE</span>, 
+					поэтому допускается задавать относительный путь. Например:</li>
+				</ul>
+				<p><span class="pscm">.INCLUDE</span> "<span class="strn">inc/parameters.asm</span>"</p>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+				<p><span class="pscm">.SCRIPT</span> "<span class="strn">имя скрипта</span>"</p>
+				<p>текст скрипта</p>
+				<p><span class="pscm">.ENDS</span></p>
+				</td>
+				<td>
+				<p>- задание скрипта, который будет выполнен после окончательной 
+				линковки, перед записью результата на диск, с целью модификации 
+				бинарного файла без использования сторонних средств. Особенности:</p>
+				<ul>
+					<li>Имя скрипта опционально. Его можно не задавать, оно нужно 
+					лишь для того, чтобы видеть, какой из нескольких скриптов выполняется 
+					в данный момент. И если возникнет ошибка, то, в каком из них 
+					она произошла.</li>
+					<li>Именем скрипта считается вся строка символов после псевдокоманды, 
+					конец строки - начало комментария или пробельные символы, или 
+					символ конца строки. </li>
+					<li>Имя скрипта можно не заключать в кавычки, если оно не содержит 
+					пробелов, иначе - кавычки обязательны. В этом случае, ограничителем 
+					строки считается заключительная кавычка, и в этой же строке 
+					можно располагать ещё одну команду.</li>
+					<li>Скриптом считается вся последовательность строк, пока не 
+					встретится псевдокоманда <span class="pscm">.ENDS</span>.</li>
+				</ul>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+				<p><span class="pscm">.ENABL</span></p>
+				</td>
+				<td>
+				<p>Команда заставляет транслировать операнды с адресацией
+				<span class="nmbr">67</span> как <span class="nmbr">37</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+				<p><span class="pscm">.DSABL</span></p>
+				</td>
+				<td>
+				<p>Отмена действия псевдокоманды <span class="pscm">.ENABL</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="pscm">.END</span></p>
+				</td>
+				<td>
+				<p>Оператор завершения программы.</p>
+				</td>
+			</tr>
+		</table>
+		<h2><a name="toc_p11"></a>Описание работы со скриптами.</h2>
+		<h3><a name="toc_p11_1"></a>Что такое скрипт и зачем он нужен.</h3>
+		<p>Скрипт - это текст, заключённый между псевдокомандами
+		<span class="pscm">.SCRIPT</span> "Имя скрипта" и <span class="pscm">.ENDS</span>, 
+		компилятор при разборе ассемблерного текста, сохраняет все строки между 
+		этими псевдокомандами в отдельный массив, не проводя синтаксического анализа. 
+		Анализ делается позже, скриптовым интерпретатором при выполнении скрипта.
+		</p>
+		<p>Выполнением скрипта занимается простой интерпретатор, поэтому интеллектуальные 
+		возможности его довольно ограниченны. </p>
+		<p>Скриптов в тексте может быть неограниченное количество. Все они считаются 
+		автономными единицами, никак не связанными и не взаимодействующими между 
+		собой. Располагаться скрипты могут в любом месте программы до псевдокоманды
+		<span class="pscm">.END.</span> </p>
+		<p>Скрипты выполняются после окончательной компиляции или линковки, перед 
+		сохранением результирующего файла. Их назначение - модификация исполняемого 
+		файла без применения сторонних средств. Например - подсчёт КС и подстановка 
+		результата в заданное место в программе. Или кодирование/шифрование определённого 
+		участка программы. </p>
+		<p>При компиляции командой <span class="cmdm">CL</span> скрипты сохраняются 
+		в объектном файле, чтобы быть применёнными при линковке объектных модулей. 
+		При компиляции командой <span class="cmdm">CO</span> скрипты не сохраняются 
+		в объектном файле, а применяются сразу.</p>
+		<h3><a name="toc_p11_2"></a>Формат скрипта.</h3>
+		<p>Скрипт представляет собой набор ассемблерных команд, перед командой может 
+		быть метка. В строке может быть только одна команда и только одна метка. 
+		Допускаются пустые строки, они сохраняются как строка скрипта, но при выполнении 
+		игнорируются и просто занимают место. Допускается метка, в строке без команды.</p>
+		<p>Меткой считается лексема, состоящая из букв, цифр, знаков &#39;<span class="symb">_</span>&#39; 
+		и &#39;<span class="symb">$</span>&#39; и заканчивающаяся двоеточием. Метки 
+		скрипта никак не пересекаются с метками основного ассемблерного текста. 
+		Проверки на дублирующиеся метки не делается, если вы это допустите, ваш 
+		скрипт просто будет неправильно интерпретироваться и только. Потому что 
+		в командах ветвления и цикла производится поиск заданной метки с начала 
+		скрипта. И берётся первая найденная метка, совпадающая с меткой перехода.</p>
+		<p>Интерпретатор выполняет скрипт последовательно, строка, за строкой, пока 
+		не кончатся все строки. Если скрипт зациклить, то таким образом он никогда 
+		не завершится и кросс-ассемблер зависнет на вечном выполнении цикла.</p>
+		<p>Имеется ограниченный набор команд скрипта, частично повторяющий набор 
+		команд PDP-11: двухоперандных, однооперандных, команд ветвления и команды 
+		цикла <span class="cmds">SOB</span>.</p>
+		<p>Стека нет, внутренней памяти нет, следовательно, подпрограммы не реализованы. 
+		Есть набор восьми 16 разрядных регистров <span class="regn">R0</span>..<span class="regn">R7</span>, 
+		равноправных между собой. Если этого будет не хватать, то количество регистров 
+		можно увеличить, попросив меня об этом. Набор адресаций отличается от стандартного 
+		PDP-11.</p>
+		<h3><a name="toc_p11_3"></a>Команды скрипта.</h3>
+		<h4><a name="toc_p11_3_1"></a>Двухоперандные команды.</h4>
+		<table class="border2">
+			<colgroup>
+				<col width="60"><col width="60"><col width="*">
+			</colgroup>
+			<tr>
+				<td>
+				<p><span class="cmds">MOV</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>пересылка</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CMP</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>сравнение</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BIT</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>тестирование битов</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BIC</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>очистка битов</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BIS</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>логическое ИЛИ</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">AND</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>логическое И</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">XOR</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>логическое исключающее ИЛИ (может быть байтовым)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ADD</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>сложение (может быть байтовым)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SUB</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>вычитание (может быть байтовым)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">XCHG</span></p>
+				</td>
+				<td>
+				<p>ss, dd</p>
+				</td>
+				<td>
+				<p>обмен словами между источником и приёмником</p>
+				</td>
+			</tr>
+		</table>
+		<h4><a name="toc_p11_3_2"></a>Однооперандные команды.</h4>
+		<table class="border2">
+			<colgroup>
+				<col width="60"><col width="60"><col width="*">
+			</colgroup>
+			<tr>
+				<td>
+				<p><span class="cmds">SWAB</span></p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>обмен байтами в слове</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLR</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>очистка</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">COM</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>инверсия</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">INC</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>инкремент</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">DEC</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>декремент</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">NEG</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>смена знака</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ADC</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>сложение с битом С</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">SBC</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>вычитание бита С</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">TST</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>тестирование</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ROR</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>циклически сдвиг вправо</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ROL</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>циклически сдвиг влево</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ASR</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>арифметический сдвиг вправо</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">ASL</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>арифметический сдвиг влево</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">RCR</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>циклически сдвиг вправо без охвата бита С (как на x86)</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">RCL</span>(<span class="cmds">B</span>)</p>
+				</td>
+				<td>
+				<p>dd</p>
+				</td>
+				<td>
+				<p>циклически сдвиг влево без охвата бита С (как на x86)</p>
+				</td>
+			</tr>
+		</table>
+		<h4><a name="toc_p11_3_3"></a>Команды ветвления.</h4>
+		<table class="border2">
+			<colgroup>
+				<col width="80"><col width="40"><col width="*">
+			</colgroup>
+			<tr>
+				<td>
+				<p><span class="cmds">BR</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p>безусловный переход</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BNE</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BEQ</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BGE</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLT</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BGT</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLE</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BPL</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BMI</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BHI</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BLOS</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BVC</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BVS</span></p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BCC</span> (<span class="cmds">BHIS</span>)</p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">BCS</span> (<span class="cmds">BLO</span>)</p>
+				</td>
+				<td>
+				<p><span class="locl">label</span></p>
+				</td>
+				<td>
+				<p></p>
+				</td>
+			</tr>
+		</table>
+		<p>Все одноперандные и двухоперандные команды изменяют флаги
+		<span class="symb">NZVC</span> в соответствии с логикой PDP-11. Все команды 
+		ветвления работают соответственно.</p>
+		<h4><a name="toc_p11_3_4"></a>Команда цикла</h4>
+		<table class="border2">
+			<colgroup>
+				<col width="40"><col width="80"><col width="*">
+			</colgroup>
+			<tr>
+				<td>
+				<p><span class="cmds">SOB</span></p>
+				</td>
+				<td>
+				<p><span class="regn">Rn</span>, <span class="locl">label</span></p>
+				</td>
+				<td>
+				<p>Переход к метке, если --<span class="regn">Rn</span> не равно 
+				нулю.</p>
+				</td>
+			</tr>
+		</table>
+		<p>Эта команда может делать переход вперёд, если <span class="locl">label</span> 
+		будет метка, заданная после команды <span class="cmds">SOB</span>, скрипту 
+		всё равно, он не считает это ошибкой.</p>
+		<h4><a name="toc_p11_3_5"></a>Команды установки/сброса признаков</h4>
+		<table class="border2">
+			<colgroup>
+				<col width="60"><col width="60"><col width="*">
+			</colgroup>
+			<tr>
+				<td>
+				<p><span class="cmds">STF</span></p>
+				</td>
+				<td>
+				<p><span class="symb">NZVC</span></p>
+				</td>
+				<td>
+				<p>установка</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p><span class="cmds">CLF</span></p>
+				</td>
+				<td>
+				<p><span class="symb">NZVC</span></p>
+				</td>
+				<td>
+				<p>сброс</p>
+				</td>
+			</tr>
+		</table>
+		<p>Устанавливаются/сбрасываются перечисленные после команды флаги-признаки. 
+		Если за командой ничего не будет, то команда ничего не сделает. Это аналогично 
+		команде <span class="cmds">NOP</span>, которая в скриптах бессмысленна.
+		</p>
+		<p>Флаги можно записывать в любом порядке, пробелы между ними запрещены. 
+		Любой символ, кроме <span class="symb">N</span>,<span class="symb">Z</span>,<span class="symb">V</span>,<span class="symb">C</span>, 
+		считается концом перечисления. Т.е. можно писать строку неограниченной длины, 
+		состоящую из этих символов, что глупо, но допустимо.</p>
+		<h4><a name="toc_p11_3_6"></a>Адресации</h4>
+		<p>Есть <span class="nmbr">7</span> адресаций:</p>
+		<table class="border2 vtop">
+			<colgroup>
+				<col width="20"><col width="60"><col width="*">
+			</colgroup>
+			<tr>
+				<td>
+				<p>0</p>
+				</td>
+				<td>
+				<p><span class="regn">Rn</span></p>
+				</td>
+				<td>
+				<p>- регистровая</p>
+				<p>аргумент - содержимое регистров <span class="regn">R0</span>..<span class="regn">R7</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>1</p>
+				</td>
+				<td>
+				<p>(<span class="regn">Rn</span>)</p>
+				</td>
+				<td>
+				<p>- косвенно-регистровая.</p>
+				<p>аргумент - значение по адресу в регистрах <span class="regn">
+				R0</span>..<span class="regn">R7</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>2</p>
+				</td>
+				<td>
+				<p>(<span class="regn">Rn</span>)+</p>
+				</td>
+				<td>
+				<p>- автоинкрементная</p>
+				<p>аргумент - значение по адресу в регистрах <span class="regn">
+				R0</span>..<span class="regn">R7</span>, после чего значение регистра 
+				увеличивается на <span class="nmbr">2</span> или
+				<span class="nmbr">1</span>, в зависимости от типа команды: словная 
+				или байтовая</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>3</p>
+				</td>
+				<td>
+				<p>-(<span class="regn">Rn</span>)</p>
+				</td>
+				<td>
+				<p>- автодекрементная</p>
+				<p>значение по адресу в регистрах <span class="regn">R0</span>..<span class="regn">R7</span>, 
+				сначала уменьшается на <span class="nmbr">2</span> или
+				<span class="nmbr">1</span>, в зависимости от типа команды: словная 
+				или байтовая, затем значение используется как адрес аргумента</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>4</p>
+				</td>
+				<td>
+				<p><span class="regn">Rx</span>[<span class="regn">Ry</span>]</p>
+				</td>
+				<td>
+				<p>- индексная, базами индекса (<span class="regn">Rx</span>) могут 
+				быть только <span class="nmbr">4</span> регистра
+				<span class="regn">R4</span>..<span class="regn">R7</span>, индексами 
+				(<span class="regn">Ry</span>) - все <span class="nmbr">8</span><br>
+				аргумент - значение по адресу, вычисляемому для байтовой адресации 
+				как <span class="regn">Rx</span> + <span class="regn">Ry</span>, 
+				а для словной - как <span class="regn">Rx</span> +
+				<span class="nmbr">2</span> * <span class="regn">Ry</span></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>5</p>
+				</td>
+				<td>
+				<p>#<span class="labl">label</span><br>или<br>#<span class="nmbr">Число</span></p>
+				</td>
+				<td>
+				<p>- непосредственная</p>
+				<p>значение - имя реальной глобальной метки из ассемблерного кода. 
+				Это имя ищется в таблице глобальных меток и если находится там, 
+				то аргументом считается значение метки. </p>
+				<p>Если не находится, то возникает ошибка выполнения скрипта и выполнение 
+				прекращается.</p>
+				<p>или </p>
+				<p>Восьмеричное число, записываемое в дополнительном коде, отрицательных 
+				чисел нет.</p>
+				<p>Эта адресация бессмысленна в качестве приёмника. Потому что интерпретатор 
+				скрипта сохраняет значение в никуда. Оно просто теряется.</p>
+				<p>Так же эта адресация бесполезна в качестве источника в команде
+				<span class="cmds">XCHG</span>, она превращает её в обычный
+				<span class="cmds">MOV</span>.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>6</p>
+				</td>
+				<td>
+				<p><span class="labl">label</span><br>или<br><span class="nmbr">
+				Число</span></p>
+				</td>
+				<td>
+				<p>- абсолютная адресация</p>
+				<p>значение - имя реальной глобальной метки из ассемблерного кода. 
+				Это имя ищется в таблице глобальных меток и если находится там, 
+				то аргументом считается значение по адресу метки. </p>
+				<p>Если не находится, то возникает ошибка выполнения скрипта и выполнение 
+				прекращается.</p>
+				<p>или </p>
+				<p>Восьмеричное число, записываемое в дополнительном коде, отрицательных 
+				чисел нет. Это число интерпретируется как абсолютный адрес ячейки 
+				памяти. Например, если программа компонуется с адреса
+				<span class="nmbr">1000</span>, и вы точно знаете, где, что находится, 
+				то можно вместо меток записывать абсолютные адреса в программе.</p>
+				<p>Эта адресация применяется чтобы прочитать/записать/изменить значение 
+				по конкретному адресу скомпилированной программы.</p>
+				</td>
+			</tr>
+		</table>
+		<p>TODO: а может сделать индексную автоинкрементную/автодекрементную? Пока 
+		не знаю.</p>
+		<h4><a name="toc_p11_3_7"></a>Пример</h4>
+		<pre>
+<span class="cmmnt">; тест</span>
+<span class="labl">Bgnc</span>:           <span class="cmds">mov</span>     #<span class="labl">Bgnc</span>, <span class="regn">R1</span>
+                <span class="cmds">clr</span>     <span class="regn">R0</span>
+                <span class="cmds">mov</span>     #<span class="labl">Endc</span>, <span class="regn">R2</span>
+<span class="locl">1$</span>:             <span class="cmds">add</span>     (<span class="regn">R1</span>)+, <span class="regn">R0</span>
+                <span class="cmds">adc</span>     <span class="regn">R0</span>
+                <span class="cmds">cmp</span>     <span class="regn">R1</span>, <span class="regn">R2</span>
+                <span class="cmds">blo</span>     <span class="locl">1$</span>
+                <span class="cmds">cmp</span>     <span class="labl">CSum</span>, <span class="regn">R0</span>
+                <span class="cmds">beq</span>     <span class="locl">2$</span>
+                <span class="cmds">mov</span>     #<span class="labl">errcs</span>, <span class="regn">R1</span>
+                <span class="cmds">clr</span>     <span class="regn">R2</span>
+                <span class="cmds">emt</span>     <span class="nmbr">20</span>
+                <span class="cmds">halt</span>
+<span class="locl">2$</span>:             <span class="cmds">mov</span>     #<span class="labl">okcs</span>, <span class="regn">R1</span>
+                <span class="cmds">clr</span>     <span class="regn">R2</span>
+                <span class="cmds">emt</span>     <span class="nmbr">20</span>
+                <span class="cmds">halt</span>
+<span class="labl">errcs</span>:          <span class="pscm">.asciz</span>  "<span class="strn">Ошибка контрольной суммы!</span>"&lt;<span class="nmbr">12</span>&gt;
+<span class="labl">okcs</span>:           <span class="pscm">.asciz</span>  "<span class="strn">Контрольная сумма совпала!</span>"&lt;<span class="nmbr">12</span>&gt;
+                <span class="pscm">.even</span>
+<span class="labl">Endc</span>:
+<span class="labl">CSum</span>:           <span class="pscm">.word</span> <span class="nmbr">0</span>
+
+<span class="pscm">.SCRIPT</span>         <span class="cmmnt">; проверка отсечки комментариев</span>
+                <span class="cmds">mov</span> #<span class="labl">Endc</span>, <span class="regn">R2</span>
+                <span class="cmds">mov</span> #<span class="labl">Bgnc</span>, <span class="regn">R1</span>
+                <span class="cmds">sub</span> <span class="regn">R1</span>, <span class="regn">R2</span>
+                <span class="cmds">asr</span> <span class="regn">R2</span>      <span class="cmmnt">; размер в словах</span>
+                <span class="cmds">clr</span> <span class="regn">R0</span>
+<span class="locl">1$</span>:             <span class="cmds">add</span> (<span class="regn">R1</span>)+, <span class="regn">R0</span>
+                <span class="cmds">adc</span> <span class="regn">R0</span>
+                <span class="cmds">sob</span> <span class="regn">R2</span>, <span class="locl">1$</span>
+                <span class="cmds">mov</span> <span class="regn">R0</span>, <span class="labl">CSum</span>
+<span class="pscm">.ENDS</span>
+                <span class="pscm">.end</span>
+	</pre>
+		<h2><a name="toc_p7"></a>Примеры работы с блоком расширенной арифметики.</h2>
+		<p>Для организации работы с блоком расширенной арифметики необходимо перед 
+		его использованием в программе инициализировать его.</p>
+		<p>Это делается внесением в текст команды <span class="cmds">CALL</span>
+		<span class="labl">ARIFM</span>, после чего возможно написание программ 
+		с использованием мнемоники команд расширенной арифметики.</p>
+		<p>После трансляции такой программы её необходимо связать линкером с объектным 
+		модулем <span class="selc">ARIFM.OBJ</span> командой:</p>
+		<p><i><span class="selc">BKTurbo8 LI NAME prog.obj arifm.obj</span></i></p>
+		<p>полученная программа работает автономно. При поступлении кода команды 
+		расширенной арифметики происходит прерывание по вектору
+		<span class="nmbr">10</span> и соответствующая команда обрабатывается, т.о. 
+		на данной машине возможно использования программного обеспечения, написанного 
+		для процессора <span class="selc">1801ВМ2</span>.</p>
+		<p>На <span class="selc">БК11М</span> с КНГМД с прошивкой ПЗУ
+		<span class="nmbr selw">326</span> вместо этого можно в начале программы 
+		сделать:</p>
+		<p><span class="cmds">MOV</span> #<span class="nmbr">164040</span>,@#<span class="nmbr">10</span></p>
+		<p><span class="cmds">MOV</span> #<span class="nmbr">340</span>,@#<span class="nmbr">12</span></p>
+		<table class="border vtop">
+			<tr>
+				<td style="width: 80px">
+				<p class="cmdf">DIV</p>
+				</td>
+				<td>
+				<p>- деление <span class="nmbr">32</span> разрядного слова
+				<span class="regn">Rn</span>:<span class="regn">Rn|</span><span class="nmbr">1</span> 
+				на число. Регистр в команде должен быть чётным.</p>
+				<pre><span class="cmds">MOV</span> #<span class="nmbr">75</span>.,<span class="regn">R1</span>
+<span class="cmds">CLR</span> <span class="regn">R0</span>
+<span class="cmdf">DIV</span> #<span class="nmbr">10</span>.,<span class="regn">R0</span> <span class="cmmnt">;Деление числа 75. на 10.,</span>
+<span class="cmds">HALT</span> <span class="cmmnt">;в R0 - результат, в R1 - остаток.</span></pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">MUL</p>
+				</td>
+				<td>
+				<p>- умножение регистра на число. Причём если номер регистра нечётный, 
+				то сохраняется только младшая часть результата.
+				<span class="regn">Rn</span>:<span class="regn">Rn|</span><span class="nmbr">1</span> 
+				= <span class="regn">Rn</span> * src</p>
+				<pre><span class="cmds">MOV</span> #<span class="nmbr">7</span>,<span class="regn">R1</span>
+<span class="cmdf">MUL</span> #<span class="nmbr">10</span>.,<span class="regn">R1</span> <span class="cmmnt">;умножение 7*10=70 в регистре R1.</span>
+<span class="cmds">HALT</span></pre>
+				<pre><span class="cmds">MOV</span> #<span class="nmbr">37252</span>,<span class="regn">R2</span>
+<span class="cmdf">MUL</span> #<span class="nmbr">1500</span>.,<span class="regn">R2</span> <span class="cmmnt">;умножение 37252*1500. = 24063000.</span>
+<span class="cmds">HALT</span> <span class="cmmnt">; R2 содержит ст. часть числа (557 == 367.)</span>
+ <span class="cmmnt">; R3 содержит мл. часть числа (26030 == 11288.)</span></pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">ASH</p>
+				</td>
+				<td>
+				<p>- арифметический сдвиг регистра вправо, влево на (-<span class="nmbr">32
+				</span>+<span class="nmbr">32</span>) позиции в зависимости от значения
+				<span class="nmbr">5</span> бита аргумента сдвига. При
+				<span class="nmbr">1</span> в <span class="nmbr">5</span> бите - 
+				сдвиг вправо, при нуле - влево.</p>
+				<pre><span class="cmdf">ASH</span> #<span class="nmbr">5</span>,<span class="regn">R1  </span><span class="cmmnt">; сдвиг регистра R1 на 5 позиций влево.</span></pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">ASHC</p>
+				</td>
+				<td>
+				<p>- арифметический сдвиг двойного слова, причём регистр с нечётным 
+				номером содержит младшую часть слова, а с чётным старшую, остальное 
+				аналогично команде <span class="cmdf">ASH</span>.</p>
+				<pre><span class="cmds">MOV</span> #<span class="nmbr">0</span>,<span class="regn">R0</span>
+<span class="cmds">MOV</span> #<span class="keywd">^B</span><span class="nmbr">1110011100011000</span>,<span class="regn">R1</span>
+<span class="cmdf">ASHC</span> #<span class="nmbr">7</span>,<span class="regn">R0</span> <span class="cmmnt">; двигаем влево R0:R1 на 7 разрядов</span>
+<span class="cmds">HALT</span> <span class="cmmnt">; R0 содержит ^b1110011
+ ; R1 содержит ^b100011000</span></pre>
+				<pre><span class="cmds">MOV</span> #<span class="keywd">^B</span><span class="nmbr">1110011100011000</span>,<span class="regn">R1</span>
+<span class="cmdf">ASHC</span> #-<span class="nmbr">7</span>,<span class="regn">R1</span> <span class="cmmnt">; вращаем вправо R1 на 7 разрядов</span>
+<span class="cmds">HALT</span> <span class="cmmnt">; R1 содержит 0011000111001110</span></pre>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">FMUL</p>
+				</td>
+				<td>
+				<p>- умножение чисел с плавающей запятой.</p>
+				<p>B&larr;A*B - результат на место аргумента B.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">FDIV</p>
+				</td>
+				<td>
+				<p>- деление чисел с плавающей запятой.</p>
+				<p>B&larr;A/B - результат на место аргумента B.</p>
+				<p>Если делитель ( B ) равен нулю, то результат в стек не записывается.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">FADD</p>
+				</td>
+				<td>
+				<p>- сложение чисел с плавающей запятой, регистр указывает на адрес 
+				нахождения аргументов.</p>
+				<p>B&larr;A+B - результат помещается на место аргумента B.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p class="cmdf">FSUB</p>
+				</td>
+				<td>
+				<p>- вычитание чисел с плавающей запятой.</p>
+				<p>B&larr;A-B - результат в B.</p>
+				<pre>         <span class="cmds">MOV</span>   #<span class="labl">MET</span>,<span class="regn">R5</span>
+        <span class="cmdf">FSUB</span>  <span class="regn">R5</span> <span class="cmmnt">   ;R5 указывает на адрес MET</span>
+        <span class="cmds">HALT</span>
+<span class="labl">MET:</span>    <span class="pscm">.WORD</span> <span class="labl">A1</span>,<span class="labl">A2</span> <span class="cmmnt">;два слова аргумента A</span>
+        <span class="pscm">.WORD</span> <span class="labl">B1</span>,<span class="labl">B2</span> <span class="cmmnt">;два слова аргумента B</span></pre>
+				</td>
+			</tr>
+		</table>
+		<p><b>Формат чисел с плавающей запятой:</b></p>
+		<pre>
+              ┌──┬─────────────────┬─────────────┐
+ПЕРВОЕ СЛОВО :│<span class="nmbr">15</span>│<span class="nmbr">14</span> . . . . . . <span class="nmbr">07</span>│<span class="nmbr">06</span> . . . . <span class="nmbr">00</span>│
+              └──┴─────────────────┴─────────────┘
+                S      Порядок      ст. часть мантиссы
+
+              ┌──────────────────────────────────┐
+ВТОРОЕ СЛОВО :│<span class="nmbr">15</span>. . . . . . . . . . . . . . . <span class="nmbr">00</span>│
+              └──────────────────────────────────┘
+                    младшая часть мантиссы
+                S - знак числа.</pre>
+		<p>Использование команд расширенной арифметики позволяет упростить процедуру 
+		программирования, особенно те фрагменты, где используются арифметические 
+		операции.</p>
+		<h2><a name="toc_p8"></a>КОМПИЛЯЦИЯ</h2>
+		<p>Компиляция исходного текста может производиться в двух форматах выдачи:</p>
+		<ol>
+			<li>Трансляция с получением объектного модуля. (Режим
+			<span class="cmdm">CL</span>)</li>
+			<li>Трансляция с получением загрузочного модуля. (Режим
+			<span class="cmdm">CO</span>)</li>
+		</ol>
+		<p>Объектный модуль позиционно независим и может быть затем связан с другими 
+		модулями или привязан сам по любому адресу, задаваемому ключом &quot;<span class="selc">-s</span>&quot; 
+		в командной строке.</p>
+		<p>Трансляция объектного модуля производится командой <span class="cmdm">
+		CL</span>, с целью дальнейшей связки в виде загрузочного модуля командой
+		<span class="cmdm">LI</span>, причём буквально с любого адреса, задаваемого 
+		ключом &quot;<i><span class="selc">-s</span></i>&quot; в командной строке.</p>
+		<p>Загрузочный модуль транслируется по адресу, установленному псевдокомандой
+		<span class="pscm">.LA</span> или задаваемому ключом &quot;<i><span class="selc">-s</span></i>&quot; 
+		в командной строке.</p>
+		<p>При компиляции в режиме <span class="cmdm">CO</span> опционально можно 
+		создать и сохранить скомпонованный объектный файл, в котором находится таблица 
+		имён меток этого модуля и возможно остаются ссылки на метки из внешних модулей, 
+		которые можно прилинковать к этому модулю позже, командой
+		<span class="cmdm">LI</span>. </p>
+		<p>Также, такие объектники, скомпилированные командой <span class="cmdm">
+		CO</span> потом можно скомпоновать в виде набора оверлейных модулей, собранных 
+		в один файл, которые работают в заданных страницах в заданных окнах
+		<span class="selc">БК-0011(М</span>).</p>
+		<p>Это такая фича БК, ДВКшникам и УНКЦшникам не понять, а БКшникам приходится 
+		с этим жить.</p>
+		<h3><a name="toc_p8_1"></a>Пример команд для компиляции оверлейной программы.</h3>
+		<p>Рассмотрим такой пример. У нас есть большая программа, которая имеет 
+		размер, допустим больше <span class="nmbr">32</span> Кб. Часть её размещается 
+		в странице <span class="nmbr">0</span>, часть - в странице
+		<span class="nmbr">1</span>, которая подключается в окно
+		<span class="nmbr">0</span>, по адресу <span class="nmbr">40000</span>, 
+		а оставшаяся часть - в странице <span class="nmbr">2</span>, которая так 
+		же подключается в окно <span class="nmbr">0</span> по адресу
+		<span class="nmbr">40000</span>. Допустим мы так грамотно распределили подпрограммы, 
+		что странице <span class="nmbr">2</span> не нужны подпрограммы из страницы
+		<span class="nmbr">1</span> и наоборот. Но все они вызываются из страницы
+		<span class="nmbr">0</span>.</p>
+		<p>Получается, что нам нужно собрать два оверлейных модуля, которые оба 
+		будут скомпонованы с адреса <span class="nmbr">40000</span>: назовём их
+		<span class="seln">module1.ovl</span> и <span class="seln">module2.ovl</span>.</p>
+		<p>Предположим, что <span class="seln">module1</span> собирается из двух 
+		файлов <span class="seln">file1_1.asm</span> и <span class="seln">file1_2.asm</span>, 
+		а <span class="seln">module2</span> - из одного <span class="seln">file2.asm</span></p>
+		<p>Чтобы задать адрес компоновки, можно использовать псевдокоманду
+		<span class="pscm">.LA</span> &lt;адрес&gt; или ключ командной строки "<i><span class="selc">-s&lt;адрес&gt;</span></i>", 
+		у псевдокоманды приоритет, если задана она, то ключ командной строки не 
+		применяется.</p>
+		<p>Ключи и команды регистронезависимы, можно писать их как с большой, так 
+		и с маленькой буквы, как кому больше нравится.</p>
+		<p>Собираем оверлейный модуль для страницы <span class="nmbr">2</span>, 
+		т.к. он состоит всего из одного файла, то тут всё просто. Вот такой командой:</p>
+		<p><span class="seln selc">-l -s040000 CO file2.asm</span></p>
+		<p>В результате будут созданы файлы: листинга <span class="seln">file2.lst</span>, 
+		и исполняемый файл <span class="seln">file2.bin</span>, который нужно переименовать 
+		в <span class="seln">module2.ovl</span>., можно обойтись без переименования, 
+		используя две команды вместо одной:</p>
+		<p><span class="seln selc">-o -l -s040000 CL file2.asm</span></p>
+		<p><span class="seln selc">-lmodule2 LI module2.ovl file2.obj</span></p>
+		<p>По команде <span class="cmdm">CL</span> объектный файл всегда генерируется 
+		позиционно независимым, но, если задан ключ "<i><span class="selc">-s</span></i>" 
+		в командной строке или если адрес компоновки задан псевдокомандой
+		<span class="pscm">.LA</span>, то адрес сохраняется в объектном файле как 
+		адрес компоновки по умолчанию, который в последствии можно изменить ключом 
+		"<i><span class="selc">-s</span></i>" в команде <span class="cmdm">LI</span>, 
+		либо, если объектный файл линкуется к другому объектному файлу, новый адрес 
+		компоновки вычисляется автоматически.</p>
+		<p>Теперь собираем оверлейный модуль для страницы <span class="nmbr">1</span>, 
+		тут чуточку сложнее, т.к. он из двух файлов. Компилируем сперва второй файл:</p>
+		<p><span class="seln selc">-o -l CL file1_2.asm</span></p>
+		<p>В результате будут созданы файлы: листинга <span class="seln">file1_2.lst</span> 
+		и нужный нам объектный файл <span class="seln">file1_2.obj</span>.</p>
+		<p>Затем компилируем первый файл, это можно сделать так же командой
+		<span class="cmdm">CL</span>, но поскольку мы и так знаем, что он у нас 
+		первый, и должен быть скомпонован с адреса <span class="nmbr">40000</span>, 
+		то можем спокойно компилировать командой <span class="cmdm">CO</span>:</p>
+		<p><span class="seln selc">-o -l -s040000 CO file1_1.asm</span></p>
+		<p>Напомню, что, если мы в файле задали адрес компоновки псевдокомандой
+		<span class="pscm">.LA</span>, то можно не писать везде ключ командной строки 
+		"<i><span class="selc">-s</span></i>". В результате получаем файлы: листинга
+		<span class="seln">file1_1.lst</span>, нужный нам объектный файл
+		<span class="seln">file1_1.obj</span> и не нужный исполняемый файл
+		<span class="seln">file1_1.bin</span>, который можно спокойно удалить.</p>
+		<p>Ну а теперь соберём оверлейный модуль для страницы 1:</p>
+		<p><span class="seln selc">-lmodule1 LI module1.ovl file1_1.obj file1_2.obj</span></p>
+		<p>В результате получаем файлы: листинга <span class="seln">module1.lst</span>, 
+		в котором не листинг, а таблицы меток, чтобы посмотреть, нет ли там неопределённых 
+		меток и нужный нам исполняемый файл <span class="seln">module1.ovl</span>.</p>
+		<p>Вот другая последовательность команд для сборки оверлейного модуля для 
+		страницы <span class="nmbr">1</span>, используя команду
+		<span class="cmdm">CL</span>:</p>
+		<p><span class="seln selc">-o -l CL file1_1.asm file1_2.asm</span></p>
+		<p><span class="seln selc">-l -s040000 LI module1.ovl file1_1.obj file1_2.obj</span></p>
+		<p>Результат получается аналогичный, но без ненужного промежуточного файла
+		<span class="seln">file1_1.bin</span>.</p>
+		<p>Тут есть один тонкий момент, если мы одной командой компилируем сразу 
+		несколько файлов, то параметры ключей командной строки применяются ко всем 
+		ним. Именно поэтому тут нежелательно использовать ключ "<i><span class="selc">-s</span></i>". 
+		Поэтому адрес компоновки необходимо указать либо псевдокомандой
+		<span class="pscm">.LA</span>, либо при линковке.</p>
+		<p>Затем собираем модуль для страницы 0, аналогично вышеописанными способами. 
+		Но тут возникает проблема, как получить имена меток вызываемых подпрограмм 
+		из модулей <span class="nmbr">1</span> и <span class="nmbr">2</span>? Есть 
+		довольно муторный способ - достать из листингов компиляций оверлеев таблицу 
+		меток, и вставить её в исходник для модуля страницы <span class="nmbr">0</span>, 
+		это можно сделать раз, два, ну три. И хорошо, если оверлеи пересобирать 
+		больше не планируется. А иначе - очень быстро надоедает.</p>
+		<p>И вот тут появляется польза от ключа командной строки &quot;<span class="selc">-t</span>&quot; 
+		который по сути автоматизирует это действие.</p>
+		<p>Соберём оверлеи такими командами:</p>
+		<p><span class="seln selc">-o -l -s040000 CL file2.asm</span></p>
+		<p><span class="seln selc">-lmodule2 -tmodule2 LI module2.ovl file2.obj</span></p>
+		<p><span class="seln selc">-o -l CL file1_1.asm file1_2.asm</span></p>
+		<p><span class="seln selc">-lmodule1 -tmodule1 -s040000 LI module1.ovl file1_1.obj 
+		file1_2.obj</span></p>
+		<p>В результате, ко всему прочему будут созданы два дополнительных объектных 
+		модуля: <span class="seln">module2_tbl.obj</span> и <span class="seln">module1_tbl.obj</span>, 
+		которые содержат только таблицы значений меток, уже скомпонованных с адреса
+		<span class="nmbr">40000</span> для модуля <span class="nmbr">2</span> и
+		<span class="nmbr">1</span> соответственно.</p>
+		<p>Затем просто достаточно прилинковать эти объектники к компонуемой программе 
+		для страницы <span class="nmbr">0</span>:</p>
+		<p><span class="seln selc">-o -l CL file0.asm</span></p>
+		<p><span class="seln selc">-l LI main.exe file0.obj module1_tbl.obj module2_tbl.obj</span></p>
+		<p>В результате получаем работоспособный исполняемый модуль для страницы
+		<span class="nmbr">0</span>, в который уже будут скомпонованы метки из оверлейных 
+		модулей. Постоянно и везде используемый ключ <span class="selc">-l</span> 
+		- для контроля, не забыли ли каких-нибудь меток.</p>
+		<h4>Продолжение примера.</h4>
+		<p>Давайте немного усложним задачу. Допустим, из оверлейного модуля
+		<span class="nmbr">2</span> тоже нужно вызывать подпрограммы, находящиеся 
+		в главном модуле <span class="nmbr">0</span>. Для того, чтобы собрать модуль
+		<span class="nmbr">2</span>, нам нужно будет прилинковать к нему таблицу 
+		меток модуля <span class="nmbr">0</span>, а для того, чтобы собрать модуль
+		<span class="nmbr">0</span>, нужно прилинковать к нему таблицу меток модуля
+		<span class="nmbr">2</span>. Тут не обойтись без промежуточных операций.</p>
+		<p>Для начала, соберём объектный фай модуля <span class="nmbr">2</span> 
+		такой командой:</p>
+		<p><span class="seln selc">-l -o -s040000 -tmodule2 CO file2.asm</span></p>
+		<p>Получаем листинг, уже скомпонованный объектный файл
+		<span class="seln">file2.obj</span>, и объектный файл меток
+		<span class="seln">module2_tbl.obj</span>, который мы используем для сборки 
+		модуля <span class="nmbr">0</span>. И ненужный исполняемый файл
+		<span class="seln">file2.bin</span>, который пока всё равно неработоспособен.</p>
+		<p>Затем без всяких изменений собираем модуль <span class="nmbr">1</span>:</p>
+		<p><span class="seln selc">-o -l CL file1_1.asm file1_2.asm</span></p>
+		<p><span class="seln selc">-lmodule1 -tmodule1 -s040000 LI module1.ovl file1_1.obj 
+		file1_2.obj</span></p>
+		<p>Затем собираем модуль <span class="nmbr">0</span>, если он состоит всего 
+		из одного файла, то всё просто:</p>
+		<p><span class="seln selc">-o -l -tmodule0 CO file0.asm</span></p>
+		<p>Получаем всё то же, что и для модуля <span class="nmbr">2</span> - объектники 
+		и нерабочий пока бинарник.</p>
+		<p>Если модуль <span class="nmbr">0</span> состоит из нескольких файлов, 
+		то его собираем по сценарию модуля <span class="nmbr">1</span>: сперва компилируем 
+		командой <span class="cmdm">CL</span>&nbsp; потом линкуем командой
+		<span class="cmdm">LI</span>: </p>
+		<p><span class="seln selc">-o -l CL file0_1.asm file0_2.asm</span></p>
+		<p><span class="seln selc">-lmodule0 -tmodule0 -o LI module0 file0_1.obj 
+		file0_2.obj</span></p>
+		<p>Цель - получить уже скомпонованный объектный файл, и спец. таблицу меток.</p>
+		<p>И после этого, наконец мы можем уже собрать окончательные варианты рабочих 
+		бинарников.</p>
+		<p><span class="seln selc">-l LI module2.ovl module2.obj module0_tbl.obj
+		</span></p>
+		<p><span class="seln selc">-l LI main.exe module0.obj module1_tbl.obj module2_tbl.obj</span></p>
+		<p>Вот в принципе и всё.</p>
+		<h2><a name="toc_p8_2"></a>ОШИБКИ ПРИ ТРАНСЛЯЦИИ</h2>
+		<p><span class="errm">101</span> - Псевдокоманда <span class="pscm">.LA</span> 
+		должна быть первой в тексте.</p>
+		<p><span class="errm">102</span> - Ошибка длины или направления перехода 
+		в команде <span class="cmds">SOB</span>.</p>
+		<p><span class="errm">103</span> - Недопустимый символ в строке / Синтаксическая 
+		ошибка.</p>
+		<p><span class="errm">104</span> - Ошибка или отсутствие числового аргумента.</p>
+		<p><span class="errm">105</span> - Неправильная псевдокоманда.</p>
+		<p><span class="errm">106</span> - Неправильная ассемблерная инструкция.</p>
+		<p><span class="errm">107</span> - Отсутствует символ после
+		<span class="symb">&#39;</span>.</p>
+		<p><span class="errm">108</span> - Отсутствуют или недостаточно символов 
+		после <span class="symb">&quot;</span>.</p>
+		<p><span class="errm">109</span> - Ошибка длины перехода по оператору ветвления.</p>
+		<p><span class="errm">110</span> - Ошибка аргумента <span class="cmds">MARK</span>.</p>
+		<p><span class="errm">111</span> - Ошибка в имени регистра.</p>
+		<p><span class="errm">112</span> - Ошибка в псевдокоманде.</p>
+		<p><span class="errm">113</span> - Метка уже определена ранее.</p>
+		<p><span class="errm">114</span> - Аргумент <span class="pscm">.BLKB</span> 
+		слишком велик.</p>
+		<p><span class="errm">115</span> - Аргумент <span class="pscm">.BLKW</span> 
+		слишком велик.</p>
+		<p><span class="errm">116</span> - Аргумент <span class="pscm">.ORG</span> 
+		слишком велик.</p>
+		<p><span class="errm">117</span> - Нечётный адрес команды.</p>
+		<p><span class="errm">118</span> - Отсутствует <span class="pscm">.END</span></p>
+		<p><span class="errm">119</span> - Неопределённая метка в непосредственном 
+		выражении.</p>
+		<p><span class="errm">120</span> - Отсутствует переход у команды
+		<span class="cmds">SOB</span>.</p>
+		<p><span class="errm">121</span> - Ошибка аргумента <span class="cmds">TRAP</span>.</p>
+		<p><span class="errm">122</span> - Ошибка аргумента <span class="cmds">EMT</span>.</p>
+		<p><span class="errm">123</span> - Ошибка или неверный метод адресации.</p>
+		<p><span class="errm">124</span> - Отсутствует второй операнд.</p>
+		<p><span class="errm">125</span> - Переполнение байтового аргумента.</p>
+		<p><span class="errm">126</span> - Переполнение словного аргумента.</p>
+		<p><span class="errm">127</span> - Неожиданный конец строкового аргумента.</p>
+		<p><span class="errm">128</span> - Ошибка в числе с плавающей точкой.</p>
+		<p><span class="errm">129</span> - Невозможно открыть файл include.</p>
+		<p><span class="errm">130</span> - Ошибка в аргументах псевдокоманды.</p>
+		<p><span class="errm">131</span> - Ошибка в числовом аргументе.</p>
+		<p><span class="errm">132</span> - Ошибка в имени регистра FPU.</p>
+		<p><span class="errm">133</span> - <span class="pscm">.ENDS</span> без
+		<span class="pscm">.SCRIPT</span>.</p>
+		<p><span class="errm">134</span> - Неожиданный конец строки.</p>
+		<p>Так же существуют ещё разные диагностические сообщения об ошибках, не 
+		связанные с трансляцией текста, их список не приводится.</p>
+		<p>При трансляции текста выдаётся номер ошибки, номер строки и при возможности 
+		сама строка, в которой возникла ошибка.</p>
+		<hr>
+		<h1><a name="toc_p9"></a>Конвертер бинарных объектов в объектные модули 
+		кросс ассемблера Turbo8.</h1>
+		<p>Ещё есть утилита <i><span class="selc">BKbin2obj</span></i>, которая 
+		генерирует из бинарных объектов специальные объектные модули, которые потом 
+		можно слинковать с объектниками из исходников. Это такой аналог включения 
+		ресурсов в программу.</p>
+		<p>Эта утилита может конвертировать файлы изображений в БКшные изображения. 
+		Алгоритмы преобразования взяты из проекта <i>pdp11asm</i> <b>vinxru</b>, 
+		один к одному, я не разбирался, как они работают. Потому что не было необходимости.</p>
+		<p>Но, на мой взгляд, это какие-то специфичные алгоритмы для конкретных 
+		специфичных случаев.</p>
+		<p>Тут надо конкретики добавить. А ещё разобраться с алгоритмами работы 
+		с картинками.</p>
+		<br><hr><hr>
+		<p>Автор (не я, а автор оригинального БКшного Turbo8) приносит свою благодарность:</p>
+		<table class="border" style="width: 100%">
+			<tr>
+				<td style="width: 150px">
+				<p>А.&nbsp;Надежину:</p>
+				</td>
+				<td>
+				<p>за ANDOS, TURBO4 и ещё много прекрасных программ.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>А.&nbsp;Надежину:</p>
+				</td>
+				<td>
+				<p>за терпение, с которым он давал советы начинающему программисту-любителю.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>А.&nbsp;Надежину:</p>
+				</td>
+				<td>
+				<p>за подарок - TURBO6M.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>С.&nbsp;Камневу:</p>
+				</td>
+				<td>
+				<p>за великолепную сервисную оболочку DiskMASTER и ряд полезных 
+				советов.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>В.&nbsp;Ретуновскому &amp; А.&nbsp;Суханову:</p>
+				</td>
+				<td>
+				<p>за TRACER.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>С.&nbsp;Клименкову:</p>
+				</td>
+				<td>
+				<p>за PARADISE.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>М.&nbsp;Королеву:</p>
+				</td>
+				<td>
+				<p>за DESS, READER14 и MKDOS, с которой и начал автор работу с БК.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>Д.&nbsp;Бутырскому:</p>
+				</td>
+				<td>
+				<p>за TURBO7MK, который хоть и не был в числе предшественников, 
+				но из которого была заимствована одна идея.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>Д.&nbsp;Романову:</p>
+				</td>
+				<td>
+				<p>за систему VorteX, в которой было написано данное описание, и 
+				с которой вообще автор провёл много приятных минут. </p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>П.&nbsp;Суходольскому:</p>
+				</td>
+				<td>
+				<p>за АОН вообще и РУСЬ14 в частности.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<p>В.&nbsp;Тукову,</p>
+				</td>
+				<td>
+				<p>благодаря которому автор познакомился с БК.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p>И, конечно, В.&nbsp;Коренкову, &quot;отцу-основателю&quot; серии 
+				ассемблеров TURBO, и авторам TURBO4, TURBO5, TURBO6, без которых 
+				этой работы не было бы вообще.</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p>Хотелось бы также поблагодарить своего кота Василия за моральную 
+				поддержку (не очень мешал).</p>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p><b>Автор ассемблера Turbo8DK</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+				<p>Крылов Дмитрий Константинович 398-83-12</p>
+				<p>Москва, сентябрь 1995&nbsp;г.</p>
+				</td>
+			</tr>
+		</table>
+		<hr><hr>
+		<p>Ну а я по традиции присоединяюсь к благодарностям и в свою очередь благодарю 
+		Крылова Дмитрия Константиновича за ассемблер Turbo8DK, которым я только 
+		и пользовался, после появления дисковода у моей БКшки, и так привык к нему, 
+		что вот написал кросс ассемблер на его основе.</p>
+		<p>© gid 2012-2023</p>
+	</div>
+</div>
+
+</body>
+
+</html>

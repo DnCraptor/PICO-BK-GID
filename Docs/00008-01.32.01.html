@@ -1,0 +1,4122 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<link href="css/cmmn.css" rel="stylesheet">
+<link href="css/style11.css" rel="stylesheet">
+<title>00008-01.32.01 - БК-0011. РУКОВОДСТВО СИСТЕМНОГО ПРОГРАММИСТА</title>
+</head>
+
+<body>
+
+<div id="content">
+	<h1 id="firstHeading">БК-0011 - Руководство системного программиста</h1>
+	<p>&nbsp;</p>
+	<center class="preblk">ПЕРСОНАЛЬНАЯ МИКРО-ЭВМ &quot;ЭЛЕКТРОНИКА МС<span class="nmbr">0513</span>&quot;<br>
+	ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ<br>ДРАЙВЕР-МОНИТОРНАЯ СИСТЕМА<br>РУКОВОДСТВО СИСТЕМНОГО 
+	ПРОГРАММИСТА<br><span class="nmbr">00008</span>-<span class="nmbr">01</span>.<span class="nmbr">32</span>.<span class="nmbr">01</span><br>
+	<br><br>1989<br></center><br clear="all" style="page-break-before: always">
+	<div id="mw-content-text" class="mw-content-ltr" lang="ru">
+		<div id="toc" class="toc">
+			<div id="toctitle">
+				<h2>Содержание</h2>
+			</div>
+			<ul>
+				<li class="toclevel-1"><a href="#_Toc375906510">
+				<span class="tocnumber">&nbsp;&nbsp;</span><span class="toctext">АННОТАЦИЯ</span></a></li>
+				<li class="toclevel-1"><a href="#_Toc375906511">
+				<span class="tocnumber">1.&nbsp;</span><span class="toctext">ВВЕДЕНИЕ</span></a>
+				<ul>
+					<li class="toclevel-2"><a href="#_Toc375906512">
+					<span class="tocnumber">1.1.&nbsp;</span><span class="toctext">Состав 
+					ЭВМ</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906513">
+					<span class="tocnumber">1.2.&nbsp;</span><span class="toctext">Архитектура 
+					ЭВМ</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906514">
+						<span class="tocnumber">1.2.1.&nbsp;</span><span class="toctext">Распределение 
+						адресного пространства ЭВМ</span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906515">
+					<span class="tocnumber">1.3.&nbsp;</span><span class="toctext">Регистры 
+					внешних устройств ЭВМ</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906516">
+						<span class="tocnumber">1.3.1.&nbsp;</span><span class="toctext">Регистр 
+						состояния клавиатуры</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906517">
+						<span class="tocnumber">1.3.2.&nbsp;</span><span class="toctext">Регистр 
+						данных клавиатуры</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906518">
+						<span class="tocnumber">1.3.3.&nbsp;</span><span class="toctext">Регистр 
+						смещения</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906519">
+						<span class="tocnumber">1.3.4.&nbsp;</span><span class="toctext">Регистр 
+						параллельного программируемого интерфейса</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906520">
+						<span class="tocnumber">1.3.5.&nbsp;</span><span class="toctext">Системный 
+						регистр</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906521">
+						<span class="tocnumber">1.3.5.1.&nbsp;</span><span class="toctext">Регистр 
+						чтения</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906522">
+						<span class="tocnumber">1.3.5.2.&nbsp;</span><span class="toctext">Регистр 
+						записи</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906523">
+						<span class="tocnumber">1.3.6.&nbsp;</span><span class="toctext">Регистры 
+						дополнительных внешних устройств</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906524">
+						<span class="tocnumber">1.3.6.1.&nbsp;</span><span class="toctext">Регистры 
+						КНГМД</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906525">
+						<span class="tocnumber">1.3.6.2.&nbsp;</span><span class="toctext">Регистр 
+						КПУ</span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906526">
+					<span class="tocnumber">1.4.&nbsp;</span><span class="toctext">Вектора 
+					прерываний</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906527">
+					<span class="tocnumber">1.5.&nbsp;</span><span class="toctext">Особенности 
+					выполнения команд</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1"><a href="#_Toc375906528">
+				<span class="tocnumber">2.&nbsp;</span><span class="toctext">ФУНКЦИИ 
+				ДРАЙВЕР-МОНИТОРНОЙ СИСТЕМЫ</span></a>
+				<ul>
+					<li class="toclevel-2"><a href="#_Toc375906529">
+					<span class="tocnumber">2.1.&nbsp;</span><span class="toctext">Программа 
+					начального пуска ЭВМ</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906530">
+					<span class="tocnumber">2.2.&nbsp;</span><span class="toctext">Монитор 
+					команд оператора</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906531">
+						<span class="tocnumber">2.2.1.&nbsp;</span><span class="toctext">Команды 
+						монитора</span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906532">
+					<span class="tocnumber">2.3.&nbsp;</span><span class="toctext">Диспетчер 
+					команд </span><span class="cmds">EMT</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906533">
+					<span class="tocnumber">2.4.&nbsp;</span><span class="toctext">Драйвер 
+					ОЗУ/ПЗУ</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906534">
+					<span class="tocnumber">2.5.&nbsp;</span><span class="toctext">Драйвер 
+					клавиатуры</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906535">
+					<span class="tocnumber">2.6.&nbsp;</span><span class="toctext">Драйвер 
+					телевизионного приёмника</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906536">
+					<span class="tocnumber">2.7.&nbsp;</span><span class="toctext">Драйвер 
+					кассетного магнитофона</span></a></li>
+					<li class="toclevel-2"><a href="#_Toc375906537">
+					<span class="tocnumber">2.8.&nbsp;</span><span class="toctext">Драйвер 
+					накопителя на ГМД</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1"><a href="#_Toc375906538">
+				<span class="tocnumber">3.&nbsp;</span><span class="toctext">КОМАНДЫ
+				<span class="cmds">EMT</span> ДРАЙВЕР-МОНИТОРНОЙ СИСТЕМЫ</span></a>
+				<ul>
+					<li class="toclevel-2"><a href="#_Toc375906539">
+					<span class="tocnumber">3.1.&nbsp;</span><span class="toctext">Общесистемные 
+					запросы</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906540">
+						<span class="tocnumber">3.1.1.&nbsp;</span><span class="toctext">Завершение 
+						программы пользователя <span class="pscm">.BEXIT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906541">
+						<span class="tocnumber">3.1.2.&nbsp;</span><span class="toctext">Инициализация 
+						драйвер-мониторной системы <span class="pscm">.BINIT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906542">
+						<span class="tocnumber">3.1.3.&nbsp;</span><span class="toctext">Перехват 
+						ошибки недопустимое &quot;</span><span class="cmds">EMT</span><span class="toctext">&quot;
+						<span class="pscm">.BEMTSET</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906543">
+						<span class="tocnumber">3.1.4.&nbsp;</span><span class="toctext">Перехват 
+						вектора <span class="nmbr">4</span> <span class="pscm">.BTRPSET</span></span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906544">
+					<span class="tocnumber">3.2.&nbsp;</span><span class="toctext">Запросы 
+					драйвера ОЗУ/ПЗУ</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906545">
+						<span class="tocnumber">3.2.1.&nbsp;</span><span class="toctext">Подключение 
+						страницы ОЗУ/ПЗУ <span class="pscm">.BSETPG</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906546">
+						<span class="tocnumber">3.2.2.&nbsp;</span><span class="toctext">Вызов 
+						подпрограммы из скрытой страницы <span class="pscm">.BJSR</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906547">
+						<span class="tocnumber">3.2.3.&nbsp;</span><span class="toctext">Переход 
+						в скрытую страницу без возврата <span class="pscm">.BJMP</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906548">
+						<span class="tocnumber">3.2.4.&nbsp;</span><span class="toctext">Чтение 
+						из скрытой страницы ОЗУ/ПЗУ <span class="pscm">.BPEEK</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906549">
+						<span class="tocnumber">3.2.5.&nbsp;</span><span class="toctext">Запись 
+						слова в скрытую страницу ОЗУ <span class="pscm">.BPOKE</span></span></a></li>
+						<li class="toclevel-3"><a href="#_TocRef326">
+						<span class="tocnumber">3.2.6.&nbsp;</span><span class="toctext">Запись 
+						байта в скрытую страницу ОЗУ <span class="pscm">.BPOKB</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906550">
+						<span class="tocnumber">3.2.7.&nbsp;</span><span class="toctext">Чтение 
+						статуса страницы ОЗУ/ПЗУ <span class="pscm">.BTEST</span></span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906551">
+					<span class="tocnumber">3.3.&nbsp;</span><span class="toctext">Запросы 
+					драйвера клавиатуры</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906552">
+						<span class="tocnumber">3.3.1.&nbsp;</span><span class="toctext">Инициализация 
+						драйвера клавиатуры <span class="pscm">.BKBINI</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906553">
+						<span class="tocnumber">3.3.2.&nbsp;</span><span class="toctext">Чтение 
+						символа с ожиданием <span class="pscm">.BTTYIN</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906554">
+						<span class="tocnumber">3.3.3.&nbsp;</span><span class="toctext">Чтение 
+						строки с редактированием <span class="pscm">.BGTLIN</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906555">
+						<span class="tocnumber">3.3.4.&nbsp;</span><span class="toctext">Установка 
+						функциональных клавиш <span class="pscm">.BFUNCT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906556">
+						<span class="tocnumber">3.3.5.&nbsp;</span><span class="toctext">Экранное 
+						редактирование существующей строки <span class="pscm">.BEDIT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906557">
+						<span class="tocnumber">3.3.6.&nbsp;</span><span class="toctext">Установка 
+						режима работы клавиатуры <span class="pscm">.BKSET</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906558">
+						<span class="tocnumber">3.3.7.&nbsp;</span><span class="toctext">Чтение 
+						режима работы клавиатуры <span class="pscm">.BKGET</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906559">
+						<span class="tocnumber">3.3.8.&nbsp;</span><span class="toctext">Ввод 
+						символа с клавиатуры без ожидания <span class="pscm">.BINKEY</span></span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906560">
+					<span class="tocnumber">3.4.&nbsp;</span><span class="toctext">Запросы 
+					драйвера телевизионного приёмника</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906561">
+						<span class="tocnumber">3.4.1.&nbsp;</span><span class="toctext">Вывод 
+						символа на экран <span class="pscm">.BTTYOU</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906562">
+						<span class="tocnumber">3.4.2.&nbsp;</span><span class="toctext">Вывод 
+						строки символов <span class="pscm">.BPRINT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906563">
+						<span class="tocnumber">3.4.3.&nbsp;</span><span class="toctext">Вывод 
+						символа в служебную область экрана <span class="pscm">.BSSOUT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906564">
+						<span class="tocnumber">3.4.4.&nbsp;</span><span class="toctext">Установка 
+						координат алфавитно-цифрового курсора <span class="pscm">
+						.BLOCAT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906565">
+						<span class="tocnumber">3.4.5.&nbsp;</span><span class="toctext">Чтение 
+						координат алфавитно-цифрового курсора <span class="pscm">
+						.BPOS</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906566">
+						<span class="tocnumber">3.4.6.&nbsp;</span><span class="toctext">Вывод 
+						графической точки <span class="pscm">.BPOINT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906567">
+						<span class="tocnumber">3.4.7.&nbsp;</span><span class="toctext">Чтение 
+						цвета точки экрана <span class="pscm">.BGETPNT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906568">
+						<span class="tocnumber">3.4.8.&nbsp;</span><span class="toctext">Вывод 
+						графического вектора <span class="pscm">.BVECT</span></span></a></li>
+						<li class="toclevel-3"><a href="#_TocRref349">
+						<span class="tocnumber">3.4.9.&nbsp;</span><span class="toctext">Переключение 
+						буферов экрана <span class="pscm">.BBUFSET</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906569">
+						<span class="tocnumber">3.4.10.&nbsp;</span><span class="toctext">Установка 
+						параметров драйвера телевизионного приёмника </span>
+						<span class="pscm">.BTVSET</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906570">
+						<span class="tocnumber">3.4.11.&nbsp;</span><span class="toctext">Чтение 
+						состояния драйвера телевизионного приёмника
+						<span class="pscm">.BTVGET</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906571">
+						<span class="tocnumber">3.4.12.&nbsp;</span><span class="toctext">Построчный 
+						сдвиг экрана <span class="pscm">.BSCROLL</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906572">
+						<span class="tocnumber">3.4.13.&nbsp;</span><span class="toctext">Рисование 
+						дуг и окружностей <span class="pscm">.BCIRCL</span></span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906573">
+						<span class="tocnumber">3.4.14.&nbsp;</span><span class="toctext">Вывод 
+						звукового сигнала <span class="pscm">.BSOUND</span></span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906574">
+					<span class="tocnumber">3.5.&nbsp;</span><span class="toctext">Запросы 
+					драйвера магнитофона</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906575">
+						<span class="tocnumber">3.5.1.&nbsp;</span><span class="toctext">Вызов 
+						драйвера магнитофона формата БК0010 <span class="pscm">.BMTB10</span></span></a></li>
+					</ul>
+					</li>
+					<li class="toclevel-2"><a href="#_Toc375906576">
+					<span class="tocnumber">3.6.&nbsp;</span><span class="toctext">Запросы 
+					драйвера НГМД</span></a>
+					<ul>
+						<li class="toclevel-3"><a href="#_Toc375906577">
+						<span class="tocnumber">3.6.1.&nbsp;</span><span class="toctext">Автоматическая 
+						загрузка</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906578">
+						<span class="tocnumber">3.6.2.&nbsp;</span><span class="toctext">Загрузка 
+						с выбранного привода</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906579">
+						<span class="tocnumber">3.6.3.&nbsp;</span><span class="toctext">Чтение-запись 
+						логического блока</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906580">
+						<span class="tocnumber">3.6.4.&nbsp;</span><span class="toctext">Чтение-запись 
+						по номеру сектора и дорожки</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906581">
+						<span class="tocnumber">3.6.5.&nbsp;</span><span class="toctext">Инициализация 
+						рабочей области</span></a></li>
+						<li class="toclevel-3"><a href="#_Toc375906582">
+						<span class="tocnumber">3.6.6.&nbsp;</span><span class="toctext">Форматирование 
+						дорожки</span></a></li>
+					</ul>
+					</li>
+				</ul>
+				</li>
+				<li class="toclevel-1"><a href="#_Toc375906583">
+				<span class="tocnumber">&nbsp;&nbsp;</span><span class="toctext">Приложение 
+				1. Кодировка символов ЭВМ</span></a></li>
+				<li class="toclevel-1"><a href="#_Toc375906584">
+				<span class="tocnumber">&nbsp;&nbsp;</span><span class="toctext">Приложение 
+				2. Редактирование строки</span></a></li>
+				<li class="toclevel-1"><a href="#_Toc375906585">
+				<span class="tocnumber">&nbsp;&nbsp;</span><span class="toctext">Приложение 
+				3. Формат таблицы управления режимом ТВ.</span></a></li>
+				<li class="toclevel-1"><a href="#_Toc375906586">
+				<span class="tocnumber">&nbsp;&nbsp;</span><span class="toctext">Приложение 
+				4. Таблица палитр</span></a></li>
+				<li class="toclevel-1"><a href="#_Toc375906587">
+				<span class="tocnumber">&nbsp;&nbsp;</span><span class="toctext">Приложение 
+				5. Таблица соответствия клавиш клавиатуры и обозначения клавиш в 
+				тексте</span></a></li>
+			</ul>
+		</div>
+	</div>
+	<h1 id="_Toc375906510">АННОТАЦИЯ</h1>
+	<p>Настоящее руководство рассчитано на пользователей микро-ЭВМ Электроника МС 
+	0513 (&quot;Электроника БК0011&quot;, далее - ЭВМ), программирующих на уровне 
+	языка ассемблера.</p>
+	<p>В руководстве описаны функции драйвер-мониторной системы ЭВМ и способы обращения 
+	к ним из пользовательских программ.</p>
+	<p>В отдельную главу выделено описание команд оператора, позволяющих пользователю 
+	работать с ЭВМ в интерактивном режиме, вводить, отлаживать в кодах и запускать 
+	программы, считывать и записывать программы на магнитную ленту и т. д.</p>
+	<br clear="all" style="page-break-before: always">
+	<h1 id="_Toc375906511">1. ВВЕДЕНИЕ</h1>
+	<h2 id="_Toc375906512">1.1. Состав ЭВМ</h2>
+	<p>В состав ЭВМ входят:</p>
+	<ul>
+		<li>информационно-вычислительное устройство;</li>
+		<li>блок питания;</li>
+		<li>блок контроллера накопителя на гибких магнитных дисках (КНГМД);</li>
+		<li>блок контроллера печатающего устройства (КПУ);</li>
+		<li>блок контроллера локальной сети (КМК);</li>
+		<li>блок ПЗУ;</li>
+		<li>кабели связи с внешними устройствами.</li>
+	</ul>
+	<p>В качестве устройства отображения информации может использоваться чёрно-белое 
+	или цветное видеоконтрольное устройство или бытовой телевизор, имеющий вход 
+	видеосигнала или RGB-вход. В качестве внешних запоминающих устройств могут использоваться 
+	кассетный монофонический магнитофон (например, типа &quot;Электроника 302&quot;) 
+	и до четырёх накопителей на <span class="nmbr">133</span>-мм гибких магнитных 
+	дисках. Для записи и хранения информации используются соответствующие компакт-кассеты 
+	(МК60, МК90 и т.п.) и гибкие магнитные диски.</p>
+	<p>Связь нескольких ЭВМ в локальную сеть осуществляется с помощью контроллера 
+	моноканала.</p>
+	<p>Связь с внешними устройствами пользователя осуществляется через
+	<span class="nmbr">16</span>-разрядный параллельный программируемый интерфейс.</p>
+	<p>Для связи программ пользователя со стандартными периферийными устройствами, 
+	распределения ресурсов ЭВМ, связи ЭВМ с оператором используется драйвер-мониторная 
+	система, размещённая в системном ПЗУ объёмом <span class="nmbr">16</span>Кбайт.</p>
+	<p>Обращение из программы пользователя к системным программам драйвер-мониторной 
+	системы осуществляется с помощью системных запросов - команд &quot;<span class="cmds">EMT</span>&quot; 
+	с различными аргументами.</p>
+	<p>Общение между оператором и драйвер-мониторной системой осуществляется с помощью 
+	команд оператора, подаваемых с клавиатуры.</p>
+	<p><span class="attnt">ПРИМЕЧАНИЕ.</span> Приводимые в документе числа без последующей 
+	точки - восьмеричные, с точкой - десятичные.</p>
+	<h2 id="_Toc375906513">1.2. Архитектура ЭВМ</h2>
+	<p>ЭВМ построена на основе микропроцессорного комплекта серии К1801 и включает 
+	в себя:</p>
+	<ul>
+		<li>однокристальный <span class="nmbr">16</span>-разрядный микропроцессор 
+		К1801ВМ1;</li>
+		<li>оперативное запоминающее устройство (ОЗУ) ёмкостью
+		<span class="nmbr">128</span> Кбайт со страничной организацией, выполненное 
+		на микросхемах К565РУ5;</li>
+		<li>системное ПЗУ ёмкостью <span class="nmbr">16</span> Кбайт;</li>
+		<li>контроллер клавиатуры на базе БИС К1801ВП1-014;</li>
+		<li>контроллер ОЗУ и телевизионного графического дисплея на базе БИС К1В01ВП1-037;</li>
+		<li>контроллер накопителя на бытовом кассетном магнитофоне;</li>
+		<li><span class="nmbr">16</span>-разрядный параллельный программируемый 
+		интерфейс.</li>
+	</ul>
+	<p>Отдельные функциональные узлы ЭВМ соединены с помощью межмодульного параллельного 
+	интерфейса МПИ ОСТ 11.305.903-80.</p>
+	<p>Обслуживание перечисленных устройств, осуществляется соответствующими программами 
+	- драйверами, расположенными в системном ПЗУ ЭВМ.</p>
+	<p>Обслуживание внешних блоков контроллеров НГМД и локальной сети выполняется 
+	программами, расположенными в ПЗУ контроллера НГМД и в сменном ПЗУ микро-ЭВМ.</p>
+	<h3 id="_Toc375906514">1.2.1. Распределение адресного пространства ЭВМ</h3>
+	<p>Виртуальное адресное пространство ЭВМ определяется возможностями процессора 
+	К1801ВМ1 и составляет 64Кбайт. Распределение адресного пространства показано 
+	на рис. <span class="nmbr">1</span>.</p>
+	<center>
+	<table border="0" cellpadding="0" cellspacing="0" class="tpic">
+		<tr>
+			<td></td>
+			<td class="cs__b_s" colspan="7">
+			<p>Переключаемые страницы ОЗУ и ПЗУ</p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td width="65"></td>
+			<td width="65"></td>
+			<td width="65"></td>
+			<td colspan="2" width="65">
+			<p class="left">/</p>
+			</td>
+			<td width="65">
+			<p align="right">\</p>
+			</td>
+			<td width="65"></td>
+			<td width="65"></td>
+			<td width="65"></td>
+			<td width="65"></td>
+			<td width="65"></td>
+		</tr>
+		<tr>
+			<td class="cst_bls" colspan="2">
+			<p>стр. ОЗУ <span class="nmbr">0</span></p>
+			</td>
+			<td class="cst_bldsh" colspan="3">
+			<p>. . . . .</p>
+			</td>
+			<td class="cst_bldsh" colspan="2">
+			<p>. . . . .</p>
+			</td>
+			<td class="cst_bls" colspan="2">
+			<p>сист. ПЗУ</p>
+			</td>
+			<td class="cstrbls" colspan="2">
+			<p>Регистры ВУ</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="left"><span class="nmbr">0</span></p>
+			</td>
+			<td colspan="2">
+			<p><span class="nmbr">40000</span></p>
+			</td>
+			<td colspan="3">
+			<p><span class="nmbr">100000</span></p>
+			</td>
+			<td colspan="2">
+			<p><span class="nmbr">140000</span></p>
+			</td>
+			<td colspan="2">
+			<p><span class="nmbr">160000</span></p>
+			</td>
+			<td>
+			<p align="right"><span class="nmbr">177777</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td colspan="2">
+			<p class="left">|</p>
+			</td>
+			<td>
+			<p align="right">|</p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+			<p align="right">&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td class="cstrbls" colspan="3">
+			<p>стр. ОЗУ <span class="nmbr">0</span>...<span class="nmbr">7</span></p>
+			</td>
+			<td></td>
+			<td class="cstrbls" colspan="3">
+			<p>стр. ОЗУ <span class="nmbr">0</span>...<span class="nmbr">7</span></p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td colspan="2"></td>
+			<td colspan="3">
+			<p>или</p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td colspan="2"></td>
+			<td class="cstrbls" colspan="3">
+			<p>стр. ПЗУ <span class="nmbr">8</span>...<span class="nmbr">11</span></p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td colspan="2"></td>
+			<td colspan="3">
+			<p>или</p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td colspan="2"></td>
+			<td class="cstrbls" colspan="3">
+			<p>внешний блок ПЗУ</p>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<p class="picttl">Рис.<span class="nmbr">1</span>. Распределение адресного пространства 
+	ЭВМ</p>
+	</center>
+	<p>Переключение страниц ОЗУ/ПЗУ осуществляется программно с использованием системного 
+	регистра ЭВМ.</p>
+	<p>Следует обратить внимание, что каждая страница ОЗУ может быть одновременно 
+	подключена к двум окнам виртуального адресного пространства, а статическая страница 
+	(адреса <span class="nmbr">0</span>-<span class="nmbr">40000</span>) - даже 
+	к <span class="nmbr">3</span>-м. Переключение страниц из пользовательской программы 
+	может осуществляться с помощью запросов <span class="cmds">EMT</span> драйвер-мониторной 
+	системы.</p>
+	<p>Две страницы ОЗУ являются буферами экрана. Один из буферов постоянно отображается 
+	на экране телевизионного приёмника. Управление отображением того или иного буфера 
+	экрана так же возложено на драйвер-мониторную систему, причём имеется возможность &quot;скрытого&quot; 
+	вывода на экран, т.е. формирование изображения из программы пользователя в одном 
+	буфере в то время, как на экран выводится другой.</p>
+	<p>Одна из переключаемых страниц ОЗУ является служебной страницей драйвер-мониторной 
+	системы ЭВМ и недоступна пользователю.</p>
+	<h2 id="_Toc375906515">1.3. Регистры внешних устройств ЭВМ</h2>
+	<p>Работа ЭВМ с периферийными (внешними) устройствами выполняется через регистры 
+	внешних устройств, для которых выделен диапазон <span class="nmbr">160000</span>-<span class="nmbr">177777</span> 
+	адресного пространства. Ниже описаны регистры стандартных периферийных устройств. 
+	Остальные адреса регистров зарезервированы для подключения дополнительных периферийных 
+	устройств.</p>
+	<h3 id="_Toc375906516">1.3.1. Регистр состояния клавиатуры</h3>
+	<p>Адрес регистра - <span class="nmbr">177660</span></p>
+	<p>Формат регистра</p>
+	<svg id="r121" height="80" width="402">
+			<rect id="r_cell" x="0.5" y="0.5" width="25" height="24" class="style0"/>
+			<use id="r_bit14" xlink:href="#r_cell" transform="translate(25.5,0)"/>
+			<use id="r_bit13" xlink:href="#r_cell" transform="translate(50.5,0)"/>
+			<use id="r_bit12" xlink:href="#r_cell" transform="translate(75.5,0)"/>
+			<use id="r_bit11" xlink:href="#r_cell" transform="translate(100.5,0)"/>
+			<use id="r_bit10" xlink:href="#r_cell" transform="translate(125.5,0)"/>
+			<use id="r_bit09" xlink:href="#r_cell" transform="translate(150.5,0)"/>
+			<use id="r_bit08" xlink:href="#r_cell" transform="translate(175.5,0)"/>
+			<use id="r_bit07" xlink:href="#r_cell" transform="translate(200.5,0)"/>
+			<use id="r_bit06" xlink:href="#r_cell" transform="translate(225.5,0)"/>
+			<use id="r_bit05" xlink:href="#r_cell" transform="translate(250.5,0)"/>
+			<use id="r_bit04" xlink:href="#r_cell" transform="translate(275.5,0)"/>
+			<use id="r_bit03" xlink:href="#r_cell" transform="translate(300.5,0)"/>
+			<use id="r_bit02" xlink:href="#r_cell" transform="translate(325.5,0)"/>
+			<use id="r_bit01" xlink:href="#r_cell" transform="translate(350.5,0)"/>
+			<use id="r_bit00" xlink:href="#r_cell" transform="translate(375.5,0)"/>
+			<text id="t_bit15"  x="13" y="16" class="style2">
+				<tspan class="nmbr">15</tspan></text><text id="t_bit14"  x="38" y="16" class="style2"><tspan class="nmbr">14</tspan></text><text id="t_bit13"  x="63" y="16" class="style2"><tspan class="nmbr">13</tspan></text><text id="t_bit12"  x="88" y="16" class="style2"><tspan class="nmbr">12</tspan></text><text id="t_bit11" x="113" y="16" class="style2"><tspan class="nmbr">11</tspan></text><text id="t_bit10" x="138" y="16" class="style2"><tspan class="nmbr">10</tspan></text><text id="t_bit09" x="163" y="16" class="style2"><tspan class="nmbr">09</tspan></text><text id="t_bit08" x="188" y="16" class="style2"><tspan class="nmbr">08</tspan></text><text id="t_bit07" x="213" y="16" class="style2"><tspan class="nmbr">07</tspan></text><text id="t_bit06" x="238" y="16" class="style2"><tspan class="nmbr">06</tspan></text><text id="t_bit05" x="263" y="16" class="style2"><tspan class="nmbr">05</tspan></text><text id="t_bit04" x="288" y="16" class="style2"><tspan class="nmbr">04</tspan></text><text id="t_bit03" x="313" y="16" class="style2"><tspan class="nmbr">03</tspan></text><text id="t_bit02" x="338" y="16" class="style2"><tspan class="nmbr">02</tspan></text><text id="t_bit01" x="363" y="16" class="style2"><tspan class="nmbr">01</tspan></text><text id="t_bit00" x="388" y="16" class="style2"><tspan class="nmbr">00</tspan></text><line id="ln1" x1="213.5" y1="26.5" x2="213.5" y2="42.5" class="style0"/><line id="ln2" x1="238.5" y1="26.5" x2="238.5" y2="62.5" class="style0"/><text id="t_b7d" x="138" y="56" class="style1">готовность</text><text id="t_b6d" x="116" y="76" class="style1">маскирование прерываний</text></svg>
+	<table>
+		<tr>
+			<td class="lfcell">Разряд <span class="nmbr">7</span> -</td>
+			<td>&quot;<span class="nmbr">1</span>&quot; в этом разряде означает, 
+			что в регистре данных клавиатуры находится код нажатой клавиши. Устанавливается 
+			при нажатии на клавишу, сбрасывается при чтении регистра данных клавиатуры. 
+			При нулевом состоянии <span class="nmbr">6</span>-го разряда установка 
+			в &quot;<span class="nmbr">1</span>&quot; вызывает прерывание. Доступен 
+			только по чтению.</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">6</span> -</td>
+			<td>&quot;<span class="nmbr">0</span>&quot; в этом разряде разрешает 
+			выработку сигнала требования прерывания по единичному значению разряда
+			<span class="nmbr">7</span>.</td>
+		</tr>
+	</table>
+	<p>Остальные разряды регистра не используются, читаются как
+	<span class="nmbr">0</span>.</p>
+	<p>По сигналу сброса магистрали разряд <span class="nmbr">6</span> устанавливается 
+	в &quot;<span class="nmbr">1</span>&quot;, разряд <span class="nmbr">7</span> 
+	обнуляется.</p>
+	<p><span class="attnt">ПРИМЕЧАНИЕ.</span> См. также информацию о бите
+	<span class="nmbr">6</span> в <a href="#_Toc375906520">системном регистре</a> 
+	ЭВМ.</p>
+	<h3 id="_Toc375906517">1.3.2. Регистр данных клавиатуры</h3>
+	<p>Адрес регистра - <span class="nmbr">177662</span></p>
+	<p>Формат регистра: </p>
+	<svg id="r122" height="80" width="402">
+			<rect id="r_cell" x="0.5" y="0.5" width="25" height="24" class="style0"/>
+			<use id="r_bit14" xlink:href="#r_cell" transform="translate(25.5,0)"/>
+			<use id="r_bit13" xlink:href="#r_cell" transform="translate(50.5,0)"/>
+			<use id="r_bit12" xlink:href="#r_cell" transform="translate(75.5,0)"/>
+			<use id="r_bit11" xlink:href="#r_cell" transform="translate(100.5,0)"/>
+			<use id="r_bit10" xlink:href="#r_cell" transform="translate(125.5,0)"/>
+			<use id="r_bit09" xlink:href="#r_cell" transform="translate(150.5,0)"/>
+			<use id="r_bit08" xlink:href="#r_cell" transform="translate(175.5,0)"/>
+			<use id="r_bit07" xlink:href="#r_cell" transform="translate(200.5,0)"/>
+			<use id="r_bit06" xlink:href="#r_cell" transform="translate(225.5,0)"/>
+			<use id="r_bit05" xlink:href="#r_cell" transform="translate(250.5,0)"/>
+			<use id="r_bit04" xlink:href="#r_cell" transform="translate(275.5,0)"/>
+			<use id="r_bit03" xlink:href="#r_cell" transform="translate(300.5,0)"/>
+			<use id="r_bit02" xlink:href="#r_cell" transform="translate(325.5,0)"/>
+			<use id="r_bit01" xlink:href="#r_cell" transform="translate(350.5,0)"/>
+			<use id="r_bit00" xlink:href="#r_cell" transform="translate(375.5,0)"/>
+			<text id="t_bit15"  x="13" y="16" class="style2">
+				<tspan class="nmbr">15</tspan></text><text id="t_bit14"  x="38" y="16" class="style2"><tspan class="nmbr">14</tspan></text><text id="t_bit13"  x="63" y="16" class="style2"><tspan class="nmbr">13</tspan></text><text id="t_bit12"  x="88" y="16" class="style2"><tspan class="nmbr">12</tspan></text><text id="t_bit11" x="113" y="16" class="style2"><tspan class="nmbr">11</tspan></text><text id="t_bit10" x="138" y="16" class="style2"><tspan class="nmbr">10</tspan></text><text id="t_bit09" x="163" y="16" class="style2"><tspan class="nmbr">09</tspan></text><text id="t_bit08" x="188" y="16" class="style2"><tspan class="nmbr">08</tspan></text><text id="t_bit07" x="213" y="16" class="style2"><tspan class="nmbr">07</tspan></text><text id="t_bit06" x="238" y="16" class="style2"><tspan class="nmbr">06</tspan></text><text id="t_bit05" x="263" y="16" class="style2"><tspan class="nmbr">05</tspan></text><text id="t_bit04" x="288" y="16" class="style2"><tspan class="nmbr">04</tspan></text><text id="t_bit03" x="313" y="16" class="style2"><tspan class="nmbr">03</tspan></text><text id="t_bit02" x="338" y="16" class="style2"><tspan class="nmbr">02</tspan></text><text id="t_bit01" x="363" y="16" class="style2"><tspan class="nmbr">01</tspan></text><text id="t_bit00" x="388" y="16" class="style2"><tspan class="nmbr">00</tspan></text><path id="p_sc" d="M225.5,26.5 Q225.5,38.5,241.5,38.5 L306.5,38.5 Q312.5,38.5,312.5,44.5 Q312.5,38.5,318.5,38.5 L388.5,38.5 Q400.5,38.5,400.5,26.5" class="style0"/><text id="t_b6_0d" x="260" y="56" class="style1">код символа</text></svg>
+	<p>Разряды <span class="nmbr">0</span>-<span class="nmbr">6</span> содержат 
+	код нажатой клавиши. Разряды <span class="nmbr">7</span>-<span class="nmbr">15</span> 
+	не используются, читаются нулями.</p>
+	<p>Младший байт регистра доступен только по чтению. Данные сохраняются в регистре 
+	до нажатия следующей клавиши клавиатуры. При установленном в &quot;<span class="nmbr">1</span>&quot;
+	<span class="nmbr">7</span>-м разряде <a href="#_Toc375906516">регистра состояния</a> 
+	запись в регистр данных блокируется, и нажатия клавиш игнорируются.</p>
+	<svg id="r123" height="110" width="402">
+			<rect id="r_cell" x="0.5" y="0.5" width="25" height="24" class="style0"/>
+			<use id="r_bit14" xlink:href="#r_cell" transform="translate(25.5,0)"/>
+			<use id="r_bit13" xlink:href="#r_cell" transform="translate(50.5,0)"/>
+			<use id="r_bit12" xlink:href="#r_cell" transform="translate(75.5,0)"/>
+			<use id="r_bit11" xlink:href="#r_cell" transform="translate(100.5,0)"/>
+			<use id="r_bit10" xlink:href="#r_cell" transform="translate(125.5,0)"/>
+			<use id="r_bit09" xlink:href="#r_cell" transform="translate(150.5,0)"/>
+			<use id="r_bit08" xlink:href="#r_cell" transform="translate(175.5,0)"/>
+			<use id="r_bit07" xlink:href="#r_cell" transform="translate(200.5,0)"/>
+			<use id="r_bit06" xlink:href="#r_cell" transform="translate(225.5,0)"/>
+			<use id="r_bit05" xlink:href="#r_cell" transform="translate(250.5,0)"/>
+			<use id="r_bit04" xlink:href="#r_cell" transform="translate(275.5,0)"/>
+			<use id="r_bit03" xlink:href="#r_cell" transform="translate(300.5,0)"/>
+			<use id="r_bit02" xlink:href="#r_cell" transform="translate(325.5,0)"/>
+			<use id="r_bit01" xlink:href="#r_cell" transform="translate(350.5,0)"/>
+			<use id="r_bit00" xlink:href="#r_cell" transform="translate(375.5,0)"/>
+			<text id="t_bit15"  x="13" y="16" class="style2">
+				<tspan class="nmbr">15</tspan></text><text id="t_bit14"  x="38" y="16" class="style2"><tspan class="nmbr">14</tspan></text><text id="t_bit13"  x="63" y="16" class="style2"><tspan class="nmbr">13</tspan></text><text id="t_bit12"  x="88" y="16" class="style2"><tspan class="nmbr">12</tspan></text><text id="t_bit11" x="113" y="16" class="style2"><tspan class="nmbr">11</tspan></text><text id="t_bit10" x="138" y="16" class="style2"><tspan class="nmbr">10</tspan></text><text id="t_bit09" x="163" y="16" class="style2"><tspan class="nmbr">09</tspan></text><text id="t_bit08" x="188" y="16" class="style2"><tspan class="nmbr">08</tspan></text><text id="t_bit07" x="213" y="16" class="style2"><tspan class="nmbr">07</tspan></text><text id="t_bit06" x="238" y="16" class="style2"><tspan class="nmbr">06</tspan></text><text id="t_bit05" x="263" y="16" class="style2"><tspan class="nmbr">05</tspan></text><text id="t_bit04" x="288" y="16" class="style2"><tspan class="nmbr">04</tspan></text><text id="t_bit03" x="313" y="16" class="style2"><tspan class="nmbr">03</tspan></text><text id="t_bit02" x="338" y="16" class="style2"><tspan class="nmbr">02</tspan></text><text id="t_bit01" x="363" y="16" class="style2"><tspan class="nmbr">01</tspan></text><text id="t_bit00" x="388" y="16" class="style2"><tspan class="nmbr">00</tspan></text><path id="p_sc" d="M100.5,26.5 Q100.5,38.5,116.5,38.5 L144.5,38.5 Q150.5,38.5,150.5,44.5 Q150.5,38.5,156.5,38.5 L188.5,38.5 Q200.5,38.5,200.5,26.5" class="style0"/><text id="t_b11_8d" x="100" y="56" class="style1">код палитры</text><polyline id="pl_b14" points="38.5,26.5 38.5,76.5 75.5,76.5" class="style0"/><polyline id="pl_b15" points="13.5,26.5 13.5,100.5 75.5,100.5" class="style0"/><text id="t_b11_14d" x="80" y="80" class="style1">управление таймером</text><text id="t_b11_15d" x="80" y="104" class="style1">блокировка клавиши "Стоп"</text></svg>
+	<p>Старший байт регистра доступен только по записи. Разряды
+	<span class="nmbr">8</span>-<span class="nmbr">11</span> задают код цветовой 
+	палитры в соответствии с таблицей из <a href="#_Toc375906586">приложения
+	<span class="nmbr">4</span></a>.</p>
+	<p>Разряд <span class="nmbr">14</span> управляет таймером <span class="nmbr">
+	48</span>,<span class="nmbr">5</span>Гц (&quot;<span class="nmbr">0</span>&quot; 
+	- прерывание разрешено). При включении питания разряд <span class="nmbr">14</span> 
+	устанавливается в &quot;<span class="nmbr">1</span>&quot; (прерывание запрещено).</p>
+	<p>Разряд <span class="nmbr">15</span> управляет прерыванием по клавише <i>&quot;СТОП&quot;</i> 
+	(&quot;<span class="nmbr">0</span>&quot; - прерывание разрешено). При включении 
+	питания разряд <span class="nmbr">15</span> устанавливается в &quot;<span class="nmbr">0</span>&quot;.</p>
+	<h3 id="_Toc375906518">1.3.3. Регистр смещения</h3>
+	<p>Регистр смещения предназначен для управления <i>&quot;РУЛОННЫМ&quot;</i> 
+	сдвигом информации на экране по вертикали путём задания адреса в буфере экрана, 
+	с которого должна начинаться регенерация изображения.</p>
+	<p>Адрес регистра - <span class="nmbr">177664</span></p>
+	<p>Формат регистра</p>
+	<svg id="r124" height="90" width="402">
+			<rect id="r_cell" x="0.5" y="0.5" width="25" height="24" class="style0"/>
+			<use id="r_bit14" xlink:href="#r_cell" transform="translate(25.5,0)"/>
+			<use id="r_bit13" xlink:href="#r_cell" transform="translate(50.5,0)"/>
+			<use id="r_bit12" xlink:href="#r_cell" transform="translate(75.5,0)"/>
+			<use id="r_bit11" xlink:href="#r_cell" transform="translate(100.5,0)"/>
+			<use id="r_bit10" xlink:href="#r_cell" transform="translate(125.5,0)"/>
+			<use id="r_bit09" xlink:href="#r_cell" transform="translate(150.5,0)"/>
+			<use id="r_bit08" xlink:href="#r_cell" transform="translate(175.5,0)"/>
+			<use id="r_bit07" xlink:href="#r_cell" transform="translate(200.5,0)"/>
+			<use id="r_bit06" xlink:href="#r_cell" transform="translate(225.5,0)"/>
+			<use id="r_bit05" xlink:href="#r_cell" transform="translate(250.5,0)"/>
+			<use id="r_bit04" xlink:href="#r_cell" transform="translate(275.5,0)"/>
+			<use id="r_bit03" xlink:href="#r_cell" transform="translate(300.5,0)"/>
+			<use id="r_bit02" xlink:href="#r_cell" transform="translate(325.5,0)"/>
+			<use id="r_bit01" xlink:href="#r_cell" transform="translate(350.5,0)"/>
+			<use id="r_bit00" xlink:href="#r_cell" transform="translate(375.5,0)"/>
+			<text id="t_bit15"  x="13" y="16" class="style2">
+				<tspan class="nmbr">15</tspan></text><text id="t_bit14"  x="38" y="16" class="style2"><tspan class="nmbr">14</tspan></text><text id="t_bit13"  x="63" y="16" class="style2"><tspan class="nmbr">13</tspan></text><text id="t_bit12"  x="88" y="16" class="style2"><tspan class="nmbr">12</tspan></text><text id="t_bit11" x="113" y="16" class="style2"><tspan class="nmbr">11</tspan></text><text id="t_bit10" x="138" y="16" class="style2"><tspan class="nmbr">10</tspan></text><text id="t_bit09" x="163" y="16" class="style2"><tspan class="nmbr">09</tspan></text><text id="t_bit08" x="188" y="16" class="style2"><tspan class="nmbr">08</tspan></text><text id="t_bit07" x="213" y="16" class="style2"><tspan class="nmbr">07</tspan></text><text id="t_bit06" x="238" y="16" class="style2"><tspan class="nmbr">06</tspan></text><text id="t_bit05" x="263" y="16" class="style2"><tspan class="nmbr">05</tspan></text><text id="t_bit04" x="288" y="16" class="style2"><tspan class="nmbr">04</tspan></text><text id="t_bit03" x="313" y="16" class="style2"><tspan class="nmbr">03</tspan></text><text id="t_bit02" x="338" y="16" class="style2"><tspan class="nmbr">02</tspan></text><text id="t_bit01" x="363" y="16" class="style2"><tspan class="nmbr">01</tspan></text><text id="t_bit00" x="388" y="16" class="style2"><tspan class="nmbr">00</tspan></text><path id="p_sc" d="M200.5,26.5 Q200.5,38.5,216.5,38.5 L294.5,38.5 Q300.5,38.5,300.5,44.5 Q300.5,38.5,306.5,38.5 L388.5,38.5 Q400.5,38.5,400.5,26.5" class="style0"/><text id="t_b7_0d" x="260" y="56" class="style1">смещение</text><line id="ln1" x1="163.5" y1="26.5" x2="163.5" y2="62.5" class="style0"/><text id="t_b9_0d" x="63" y="80" class="style1">режим "малого" экрана</text></svg>
+	<table>
+		<tr>
+			<td class="lfcell">Разряд <span class="nmbr">9</span> -</td>
+			<td>при записи &quot;<span class="nmbr">1</span>&quot; в этот разряд 
+			на экране отображается весь буфер экрана (<span class="nmbr">256</span>. 
+			телевизионных строк). При нулевом значении в верхней части растра отображается
+			<span class="nmbr">1</span>/<span class="nmbr">4</span> часть (старшие 
+			адреса) экранного ОЗУ, нижняя часть экрана не отображается. Данный режим 
+			не используется драйвер-мониторной системой.</td>
+		</tr>
+		<tr>
+			<td class="lfcell">Разряды <span class="nmbr">7</span>-<span class="nmbr">0</span> 
+			-</td>
+			<td>в этом поле задаётся адрес строки экранного ОЗУ, с которой начинается 
+			отображение экрана.</td>
+		</tr>
+	</table>
+	<p>ОЗУ буфера экрана считается &quot;замкнутым в кольцо&quot;. Экран состоит 
+	из <span class="nmbr">256</span>. строк по <span class="nmbr">64</span>. байта 
+	в каждой. Строки начинаются с адресов, кратных <span class="nmbr">100</span> 
+	(восьмеричное). Первый байт строки расположен в левом конце строки, байты отображаются, 
+	начиная с младшего бита. Смещение задаётся в строках, т.е. изменение кода смещения 
+	на <span class="nmbr">1</span> приводит к кольцевому сдвигу информации на экране 
+	на одну строку растра. Исходному состоянию (первый байт буфера экрана отображается 
+	в самой верхней строке растра) соответствует значение смещения
+	<span class="nmbr">330</span> (восьмеричное). Увеличение значения соответствует 
+	сдвигу информации вверх, уменьшение - вниз.</p>
+	<p>Остальные разряды не используются. Регистр доступен по записи и чтению.</p>
+	<h3 id="_Toc375906519">1.3.4. Регистр параллельного программируемого интерфейса</h3>
+	<p>Этот <span class="nmbr">16</span>-разрядный регистр предназначен для записи 
+	информации в выходной порт и чтения информации со входного порта.</p>
+	<p>Адрес регистра - <span class="nmbr">177714</span></p>
+	<p>Возможность прочитать состояние выходного порта отсутствует. Фактически в 
+	ЭВМ реализованы два независимых регистра, имеющие один и тот же адрес:</p>
+	<ul>
+		<li>доступный только по записи регистр выходного порта.</li>
+		<li>доступный только по чтению регистр входного порта.</li>
+	</ul>
+	<h3 id="_Toc375906520">1.3.5. Системный регистр</h3>
+	<p>Используется при начальном запуске процессора, для переключения страниц ОЗУ/ПЗУ, 
+	управления внешними устройствами ЭВМ.</p>
+	<p>Адрес регистра - <span class="nmbr">177716</span></p>
+	<p>Фактически по указанному адресу расположены два регистра:</p>
+	<ul>
+		<li>
+		<p>регистр, доступный только по чтению;</p>
+		</li>
+		<li>
+		<p>регистр, доступный только по записи.</p>
+		</li>
+	</ul>
+	<h3 id="_Toc375906521">1.3.5.1. Регистр чтения</h3>
+	<p>Формат регистра:</p>
+	<svg id="r1261" height="172" width="482">
+			<rect id="r_cell2" x="0.5" y="24.5" width="25" height="24" class="style0"/>
+			<use id="r_bit14" xlink:href="#r_cell2" transform="translate (25.5,0)"/>
+			<use id="r_bit13" xlink:href="#r_cell2" transform="translate (50.5,0)"/>
+			<use id="r_bit12" xlink:href="#r_cell2" transform="translate (75.5,0)"/>
+			<use id="r_bit11" xlink:href="#r_cell2" transform="translate(100.5,0)"/>
+			<use id="r_bit10" xlink:href="#r_cell2" transform="translate(125.5,0)"/>
+			<use id="r_bit09" xlink:href="#r_cell2" transform="translate(150.5,0)"/>
+			<use id="r_bit08" xlink:href="#r_cell2" transform="translate(175.5,0)"/>
+			<use id="r_bit07" xlink:href="#r_cell2" transform="translate(200.5,0)"/>
+			<use id="r_bit06" xlink:href="#r_cell2" transform="translate(225.5,0)"/>
+			<use id="r_bit05" xlink:href="#r_cell2" transform="translate(250.5,0)"/>
+			<use id="r_bit04" xlink:href="#r_cell2" transform="translate(275.5,0)"/>
+			<use id="r_bit03" xlink:href="#r_cell2" transform="translate(300.5,0)"/>
+			<use id="r_bit02" xlink:href="#r_cell2" transform="translate(325.5,0)"/>
+			<use id="r_bit01" xlink:href="#r_cell2" transform="translate(350.5,0)"/>
+			<use id="r_bit00" xlink:href="#r_cell2" transform="translate(375.5,0)"/>
+			<text id="t_bit15"  x="13" y="16" class="style2">
+				<tspan class="nmbr">15</tspan></text><text id="t_bit14"  x="38" y="16" class="style2"><tspan class="nmbr">14</tspan></text><text id="t_bit13"  x="63" y="16" class="style2"><tspan class="nmbr">13</tspan></text><text id="t_bit12"  x="88" y="16" class="style2"><tspan class="nmbr">12</tspan></text><text id="t_bit11" x="113" y="16" class="style2"><tspan class="nmbr">11</tspan></text><text id="t_bit10" x="138" y="16" class="style2"><tspan class="nmbr">10</tspan></text><text id="t_bit09" x="163" y="16" class="style2"><tspan class="nmbr">09</tspan></text><text id="t_bit08" x="188" y="16" class="style2"><tspan class="nmbr">08</tspan></text><text id="t_bit07" x="213" y="16" class="style2"><tspan class="nmbr">07</tspan></text><text id="t_bit06" x="238" y="16" class="style2"><tspan class="nmbr">06</tspan></text><text id="t_bit05" x="263" y="16" class="style2"><tspan class="nmbr">05</tspan></text><text id="t_bit04" x="288" y="16" class="style2"><tspan class="nmbr">04</tspan></text><text id="t_bit03" x="313" y="16" class="style2"><tspan class="nmbr">03</tspan></text><text id="t_bit02" x="338" y="16" class="style2"><tspan class="nmbr">02</tspan></text><text id="t_bit01" x="363" y="16" class="style2"><tspan class="nmbr">01</tspan></text><text id="t_bit00" x="388" y="16" class="style2"><tspan class="nmbr">00</tspan></text><text id="t_bc15"  x="13" y="40" class="style2"><tspan class="nmbr">1</tspan></text><text id="t_bc14"  x="38" y="40" class="style2"><tspan class="nmbr">1</tspan></text><text id="t_bc13"  x="63" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc12"  x="88" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc11" x="113" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc10" x="138" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc09" x="163" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc08" x="188" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc07" x="213" y="40" class="style2"><tspan class="nmbr">1</tspan></text><text id="t_bc06" x="238" y="40" class="style2">X</text><text id="t_bc05" x="263" y="40" class="style2">X</text><text id="t_bc04" x="288" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc03" x="313" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc02" x="338" y="40" class="style2">X</text><text id="t_bc01" x="363" y="40" class="style2"><tspan class="nmbr">0</tspan></text><text id="t_bc00" x="388" y="40" class="style2"><tspan class="nmbr">0</tspan></text><path id="p_sc" d="M200.5,26.5 Q200.5,38.5,216.5,38.5 L294.5,38.5 Q300.5,38.5,300.5,44.5 Q300.5,38.5,306.5,38.5 L388.5,38.5 Q400.5,38.5,400.5,26.5" transform="translate(-199.5,24.5)" class="style0"/><text id="t_b15_8d" x="0" y="80" class="style1">адрес начального пуска</text><polyline id="pl_b7" points="213.5,50.5 213.5,116.5 170.5,116.5" class="style0"/><text id="t_b7d" x="0" y="0" class="style1"><tspan x="4" y="104">признак отсутствия</tspan><tspan x="4" y="120">арифметического</tspan><tspan x="4" y="136">расширителя</tspan></text><rect id="r_b7d" x="0.5" y="94.5" width="170" height="48" class="style3"/><line id="l_b6" x1="238.5" y1="50.5" x2="238.5" y2="150.5" class="style0"/><text id="t_b6d" x="150" y="164" class="style1">флаг нажатия клавиши</text><polyline id="pl_b5" points="263.5,50.5 263.5,116.5 288.5,116.5" class="style0"/><text id="t_b5d" x="292" y="120" class="style1">данные с магнитофона</text><line id="l_b2" x1="338.5" y1="50.5" x2="338.5" y2="70.5" class="style0"/><text id="t_b2d" x="0" y="0" class="style1"><tspan x="288" y="80">признак записи</tspan><tspan x="288" y="96">в системный регистр</tspan></text><rect id="r_b2d" x="284.5" y="70.5" width="180" height="32" class="style3"/></svg>
+	<table>
+		<tr>
+			<td class="lfcell">Разряды <span class="nmbr">15</span>-<span class="nmbr">8</span> 
+			-</td>
+			<td>определяют адрес начального пуска ЭВМ по включению питания (<span class="nmbr">140000</span>);</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">7 </span>-</td>
+			<td>должен быть равен &quot;<span class="nmbr">1</span>&quot;;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">6 </span>-</td>
+			<td>установлен в &quot;<span class="nmbr">0</span>&quot;, если нажата 
+			любая клавиша клавиатуры ЭВМ. Устанавливается в &quot;<span class="nmbr">1</span>&quot; 
+			по отпусканию клавиши;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">5</span> -</td>
+			<td>разряд данных контроллера магнитофона;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">2 </span>-</td>
+			<td>этот разряд устанавливается в &quot;<span class="nmbr">1</span>&quot; 
+			по любой операции записи в системный регистр. Сбрасывается в &quot;<span class="nmbr">0</span>&quot; 
+			по окончанию операции чтения системного регистра.</td>
+		</tr>
+	</table>
+	<p>Об использовании этого разряда см. в <a href="#_Toc375906527">разделе</a>, 
+	посвящённом особенностям выполнения некоторых команд ЭВМ.</p>
+	<p>Остальные разряды не используются и читаются нулями.</p>
+	<h3 id="_Toc375906522">1.3.5.2. Регистр записи </h3>
+	<p>Формат регистра:</p>
+	<pre>
+ <span class="nmbr">15</span> <span class="nmbr">14</span> <span class="nmbr">13</span> <span class="nmbr">12</span> <span class="nmbr">11</span> <span class="nmbr">10</span> <span class="nmbr">09</span> <span class="nmbr">08</span> <span class="nmbr">07</span> <span class="nmbr">06</span> <span class="nmbr">05</span> <span class="nmbr">04</span> <span class="nmbr">03</span> <span class="nmbr">02</span> <span class="nmbr">01</span> <span class="nmbr">00</span>
+┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+│ .│ X│ X│ X│ <span class="nmbr">1</span>│ X│ X│ X│ X│ X│ X│ X│ X│ X│ X│ X│
+└──┼──┴──┴──┼──┼──┴──┴──┼──┼──┴──┼──┴──┴──┴──┴──┘
+   └───┬────┘ │└────┬───┘ │└──┬──┘ │  │  │  │  │
+управление  переключением │   │    │  │  │  │  │
+страниц ОЗУ по│ адресам   │   │    │  │  │  │  │
+<span class="nmbr">40000</span>-<span class="nmbr">100000</span>  │ <span class="nmbr">100000</span>-<span class="nmbr">140000</span> │    │  │  │  │  │
+              │           │   │    │  │  │  │  │
+     Разрешение записи    │   │    │  │  │  │  │
+     в системный регистр  │   │    │  │  │  │  │
+Управление двигателем ────┘   │    │  │  │  │  │
+магнитофона                   │    │  │  │  │  │
+  Выходной регистр данных ────┘    │  │  │  │  │
+  контроллера магнитофона          │  │  │  │  │
+    Разрешение работы страниц ПЗУ ─┴──┴──│──┴──┘
+           Переключение буфера экрана ───┘      
+</pre>
+	<table>
+		<tr>
+			<td class="lfcell">Разряды <span class="nmbr">14</span>-<span class="nmbr">12</span> 
+			-</td>
+			<td>определяют номер страницы ОЗУ, подключаемой на адреса
+			<span class="nmbr">40000</span>-<span class="nmbr">100000</span> (см. 
+			ниже);</td>
+		</tr>
+		<tr>
+			<td>Разряды <span class="nmbr">10</span>-<span class="nmbr">8</span> 
+			-</td>
+			<td>определяют номер страницы ОЗУ, подключаемой на адреса
+			<span class="nmbr">100000</span>-<span class="nmbr">140000</span>;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">7</span> -</td>
+			<td>значение &quot;<span class="nmbr">0</span>&quot; этого разряда вызывает 
+			включение двигателя магнитофона (замыкает контакты реле дистанционного 
+			управления);</td>
+		</tr>
+		<tr>
+			<td>Разряды <span class="nmbr">6</span> и <span class="nmbr">5</span> 
+			-</td>
+			<td>задают выходные данные контроллера магнитофона; разряд
+			<span class="nmbr">6</span> также подаётся на излучатель звука ЭВМ;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">4</span> -</td>
+			<td>разрешает подключение к адресному пространству
+			<span class="nmbr">100000</span>-<span class="nmbr">140000</span> страницы 
+			ПЗУ № <span class="nmbr">11</span>., отключает страницу ОЗУ с соответствующих 
+			адресов;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">3</span> -</td>
+			<td>разрешает подключение к адресному пространству
+			<span class="nmbr">100000</span>-<span class="nmbr">140000</span> страницы 
+			ПЗУ № <span class="nmbr">10</span>., отключает страницу ОЗУ с соответствующих 
+			адресов;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">2</span> -</td>
+			<td>при единичном значении этого бита отображается буфер экрана №
+			<span class="nmbr">1</span> (страница ОЗУ № <span class="nmbr">6</span>). 
+			При нулевом - буфер экрана № <span class="nmbr">0</span> (страница №
+			<span class="nmbr">5</span>):</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">1</span> -</td>
+			<td>разрешает подключение к адресному пространству
+			<span class="nmbr">100000</span>-<span class="nmbr">140000</span> страницы 
+			ПЗУ № <span class="nmbr">9</span>., отключает страницу ОЗУ с соответствующих 
+			адресов;</td>
+		</tr>
+		<tr>
+			<td>Разряд <span class="nmbr">0</span> -</td>
+			<td>разрешает подключение к адресному пространству
+			<span class="nmbr">100000</span>-<span class="nmbr">140000</span> страницы 
+			ПЗУ № <span class="nmbr">8</span>., отключает страницу ОЗУ с соответствующих 
+			адресов;</td>
+		</tr>
+	</table>
+	<p>&nbsp;</p>
+	<table cellpadding="2" cellspacing="2">
+		<tr>
+			<th>Бит</th>
+			<th><span class="nmbr">14</span></th>
+			<th><span class="nmbr">13</span></th>
+			<th><span class="nmbr">12</span></th>
+			<th>&nbsp;</th>
+		</tr>
+		<tr>
+			<th>&nbsp;</th>
+			<th>(<span class="nmbr">10</span></th>
+			<th><span class="nmbr">9</span></th>
+			<th><span class="nmbr">8</span>)</th>
+			<th>&nbsp;</th>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>страница <span class="nmbr">0</span> (постоянно отображена
+			<span class="nmbr">0</span>...<span class="nmbr">40000</span>)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>страница <span class="nmbr">1</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>страница <span class="nmbr">2</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>страница <span class="nmbr">3</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>страница <span class="nmbr">4</span></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>страница <span class="nmbr">5</span> (буфер экрана
+			<span class="nmbr">0</span>)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>страница <span class="nmbr">6</span> (буфер экрана
+			<span class="nmbr">1</span>)</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>страница <span class="nmbr">7</span> (системная страница)</td>
+		</tr>
+	</table>
+	<p><span class="attnt">ПРИМЕЧАНИЕ.</span> Запись в регистр возможна только при 
+	установленном в &quot;<span class="nmbr">1</span>&quot; <span class="nmbr">11</span>-м 
+	бите, только по командам, работающим с регистром, как с целым словом.</p>
+	<p>Страницы <span class="nmbr">8</span> и <span class="nmbr">9</span> ПЗУ зарезервированы:</p>
+	<table>
+		<tr>
+			<td width="40">-</td>
+			<td>в странице <span class="nmbr">8</span> и адресном пространстве
+			<span class="nmbr">100000</span>-<span class="nmbr">117777</span> страницы
+			<span class="nmbr">9</span> расположены ПЗУ языка программирования BASIC, 
+			в адресах <span class="nmbr">120000</span>-<span class="nmbr">137777</span> 
+			расположены программы драйвер-мониторной системы.</td>
+		</tr>
+	</table>
+	<h3 id="_Toc375906523">1.3.6. Регистры дополнительных внешних устройств</h3>
+	<h3 id="_Toc375906524">1.3.6.1. Регистры КНГМД</h3>
+	<p>Регистр состояния.</p>
+	<p>Адрес регистра - <span class="nmbr">177130</span></p>
+	<pre>
+┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+│<span class="nmbr">15</span>│<span class="nmbr">14</span>│<span class="nmbr">13</span>│<span class="nmbr">12</span>│<span class="nmbr">11</span>│<span class="nmbr">10</span>│ <span class="nmbr">9</span>│ <span class="nmbr">8</span>│ <span class="nmbr">7</span>│ <span class="nmbr">6</span>│ <span class="nmbr">5</span>│ <span class="nmbr">4</span>│ <span class="nmbr">3</span>│ <span class="nmbr">2</span>│ <span class="nmbr">1</span>│ <span class="nmbr">0</span>│
+└──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘
+</pre>
+	<p>Формат по записи:</p>
+	<table>
+		<tr>
+			<td class="lfcell"><span class="nmbr">0</span> разряд -</td>
+			<td>выбор накопителя с номером <span class="nmbr">0</span>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">1</span> разряд -</td>
+			<td>выбор накопителя с номером <span class="nmbr">1</span>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span> разряд -</td>
+			<td>выбор накопителя с номером <span class="nmbr">2</span>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">3</span> разряд -</td>
+			<td>выбор накопителя с номером <span class="nmbr">3</span>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">4</span> разряд -</td>
+			<td>включение электродвигателя;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">5</span> разряд -</td>
+			<td>&quot;<span class="nmbr">0</span>&quot; - выбор верхней головки 
+			накопителя, &quot;<span class="nmbr">1</span>&quot; - выбор нижней головки 
+			накопителя;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">6</span> разряд -</td>
+			<td>направление перемещения шагового двигателя;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">7</span> разряд -</td>
+			<td>шаг;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">8</span> разряд -</td>
+			<td>признак <i>&quot;НАЧАЛО ЧТЕНИЯ&quot;</i>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">9</span> разряд -</td>
+			<td>признак <i>&quot;ЗАПИСЬ МАРКЕРА&quot;</i>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">10</span> разряд -</td>
+			<td>переключение схемы прекоррекции;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">11</span>-<span class="nmbr">15</span> -</td>
+			<td>разряды не используются;</td>
+		</tr>
+	</table>
+	<p>Формат по чтению:</p>
+	<table>
+		<tr>
+			<td class="lfcell"><span class="nmbr">0</span> разряд -</td>
+			<td>признак <i>&quot;<span class="nmbr">0</span> ДОРОЖКА&quot;</i></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">1</span> разряд -</td>
+			<td>признак готовности накопителя к работе (в накопителе &quot;Электроника 
+			НГМД- 6022&quot; не используется);</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span> разряд -</td>
+			<td>запрет записи;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">7</span> разряд -</td>
+			<td>требование съёма информации с регистра данных или записи в него 
+			новой информации;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">14</span> разряд -</td>
+			<td>в режиме чтения признак записи циклического контрольного кода на 
+			диск;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">15</span> разряд -</td>
+			<td>признак <i>&quot;<span class="nmbr">0</span> СЕКТОР&quot;</i>;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">3</span>-<span class="nmbr">6</span> и
+			<span class="nmbr">8</span>-<span class="nmbr">13</span> -</td>
+			<td>разряды не используются.</td>
+		</tr>
+	</table>
+	<p>Регистр данных</p>
+	<p>Адрес регистра <span class="nmbr">177132</span></p>
+	<pre>
+┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+│<span class="nmbr">15</span>│<span class="nmbr">14</span>│<span class="nmbr">13</span>│<span class="nmbr">12</span>│<span class="nmbr">11</span>│<span class="nmbr">10</span>│ <span class="nmbr">9</span>│ <span class="nmbr">8</span>│ <span class="nmbr">7</span>│ <span class="nmbr">6</span>│ <span class="nmbr">5</span>│ <span class="nmbr">4</span>│ <span class="nmbr">3</span>│ <span class="nmbr">2</span>│ <span class="nmbr">1</span>│ <span class="nmbr">0</span>│
+└──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘
+</pre>
+	<p>В регистр данных по записи осуществляется запись информации из канала.</p>
+	<p>Из регистра данных по чтению информация передаётся в канал. Все разряды регистра 
+	данных доступны по записи и чтению.</p>
+	<h3 id="_Toc375906525">1.3.6.2. Регистр КПУ</h3>
+	<p>Блок КПУ подключается через регистр параллельного программируемого интерфейса 
+	(порт) с адресом <span class="nmbr">177714</span>.</p>
+	<pre>
+┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+│<span class="nmbr">15</span>│<span class="nmbr">14</span>│<span class="nmbr">13</span>│<span class="nmbr">12</span>│<span class="nmbr">11</span>│<span class="nmbr">10</span>│ <span class="nmbr">9</span>│ <span class="nmbr">8</span>│ <span class="nmbr">7</span>│ <span class="nmbr">6</span>│ <span class="nmbr">5</span>│ <span class="nmbr">4</span>│ <span class="nmbr">3</span>│ <span class="nmbr">2</span>│ <span class="nmbr">1</span>│ <span class="nmbr">0</span>│
+└──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘
+</pre>
+	<table>
+		<tr>
+			<td class="lfcell"><span class="nmbr">0</span>-<span class="nmbr">7</span> 
+			разряды -</td>
+			<td>по записи; байт на печать,<br>по чтению: читается как &quot;<span class="nmbr">0</span>&quot;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">14</span> разряд -</td>
+			<td>по записи: строб данных,<br>по чтению: готовность печатающего устройства;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">8</span>-<span class="nmbr">13</span>,
+			<span class="nmbr">15</span></td>
+			<td>разряды не используются, читаются как &quot;<span class="nmbr">0</span>&quot;</td>
+		</tr>
+	</table>
+	<h2 id="_Toc375906526">1.4. Вектора прерываний</h2>
+	<p>Обработка прерываний ЭВМ производится по векторам, размещённым в области
+	<span class="nmbr">0</span>-<span class="nmbr">376</span><sub>8</sub>. Некоторые 
+	ячейки этой области используются - драйвер-мониторной системой для внутренних 
+	целей. В таблице приведены вектора прерываний стандартных устройств.</p>
+	<table class="border">
+		<tr>
+			<th class="lfcell">Вектор</th>
+			<th>Источник прерывания</th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">004</span></td>
+			<td>Клавиша <i>&quot;СТОП&quot;</i>, команда &quot;<span class="cmds">HALT</span>&quot;, 
+			отсутствие сигнала RPLY в цикле канала ЭВМ</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">010</span></td>
+			<td>Прерывание по резервной команде</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">041</span></td>
+			<td>Прерывание по <span class="symb">Т</span>-разряду</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">020</span></td>
+			<td>Прерывание по команде <span class="cmds">IOT</span></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">024</span></td>
+			<td>Прерывание по аварии сетевого питания</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">030</span></td>
+			<td>Прерывание по команде &quot;<span class="cmds">EMT</span>&quot;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">034</span></td>
+			<td>Прерывание по команде &quot;<span class="cmds">TRAP</span>&quot;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">040</span>-<span class="nmbr">056</span></td>
+			<td>Используется для внутренних целей</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">060</span></td>
+			<td>Прерывание по клавиатуре (верхний регистр)</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">064</span>-<span class="nmbr">066</span></td>
+			<td>Используется для внутренних целей</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">100</span></td>
+			<td>Прерывание по системному таймеру</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">270</span></td>
+			<td>Прерывание пользователя</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">274</span></td>
+			<td>Прерывание по клавиатуре (нижний регистр)</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">300</span></td>
+			<td>Прерывание блока КМК</td>
+		</tr>
+	</table>
+	<h2 id="_Toc375906527">1.5. Особенности выполнения команд</h2>
+	<p>Система команд микро-ЭВМ соответствует системе команд ЭВМ &quot;Электроника-60&quot; 
+	и определяется применяемым процессором 1801ВМ1.</p>
+	<p>Однако в связи с рядом особенностей архитектуры существуют некоторые отличия 
+	от ЭВМ семейств СМ ЭВМ, &quot;Электроника-60&quot;, &quot;Электроника-85&quot; 
+	и ДВК.</p>
+	<p>Команда <span class="cmds">HALT</span> (код <span class="opcd">000000</span>) 
+	вызывает прерывание выполнения программы и переход по вектору прерывания
+	<span class="nmbr">4</span>, причём при этом устанавливается бит - признак записи 
+	в системный регистр. Если пользователь не предусмотрел в своей программе собственной 
+	обработки прерывания по <span class="nmbr">4</span> вектору, при этом произойдёт 
+	переход в драйвер-мониторную систему с выводом на экран содержимого счётчика 
+	команд ЭВМ.</p>
+	<p>Команда <span class="cmds">RESET</span> (код <span class="opcd">000005</span>) 
+	допустима только в том случае, если программа пользователя полностью не использует 
+	драйвер-мониторную систему и берет на себя такие функции, как управление экраном, 
+	переключение страниц ОЗУ и ПЗУ и т. д.</p>
+	<h1 id="_Toc375906528">2. ФУНКЦИИ ДРАЙВЕР-МОНИТОРНОЙ СИСТЕМЫ</h1>
+	<p>Драйвер-мониторная система состоит из следующих программ:</p>
+	<ul>
+		<li>программа начального пуска ЭВМ;</li>
+		<li>монитор команд оператора;</li>
+		<li>диспетчер команд <span class="cmds">EMT</span>;</li>
+		<li>драйвер ОЗУ/ПЗУ;</li>
+		<li>драйвер клавиатуры;</li>
+		<li>драйвер телевизионного приёмника;</li>
+		<li>драйвер кассетного магнитофона;</li>
+		<li>драйвер накопителя на ГМД.</li>
+	</ul>
+	<h2 id="_Toc375906529">2.1. Программа начального пуска ЭВМ</h2>
+	<p>Программа начального пуска предназначена для инициализации системы при включении 
+	ЭВМ, определения конфигурации ЭВМ и запуска других программных средств.</p>
+	<h2 id="_Toc375906530">2.2. Монитор команд оператора</h2>
+	<p>Монитор команд оператора позволяет пользователю ЭВМ загружать программы с 
+	магнитной ленты, запускать программы на выполнение, просматривать и корректировать 
+	содержимое ячеек ОЗУ, регистров процессора и внешних устройств, записывать участки 
+	ОЗУ на магнитную ленту, загружать операционную систему с диска и т. д.</p>
+	<p>Все эти функции выполняются оператором при помощи команд монитора.</p>
+	<p>Язык команд монитора максимально приближен ко входному языку режима пультового 
+	терминала ЭВМ &quot;Электроника-60&quot; и &quot;ДВК&quot;.</p>
+	<h3 id="_Toc375906531">2.2.1 Команды монитора</h3>
+	<p>Признаком готовности монитора к приёму очередной команды оператора является 
+	символ <i>&quot;@&quot;</i> в первой позиции строки экрана. Числа вводятся в 
+	восьмеричной системе счисления. Набирать незначащие нули необязательно.</p>
+	<p><b>ХХХХХХ/</b> - открыть ячейку с восьмеричным адресом <i>ХХХХХХ</i>.</p>
+	<p>По этой команде на экран выводится восьмеричное содержимое ячейки ОЗУ, ПЗУ 
+	или регистра внешнего устройства с адресом <i>ХХХХХХ</i>. Если такой регистр 
+	отсутствует или страница не подключена к заданному адресу, выводится сообщение 
+	об ошибке - символ <i>&quot;?&quot;</i> и команда игнорируется.</p>
+	<p><b>ХХХХХХ\</b> - открыть байт с адресом <i>ХХХХХХ</i>.</p>
+	<p>Содержимое байта или слова можно изменить, введя восьмеричное число (новое 
+	содержимое) и подав одну из команд: <i>&quot;ВВОД&quot;</i>, <i>&quot;ОТКРЫТЬ 
+	СЛЕДУЮЩУЮ ЯЧЕЙКУ&quot;</i>, <i>&quot;ОТКРЫТЬ ПРЕДЫДУЩУЮ ЯЧЕЙКУ&quot;</i>, <i>&quot;ОТКРЫТЬ 
+	КОСВЕННО&quot;</i>, <i>&quot;ОТКРЫТЬ ПО СМЕЩЕНИЮ&quot;</i>.</p>
+	<p><b>RX/</b> - открыть регистр <i>X</i>, где <i>Х</i>=<span class="nmbr">0</span>...<span class="nmbr">7</span> 
+	или &quot;<b>S</b>&quot;. Открывает регистр общего назначения процессора (<span class="regn">R0</span>-<span class="regn">R7</span>) 
+	или регистр состояния процессора (<span class="regn">RS</span>).</p>
+	<p>Команды &quot;<b>/</b>&quot; и &quot;<b>\</b>&quot; без аргумента открывают &quot;текущую&quot;, 
+	то есть последнюю открывавшуюся ячейку.</p>
+	<p><b>&quot;ВВОД&quot;</b> закрыть слово, байт или регистр. Если пользователем 
+	было введено новое содержимое, оно будет записано.</p>
+	<p><img alt="" height="20" src="img/kbd/kbdn.png" width="23"> - закрыть слово, 
+	байт или регистр (если надо, модифицировать содержимое как по команде <i>&quot;ВВОД&quot;</i>) 
+	и открыть следующее слово, байт или регистр (при этом печатается адрес открываемой 
+	ячейки). После ячейки с адресом <span class="nmbr">177777</span> открывается 
+	ячейка <span class="nmbr">000000</span>, после <span class="regn">R7</span> 
+	- <span class="regn">R0</span>, после <span class="regn">RS</span> команда работает, 
+	как команда <i>&quot;ВВОД&quot;</i>.</p>
+	<p><img alt="" height="20" src="img/kbd/kbup.png" width="23"> - закрыть (с модификацией) 
+	и открыть предыдущее слово, байт, регистр.</p>
+	<p><img alt="" height="20" src="img/kbd/kbrt.png" width="23"> - закрыть (с модификацией) 
+	ячейку, вычислить адрес по формуле:</p>
+	<pre>АДРЕС = &lt;АДРЕС ТЕКУЩЕЙ ЯЧЕЙКИ&gt; + ЕЁ СОДЕРЖИМОЕ (НОВОЕ) + <span class="nmbr">2</span></pre>
+	<p class="contn">и открыть (как слово) ячейку с соответствующим адресом.</p>
+	<p>Эта команда используется для открытия аргумента команды ЭВМ, использующей 
+	метод адресации &quot;<span class="nmbr">67</span>&quot;</p>
+	<p><img alt="" height="20" src="img/kbd/kblt.png" width="23"> - закрыть (с модификацией) 
+	ячейку, вычислить адрес по формуле:</p>
+	<pre>АДРЕС = &lt;АДРЕС ЯЧЕЙКИ&gt; + &lt;СОДЕРЖИМОЕ МЛАДШЕГО БАЙТА&gt; * <span class="nmbr">2 </span>+ <span class="nmbr">2</span></pre>
+	<p class="contn">и открыть (как слово) ячейку с соответствующим адресом.</p>
+	<p>Содержимое байта рассматривается как число со знаком. Команда используется 
+	для открытия ячейки, на которую выполняется переход по команде типа &quot;<span class="cmds">BR</span>&quot;.</p>
+	<p><b>&quot;@&quot;</b> - закрыть (с модификацией) ячейку, вычислить адрес по 
+	формуле:</p>
+	<pre>АДРЕС = СОДЕРЖИМОЕ ТЕКУЩЕЙ ЯЧЕЙКИ</pre>
+	<p class="contn">и открыть (как слово) ячейку с соответствующим адресом. Эта 
+	команда используется для открытия аргумента команды ЭВМ, использующей метод 
+	адресации &quot;<span class="nmbr">37</span>&quot;.</p>
+	<p><b>N;МС</b> - отобразить страницу номер <i>&quot;N&quot;</i> с адреса, задаваемого 
+	аргументом <i>&quot;М&quot;</i>. Страницы с номерами <span class="nmbr">0</span>-<span class="nmbr">7</span> 
+	относятся к страницам ОЗУ, а страницы с восьмеричными номерами
+	<span class="nmbr">10</span>, <span class="nmbr">11</span>,
+	<span class="nmbr">12</span>, <span class="nmbr">13</span> относятся к страницам 
+	ПЗУ.</p>
+	<p>Значение <i>&quot;М&quot;</i>, равное нулю, означает адреса
+	<span class="nmbr">40000</span>-<span class="nmbr">100000</span>, равное &quot;<span class="nmbr">1</span>&quot; 
+	- адреса <span class="nmbr">100000</span> -<span class="nmbr">140000</span>.</p>
+	<p><b>XXXXXXL</b> - загрузить с адреса <i>ХХХХХХ</i> двоичный файл с магнитной 
+	ленты. Если адрес не задан, загрузка осуществляется с адреса, заданного в заголовке 
+	файла.</p>
+	<p>После выдачи этой команды на экран выдаётся вопрос <i>&quot;NAME?&quot;</i>. 
+	Оператор должен ввести имя файла.</p>
+	<p>Драйвер-мониторная система поддерживает формат записи на магнитной ленте, 
+	совместимый с ЭВМ БК0010.</p>
+	<p>Для файла в формате БК0010 необходимо задавать имя в виде:</p>
+	<pre>B:ИМЯ_ФАЙЛА</pre>
+	<p class="contn">где <i>ИМЯ_ФАЙЛА</i> - имя файла длиной до
+	<span class="nmbr">16</span> символов.</p>
+	<p>Если необходимо просмотреть каталог ленты, необходимо ввести <i>&quot;?&quot;</i> 
+	вместо имени файла. Если ввести только <i>&quot;В:&quot;</i>, будет загружен 
+	первый встретившийся файл.</p>
+	<p><b>&lt;ОБЛАСТЬ&gt;; U</b> - вывести в файл информации из ОЗУ. <i>&lt;ОБЛАСТЬ&gt;</i> 
+	- конструкция вида</p>
+	<p class="contn">&quot;<b>XXXXXX-YYYYYY</b>&quot;, где <i>XXXXXX</i> и <i>YYYYYY</i> 
+	- начальный и конечный (включительно) адреса записываемой области ОЗУ, или вида</p>
+	<p class="contn">&quot;<b>XXXXXX+YYYYYY</b>&quot;, где <i>XXXXXX</i> - начальный, 
+	адрес записываемой области ОЗУ, а <i>YYYYYY </i>- длина в байтах. После выдачи 
+	команды задаётся вопрос <i>&quot;NAME?&quot;</i>, на который оператор должен 
+	ввести имя файла, который следует записать на ленту.</p>
+	<p><b>XXXXXXМ</b> - включить/выключить двигатель магнитофона (используется при 
+	перемотке). Если <i>XXXXXX</i> не равно <span class="nmbr">0</span>, двигатель 
+	включается, иначе выключается.</p>
+	<p><b>XXXXXXG</b> - запустить программу с адреса <i>XXXXXX</i>. При отсутствии 
+	аргумент операция игнорируется. Адрес программы помещается в ячейку
+	<span class="labl">USERPC</span> (адрес <span class="nmbr">000040</span>).</p>
+	<p><b>Р</b> - продолжить выполнение - программы с адреса, на котором оно было 
+	прервано командой &quot;<span class="cmds">HALT</span>&quot; или клавишей <i>&quot;СТОП&quot;</i>.</p>
+	<p><b>&quot;ШАГ&quot;</b> - выполнить одну команду программы и вернуться в монитор.</p>
+	<p>Кроме того, в мониторе действуют управляющие символы, описанные в
+	<a href="#_Toc375906583">приложении <span class="nmbr">1</span></a>.</p>
+	<h2 id="_Toc375906532">2.3. Диспетчер команд <span class="cmds">EMT</span></h2>
+	<p>Диспетчер команд <span class="cmds">EMT</span> обеспечивает декодировку запросов 
+	пользовательской программы и передачу управления на соответствующий драйвер. 
+	Команды <span class="cmds">EMT</span> описаны ниже.</p>
+	<h2 id="_Toc375906533">2.4. Драйвер ОЗУ/ПЗУ</h2>
+	<p>Драйвер ОЗУ/ПЗУ обрабатывает <span class="cmds">EMT</span> из пользовательской&nbsp; 
+	программы, позволяя подключать заданные страницы ОЗУ или ПЗУ, обращаться к подпрограммам, 
+	находящийся в &quot;скрытых&quot; страницах обеспечивает защиту системной служебной 
+	информации от непреднамеренной порчи.</p>
+	<h2 id="_Toc375906534">2.5. Драйвер клавиатуры</h2>
+	<p>Драйвер клавиатуры обеспечивает приём байтов с клавиатуры, перекодировку 
+	символов в соответствии с установленной кодовой таблицей (кодировку в кодах 
+	КОИ8, КОИ7-Н0, КОИ7-Н1, смешанной таблице КОИ7), подстановку значений функциональных 
+	клавиш, выполнение функции <i>&quot;ПОВТОР&quot;</i>, экранное редактирование 
+	вводимой строки, повторный ввод последней вводившейся строки, осуществляет акустическую 
+	обратную связь при нажатии клавиш и т.д.</p>
+	<h2 id="_Toc375906535">2.6. Драйвер телевизионного приёмника</h2>
+	<p>Драйвер телевизионного приёмника позволяет выводить на экран алфавитно-цифровую 
+	и графическую информацию, выполняет служебные функции типа стирания экрана, 
+	сдвига экрана, отображения служебной строки, содержащей информацию об установленном 
+	режиме работы ЭВМ и о кодировке функциональных клавиш, управляет переключением 
+	буферов экрана и т.д. Драйвер позволяет использовать разные форматы экрана. 
+	Возможны <span class="nmbr">3</span> режима работы:</p>
+	<ul>
+		<li><span class="nmbr">512</span> точек в строке, <span class="nmbr">64</span> 
+		символа в строке;</li>
+		<li><span class="nmbr">256</span> точек и строке, <span class="nmbr">32</span> 
+		символа в строке;</li>
+		<li><span class="nmbr">128</span> точек в строке, <span class="nmbr">16</span> 
+		символов в строке</li>
+	</ul>
+	<p>Драйвер позволяет использовать несколько кодовых таблиц, таблицы КОИ-8, КОИ7-Н0, 
+	КОИ7-H1, КОИ7-Н2, пользовательскую таблицу символов. Кроме обычных, алфавитно-цифровых 
+	символов присутствуют символы псевдографики. Знакогенератор псевдографики также 
+	может быть программно заменён на пользовательский, причём независимо от алфавитно-цифрового.</p>
+	<h2 id="_Toc375906536">2.7. Драйвер кассетного магнитофона</h2>
+	<p>Драйвер бытового кассетного магнитофона позволяет производить запись и считывание 
+	файлов с бытового кассетного магнитофона, производить поиск файла на ленте.</p>
+	<h2 id="_Toc375906537">2.8. Драйвер накопителя на ГМД</h2>
+	<p>Драйвер НГМД предназначен для чтения и записи информации на НГМД и используется 
+	при работе операционной системы.</p>
+	<h1 id="_Toc375906538">3. КОМАНДЫ <span class="cmds">EMT</span> ДРАЙВЕР-МОНИТОРНОЙ 
+	СИСТЕМЫ</h1>
+	<p>В этой главе описаны <span class="cmds">EMT</span> запросы драйвер-мониторной 
+	системы ЭВМ. Для каждого <span class="cmds">EMT</span> запроса приводится формат 
+	макрокоманды специальной макробиблиотеки и приводится информация для &quot;ручного&quot; 
+	программирования запросом без использования средств макроассемблера операционной 
+	системы.</p>
+	<p>Драйвер-мониторная система ЭВМ обеспечивает декодировку и выполнение следующих 
+	запросов:</p>
+	<table class="border">
+		<colgroup>
+			<col width="80"><col width="80"><col width="*">
+		</colgroup>
+		<tr>
+			<td><a href="#_Toc375906540"><span class="pscm">.BEXIT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">0</span></td>
+			<td>выход из пользовательской программы в монитор;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906541"><span class="pscm">.BKBINI</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">4</span></td>
+			<td>инициализация драйвера клавиатуры;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906553"><span class="pscm">.BTTYIN</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">6</span></td>
+			<td>чтение кода символа с клавиатуры с ожиданием;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906554"><span class="pscm">.BGTLIN</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">10</span></td>
+			<td>чтение строки с клавиатуры с выполнением экранного редактирования;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906555"><span class="pscm">.BFUNCT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">12</span></td>
+			<td>установка значений функциональных клавиш клавиатуры;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906541"><span class="pscm">.BINIT</span></a></td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">14</span></td>
+			<td>инициализация драйвер-мониторной системы;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906561"><span class="pscm">.BTTYOU</span></a></td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">16</span></td>
+			<td>вывод символа;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906562"><span class="pscm">.BPRINT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">20</span></td>
+			<td>вывод строки символов;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906563"><span class="pscm">.BSSOUT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">22</span></td>
+			<td>вывод символа в служебную строку;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906564"><span class="pscm">.BLOCAT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">24</span></td>
+			<td>установка координат А-Ц курсора;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906565"><span class="pscm">.BPOS</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">26</span></td>
+			<td>чтение координат А-Ц курсора;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906566"><span class="pscm">.BPOINT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">30</span></td>
+			<td>вывод графической точки;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906568"><span class="pscm">.BVECT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">32</span></td>
+			<td>вывод графического вектора;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906570"><span class="pscm">.BTVGET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">34</span></td>
+			<td>чтение состояния драйвера телевизионного приёмника;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906575"><span class="pscm">.BMTB10</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">36</span></td>
+			<td>вызов драйвера магнитофона;</td>
+		</tr>
+		<tr>
+			<td colspan="3"><span class="cmds">EMT</span> <span class="nmbr">10</span> 
+			- <span class="cmds">EMT</span> <span class="nmbr">50</span> - зарезервированы 
+			для совместимости с БК0010;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906545"><span class="pscm">.BSETPG</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">52</span></td>
+			<td>подключение страницы ОЗУ /ПЗУ;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906546"><span class="pscm">.BJSR</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">54</span></td>
+			<td>вызов подпрограммы из скрытой страницы ОЗУ/ПЗУ;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906547"><span class="pscm">.BJMP</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">56</span></td>
+			<td>переход на подпрограмму в скрытую страницу ОЗУ /ПЗУ без возврата;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906548"><span class="pscm">.BPEEK</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">60</span></td>
+			<td>чтение из скрытой страницы ОЗУ/ПЗУ;</td>
+		</tr>
+		<tr>
+			<td><a href="#_TocRef326"><span class="pscm">.BPOKB</span> </a></td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">62</span></td>
+			<td>запись байта в скрытую страницу ОЗУ;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906569"><span class="pscm">.BTVSET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">64</span></td>
+			<td>установка параметров драйвера телевизионного приёмника;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906556"><span class="pscm">.BEDIT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">66</span></td>
+			<td>экранное редактирование существующей строки символов;</td>
+		</tr>
+		<tr>
+			<td><span class="pscm">.BDISK</span>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">70</span></td>
+			<td>Floppy-Disk Request;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906550"><span class="pscm">.BTEST</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">72</span></td>
+			<td>чтение статуса страницы ОЗУ/ПЗУ;</td>
+		</tr>
+		<tr>
+			<td><a href="#_TocRref349"><span class="pscm">.BBUFSET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">74</span></td>
+			<td>переключение буферов экрана;</td>
+		</tr>
+		<tr>
+			<td><span class="pscm">.BSCOLOR</span>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">76</span></td>
+			<td>Set Color Map;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906557"><span class="pscm">.BKSET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">100</span></td>
+			<td>установка режима работы клавиатуры;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906559"><span class="pscm">.BINKEY</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">102</span></td>
+			<td>ввод символа с клавиатуры без ожидания;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906567"><span class="pscm">.BGETPNT</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">104</span></td>
+			<td>чтение цвета точки экрана;</td>
+		</tr>
+		<tr>
+			<td><span class="pscm">.BGCOLOR</span>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">106</span></td>
+			<td>Exam Color Map;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906571"><span class="pscm">.BSCROLL</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">110</span></td>
+			<td>построчный сдвиг экрана;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906543"><span class="pscm">.BTRPSET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">112</span></td>
+			<td>перехват вектора <span class="nmbr">4</span>;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906542"><span class="pscm">.BEMTSET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">114</span></td>
+			<td>перехват ошибки &quot;Недопустимое <span class="cmds">EMT</span>&quot;;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906558"><span class="pscm">.BKGET</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">116</span></td>
+			<td>чтение состояния драйвера клавиатуры;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906549"><span class="pscm">.BPOKE</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">120</span></td>
+			<td>запись слова в скрытую страницу ОЗУ;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906573"><span class="pscm">.BSOUND</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">124</span></td>
+			<td>выдача звука;</td>
+		</tr>
+		<tr>
+			<td><a href="#_Toc375906572"><span class="pscm">.BCIRCL</span> </a>
+			</td>
+			<td><span class="cmds">EMT</span> <span class="nmbr">130</span></td>
+			<td>рисование дуг и окружностей.</td>
+		</tr>
+	</table>
+	<h2 id="_Toc375906539">3.1. Общесистемные запросы</h2>
+	<h3 id="_Toc375906540">3.1.1. Завершение программы пользователя
+	<span class="pscm">.BEXIT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BEXIT</span>
+			<span class="labl">ARG</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ARG</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">0</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Макрокоманда осуществляет выход из программы пользователя в драйвер-мониторную 
+	систему. При нулевом значении аргумента производится полная инициализация системы, 
+	при ненулевом - инициализируется только указатель стека и драйвер клавиатуры.</p>
+	<h3 id="_Toc375906541">3.1.2. Инициализация драйвер-мониторной системы
+	<span class="pscm">.BINIT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BINIT</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">14</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>производится инициализация драйверов драйвер-мониторной системы.</p>
+	<p class="centr"><b>Драйвер клавиатуры</b></p>
+	<ul>
+		<li>восстанавливаются вектора прерывания клавиатуры, сбрасывается установленная 
+		пользователем подпрограмма завершения по нажатию клавиши на клавиатуре;</li>
+		<li>разрешается &quot;ЩЕЛЧОК&quot; при нажатии клавиши;</li>
+		<li>сбрасываются установленные пользователем значения функциональных клавиш;</li>
+		<li>сбрасывается содержимое буфера ввода с клавиатуры;</li>
+		<li>драйвер клавиатуры переключается в режим ввода в коде КОИ-8;</li>
+	</ul>
+	<p class="centr"><b>Драйвер телевизионного приёмника</b></p>
+	<ul>
+		<li>устанавливается режим <span class="nmbr">32</span> символа в строке, 
+		белые символы на чёрном фоне;</li>
+		<li>очищаются оба буфера экрана;</li>
+		<li>выключается режим двойной ширины символов;</li>
+		<li>включается отображение служебной строки на экране;</li>
+		<li>включается отображение буфера экрана <span class="nmbr">0</span>, вывод 
+		в буфер экрана <span class="nmbr">0</span>;</li>
+		<li>выключаются режимы подчёркивания и инверсии символов;</li>
+		<li>производится переключение на стандартные знакогенераторы алфавитно-цифровых 
+		и графических символов;</li>
+		<li>устанавливается режим вывода символов в коде КОИ-8;</li>
+		<li>разрешается автоматический перевод строки;</li>
+		<li>включается отображение курсора;</li>
+		<li>включается режим нормальной обработки управляющих символов, запрещается 
+		индикация управляющих символов.</li>
+	</ul>
+	<p class="centr"><b>Драйвер магнитофона</b></p>
+	<ul>
+		<li>выключается мотор магнитофона</li>
+	</ul>
+	<h3 id="_Toc375906542">3.1.3. Перехват ошибки недопустимое &quot;<span class="cmds">EMT</span>&quot;
+	<span class="pscm">.BEMTSET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BEMTSET</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">114</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Вызывает передачу подпрограмме пользователя управления по недопустимой или 
+	резервной команде <span class="cmds">EMT</span>.</p>
+	<p>Вызов с нулевым значением аргумента <span class="labl">ADDRESS</span> отменяет 
+	действие команды <span class="pscm">.BEMTSET</span>. По выдаче недопустимого
+	<span class="cmds">EMT</span> происходит передача управления подпрограмме пользователя 
+	и отмена дальнейшего перехвата.</p>
+	<p>При переходе в подпрограмму пользователя слово состояния процессора не изменяется. 
+	В стеке содержится адрес возврата в основную программу на команду, следующую 
+	за командой <span class="cmds">EMT</span> (для завершения по команде
+	<span class="cmds">RETURN</span>).</p>
+	<h3 id="_Toc375906543">3.1.4. Перехват вектора <span class="nmbr">4</span>
+	<span class="pscm">.BTRPSET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BTRPSET</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">112</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Вызывает передачу программе пользователя управления по прерыванию по вектору
+	<span class="nmbr">4</span>. Программа пользователя должна завершаться командой
+	<span class="cmds">RTI</span>.</p>
+	<p>Вызов с нулевым значением аргумента <span class="labl">ADDRESS</span> и возникновение 
+	прерывания по вектору <span class="nmbr">4</span> отменяет действие команды
+	<span class="pscm">.BTRPSET</span>.</p>
+	<h2 id="_Toc375906544">3.2. Запросы драйвера ОЗУ/ПЗУ</h2>
+	<h3 id="_Toc375906545">3.2.1. Подключение страницы ОЗУ/ПЗУ
+	<span class="pscm">.BSETPG</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BSETPG</span>
+			<span class="labl">PAGE</span>,<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; #&lt;<span class="labl">ADDRESS</span>*<span class="nmbr">400</span>&gt;+<span class="labl">PAGE</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">52</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p class="contn">где <span class="labl">PAGE</span> - номер страницы (<span class="nmbr">0</span>..<span class="nmbr">13</span>),
+	<span class="labl">ADDRESS</span> - адрес подключения (<span class="nmbr">0</span>...<span class="nmbr">377</span>)</p>
+	<p>В младший байт <span class="regn">R0</span> помещается номер подключаемой 
+	страницы, номера страниц <span class="nmbr">0</span>-<span class="nmbr">7</span> 
+	относятся к ОЗУ, страницы <span class="nmbr">10</span>-<span class="nmbr">13</span> 
+	(восьмеричное) относятся к ПЗУ.</p>
+	<p>Код адреса подключения страницы помещается в старший байт
+	<span class="regn">R0</span>. Нулевое значение означает область адресов
+	<span class="nmbr">40000</span>-<span class="nmbr">100000</span>, любое ненулевое 
+	значение - область <span class="nmbr">100000</span>-<span class="nmbr">140000</span>.</p>
+	<p>Возможно нормальное завершение запроса и завершение запроса с ошибкой. В 
+	случае нормального завершения бит &quot;<span class="symb">C</span>&quot; в 
+	слове состояния процессора сброшен, по ошибке - установлен в
+	<span class="nmbr">1</span>. в этом случае в байт с адресом
+	<span class="nmbr">52</span> (восьмеричное) помещается код ошибки:</p>
+	<table>
+		<tr>
+			<td class="lfcell"><span class="nmbr">0</span> -</td>
+			<td>страница отсутствует;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">1</span> -</td>
+			<td>страница не может быть подключена по заданному адресу (попытка подключить 
+			страницу ПЗУ по адресу <span class="nmbr">40000</span>-<span class="nmbr">100000</span>);</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span> -</td>
+			<td>страница используется драйвер-мониторной системой для своих внутренних 
+			целей и запрещена для использования.</td>
+		</tr>
+	</table>
+	<h3 id="_Toc375906546">3.2.2. Вызов подпрограммы из скрытой страницы
+	<span class="pscm">.BJSR</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BJSR</span>
+			<span class="labl">PAGE</span>,<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">PAGE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">54</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p class="contn">где <span class="labl">PAGE</span> - номер страницы (<span class="nmbr">0</span>..<span class="nmbr">13</span>),
+	<span class="labl">ADDRESS</span> - адрес обращения (<span class="nmbr">40000</span>-<span class="nmbr">137776</span>)</p>
+	<p>Заданная страница подключается по адресу, определяемому аргументом
+	<span class="labl">ADDRESS</span> (если он в диапазоне <span class="nmbr">40000</span>-<span class="nmbr">77777</span>, 
+	то с адреса <span class="nmbr">40000</span>,в диапазоне <span class="nmbr">100000</span>-<span class="nmbr">140000</span> 
+	с адреса <span class="nmbr">100000</span>) и выполняется вызов подпрограммы 
+	пользователя командой</p>
+	<pre><span class="cmds">JSR</span> <span class="regn">PC</span>,<span class="labl">ADDRESS</span></pre>
+	<p>Регистры общего назначения и слово состояния процессора при выполнении вызова 
+	не изменяются. Передавать параметры вызываемой подпрограмме в стоке не рекомендуется, 
+	так как, в отличие от обычного вызова по &quot;<span class="cmds">JSR</span>
+	<span class="regn">PC</span>&quot;, при таком вызове в стек помещается дополнительная 
+	информация. Не рекомендуется также использовать конструкции вида:</p>
+	<pre><span class="pscm">.BJSR</span>&nbsp;&nbsp;&nbsp; #<span class="labl">XXX</span>,<span class="labl">ADDRESS</span>
+<span class="pscm">.WORD</span>&nbsp;&nbsp;&nbsp; <span class="labl">ARG1</span>
+. . . . . . . . . . .
+<span class="pscm">.WORD</span>&nbsp;&nbsp;&nbsp; <span class="labl">ARGN</span></pre>
+	<p class="contn">и подпрограммы, имеющие несколько выходов, поскольку в вершине 
+	стека на входе в подпрограмму будет находиться адрес возврата в драйвер-мониторную 
+	систему.</p>
+	<p>При выходе из подпрограммы регистры общего назначения и слово состояния программы 
+	сохраняются.</p>
+	<p>При попытке обращения к подпрограмме в несуществующей странице или странице 
+	ОЗУ, используемой драйвер-мониторной системой, обращение к подпрограмме выполняться 
+	не будет, и выполнится выход в монитор с соответствующей диагностикой.</p>
+	<p>После выхода из подпрограммы восстанавливается старое подключение обеих страниц 
+	ОЗУ/ПЗУ, даже если подпрограмма переключала одну или обе страницы. Допускается 
+	вложенное использование команды &quot;<span class="pscm">.BJSR</span>&quot;.</p>
+	<h3 id="_Toc375906547">3.2.3. Переход в скрытую страницу без возврата
+	<span class="pscm">.BJMP</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BJMP</span>
+			<span class="labl">PAGE</span>,<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">PAGE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">56</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Макрокоманда выполняется аналогично макрокоманде <span class="pscm">.BJSR</span>, 
+	дополнительная информация в стек не помещается, адрес возврата не сохраняется. 
+	Если страница не существует или занята системой, параметры вызова из стека удаляются, 
+	и происходит выход в монитор с соответствующей диагностикой.</p>
+	<p><span class="attnt">ПРИМЕЧАНИЕ.</span> В диагностических сообщениях, выдаваемых 
+	по <span class="pscm">.BJMP</span>, <span class="pscm">.BJSR</span> и прерыванию 
+	по <span class="nmbr">4</span> вектору выдаётся содержимое
+	<span class="regn">PC</span> после выполнения запроса, т.е. адрес следующей 
+	за <span class="cmds">EMT</span> или недопустимой командой ячейки.</p>
+	<h3 id="_Toc375906548">3.2.4. Чтение из скрытой страницы ОЗУ/ПЗУ
+	<span class="pscm">.BPEEK</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BPEEK</span>
+			<span class="labl">PAGE</span>,<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">PAGE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">60</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Макрокоманда читает слово по указанному адресу в указанной странице и помещает 
+	его в <span class="regn">R0</span>.</p>
+	<p>При попытке прочесть слово из несуществующей страницы <span class="regn">
+	R0</span> не изменяется, а в бит &quot;<span class="symb">C</span>&quot; слова 
+	состояния процессора помещается &quot;<span class="nmbr">1</span>&quot;.</p>
+	<p>Допускается читать слова из страницы, используемой системой.</p>
+	<p>В этой и следующих макрокомандах аргумент <span class="labl">ADDRESS</span> 
+	задаёт адрес читаемой или записываемой ячейки. Так как драйвер-мониторная система 
+	сама занимается подключением соответствующей страницы, старшие
+	<span class="nmbr">2</span> бита адреса не имеют значения.</p>
+	<h3 id="_Toc375906549">3.2.5. Запись слова в скрытую страницу ОЗУ
+	<span class="pscm">.BPOKE</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BPOKE</span>
+			<span class="labl">PAGE</span>,<span class="labl">ADDRESS</span>,<span class="labl">DATA</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">PAGE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">DATA</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">120</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Макрокоманда позволяет записать данные из <span class="regn">R0</span> в 
+	указанное слово заданной страницы. При попытке записи и несуществующую страницу 
+	устанавливается бит &quot;<span class="symb">C</span>&quot;.</p>
+	<h3 id="_TocRef326">3.2.6. Запись байта в скрытую страницу ОЗУ
+	<span class="pscm">.BPOKB</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BPOKB</span>
+			<span class="labl">PAGE</span>,<span class="labl">ADDRESS</span>,<span class="labl">DATA</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">PAGE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOVB</span>&nbsp; <span class="labl">DATA</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">62</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Макрокоманда позволяет записать данные из младшего байта
+	<span class="regn">R0</span> в указанный байт заданной страницы. При попытке 
+	записи и несуществующую страницу устанавливается бит &quot;<span class="symb">C</span>&quot;.</p>
+	<h3 id="_Toc375906550">3.2.7. Чтение статуса страницы ОЗУ/ПЗУ
+	<span class="pscm">.BTEST</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BTEST</span>
+			<span class="labl">PAGE</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">PAGE</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">72</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Позволяет проверить состояние страницы ОЗУ/ПЗУ. Возвращает в
+	<span class="regn">R0</span> код:</p>
+	<table>
+		<tr>
+			<td class="lfcell">Бит <span class="nmbr">0</span> -</td>
+			<td>страница подключена по адресу <span class="nmbr">40000</span>;</td>
+		</tr>
+		<tr>
+			<td>Бит <span class="nmbr">1</span> -</td>
+			<td>страница подключена по адресу <span class="nmbr">100000</span>;</td>
+		</tr>
+		<tr>
+			<td>Бит <span class="nmbr">2</span> -</td>
+			<td>страница используется драйвер-мониторной системой или страница ПЗУ 
+			не подключена</td>
+		</tr>
+	</table>
+	<h2 id="_Toc375906551">3.3. Запросы драйвера клавиатуры</h2>
+	<h3 id="_Toc375906552">3.3.1. Инициализация драйвера клавиатуры
+	<span class="pscm">.BKBINI</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BKBINI</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">4</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>По этой макрокоманде выполняется инициализация драйвера клавиатуры, описанная 
+	в макрокоманде <a href="#_Toc375906541">инициализации драйвер-мониторной системы</a>.</p>
+	<h3 id="_Toc375906553">3.3.2. Чтение символа с ожиданием <span class="pscm">
+	.BTTYIN</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BTTYIN</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">6</span>
+<span class="cmds">MOVB</span>&nbsp; <span class="regn">R0</span>,<span class="labl">ADDRESS</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Производится ввод символа с клавиатуры. Код символа передаётся в
+	<span class="regn">R0</span>.</p>
+	<p>Кодировка символов ЭВМ показана в <a href="#_Toc375906583">приложении
+	<span class="nmbr">1</span></a>.</p>
+	<h3 id="_Toc375906554">3.3.3. Чтение строки с редактированием
+	<span class="pscm">.BGTLIN</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BGTLIN</span>
+			<span class="labl">ADDRESS</span>,<span class="labl">LENGTH</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">LENGTH</span>,-(<span class="regn">SP</span>) ; или &nbsp;&nbsp;&nbsp;&nbsp; <span class="cmds">CLR</span> -(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">10</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p class="contn">где <span class="labl">ADDRESS</span> - адрес буфера, куда 
+	необходимо поместить введённую строку символов, необязательный параметр
+	<span class="labl">LENGTH</span> - максимальная длина вводимой строки.</p>
+	<p>По этой макрокоманде драйвер-мониторная система принимает с клавиатуры строку 
+	символов, позволяя производить экранное редактирование. Ввод строки заканчивается 
+	при нажатии клавиши <i>&quot;ВВОД&quot;</i>, причём курсор может находиться 
+	в произвольном месте строки. Независимо от установленного режима при выполнении 
+	этой макрокоманды включается отображение курсора. По окончании выполнения макрокоманды 
+	курсор гасится, если его индикация не разрешена.</p>
+	<p>Экранное редактирование строки позволяет двигаться по уже набранной строке 
+	клавишами со стрелками, производить раздвижку и сдвижку символов, стирание и 
+	замену отдельных символов, стирание от курсора до конца строки. Система позволяет 
+	вводить в строку управляющие символы. Для этого необходимо нажать клавишу <i>&quot;БЛОК 
+	РЕД&quot;</i> клавиатуры, клавишу управляющего символа и затем снять режим
+	<i>&quot;БЛОК РЕД&quot;</i> повторным нажатием соответствующей клавиши. Код 
+	символа <i>&quot;БЛОК РЕД&quot;</i> в программу с клавиатуры не передаётся.</p>
+	<p>После окончания редактирования строки (по нажатию клавиши <i>&quot;ВВОД&quot;</i>) 
+	строка записывается в буфер пользователя. Код клавиши <i>&quot;ВВОД&quot;</i> 
+	в строку не записывается, в конце строки в буфере записывается нулевой байт.</p>
+	<p><span class="attnt">ПРИМЕЧАНИЕ.</span> Управляющие символы и вызываемые ими 
+	действия описаны в <a href="#_Toc375906584">приложении <span class="nmbr">2</span></a>.</p>
+	<h3 id="_Toc375906555">3.3.4. Установка функциональных клавиш
+	<span class="pscm">.BFUNCT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BFUNCT</span>
+			<span class="labl">KEY</span>,<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">KEY</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">12</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Позволяет установить значения функциональных клавиш клавиатуры. Аргумент
+	<span class="labl">KEY</span> (<span class="nmbr">1</span>..<span class="nmbr">10</span>) 
+	задаёт номер программируемой клавиши, аргумент <span class="labl">ADDRESS</span> 
+	- адрес текстовой строки, оканчивающейся нулевым байтом и содержащей текст, 
+	который необходимо вводить по нажатию на клавиатуре соответствующей клавиши. 
+	Нулевой аргумент <span class="labl">ADDRESS</span> означает, что нажатие соответствующей 
+	клавиши игнорируется.</p>
+	<p>Нулевое значение аргумента <span class="labl">KEY</span> вызывает сброс всех 
+	установленных значений.</p>
+	<p>Текстовые строки переписываются в системную область, т.е. после выдачи макрокоманды 
+	соответствующие области ОЗУ можно использовать в других целях.</p>
+	<p>Если разрешена индикация служебной строки, в ней будут отображаться начальные 
+	буквы установленных значений функциональных клавиш.</p>
+	<p>Служебные символы будут отображаться в режиме индикации спецсимволов.</p>
+	<h3 id="_Toc375906556">3.3.5. Экранное редактирование существующей строки
+	<span class="pscm">.BEDIT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BEDIT</span>
+			<span class="labl">ADDRESS</span>,<span class="labl">LENGTH</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">LENGTH</span>,-(<span class="regn">SP</span>) ; или &nbsp;&nbsp;&nbsp;&nbsp; <span class="cmds">CLR</span> -(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">66</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p class="contn">где <span class="labl">ADDRESS</span> - адрес буфера, где находится 
+	редактируемая строка, необязательный параметр <span class="labl">LENGTH</span> 
+	- максимальная длина вводимой строки.</p>
+	<p>Эта макрокоманда выводит строку символов (заканчивающуюся нулевым байтом), 
+	расположенную с адреса <span class="labl">ADDRESS</span>, на экран. Устанавливает 
+	курсор в позицию, следующую за последним выведенным символом, и позволяет выполнить 
+	экранное редактирование строки, аналогичное макрокоманде
+	<a href="#_Toc375906554"><span class="pscm">.BGTLIN</span></a>. Отредактированная 
+	строка помещается на место исходной.</p>
+	<h3 id="_Toc375906557">3.3.6. Установка режима работы клавиатуры
+	<span class="pscm">.BKSET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BKSET</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">100</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Эта макрокоманда позволяет установить режим работы клавиатуры. Аргумент
+	<span class="labl">ADDRESS</span> задаёт адрес таблицы аргументов. Первое слово 
+	таблицы содержит код режима работы драйвера.</p>
+	<table class="border">
+		<colgroup>
+			<col width="50"><col width="50"><col width="*">
+		</colgroup>
+		<tr>
+			<td>Разряд</td>
+			<td>Маска</td>
+			<td>Значение</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span> ==&gt; КОИ8, <span class="nmbr">1</span> 
+			==&gt; КОИ7</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="nmbr">4</span></td>
+			<td>В КОИ7: <span class="nmbr">1</span> ==&gt; смешанная таблица КОИ7-Н0 
+			и КОИ7-Н1</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">7</span></td>
+			<td><span class="nmbr">200</span></td>
+			<td><span class="nmbr">1</span> ==&gt; &quot;ЩЕЛЧОК&quot; клавиатуры 
+			запрещён</td>
+		</tr>
+	</table>
+	<p>Второе слово задаёт адрес подпрограммы завершения, которая будет автоматически 
+	вызываться при нажатии клавиши. Если аргумент нулевой, вызов подпрограммы завершения 
+	производиться не будет. Третье и четвёртое слова используются только при ненулевом 
+	значении <span class="nmbr">2</span>-го слова и содержат значения, записываемые 
+	в системный регистр и указатель стека при вызове подпрограммы завершения. При 
+	вызове подпрограммы завершения в <span class="regn">R0</span> передаётся код 
+	нажатой клавиши. Выход из подпрограммы выполняется командой &quot;<span class="cmds">RTS</span>
+	<span class="regn">PC</span>&quot;. В подпрограмме завершения можно использовать 
+	все регистры общего назначения.</p>
+	<p>Если при выходе из подпрограммы завершения бит &quot;<span class="symb">C</span>&quot; 
+	установлен в &quot;<span class="nmbr">1</span>&quot;, драйвер считает, что символ 
+	с клавиатуры не обработан и передаст его программе пользователя по
+	<a href="#_Toc375906553"><span class="pscm">.BTTYIN</span></a>.</p>
+	<p>Если при выходе из подпрограммы завершения бит &quot;<span class="symb">C</span>&quot; 
+	установлен в &quot;<span class="nmbr">0</span>&quot;, символ считается обработанным 
+	и в буфер не записывается.</p>
+	<h3 id="_Toc375906558">3.3.7. Чтение режима работы клавиатуры
+	<span class="pscm">.BKGET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BKGET</span>
+			<span class="labl">ADDR</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDR</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">116</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Записывает в область программы пользователя режим работы клавиатуры.</p>
+	<p>Формат таблицы описан в макро <a href="#_Toc375906557">
+	<span class="pscm">.BKSET</span></a>.</p>
+	<h3 id="_Toc375906559">3.3.8. Ввод символа с клавиатуры без ожидания
+	<span class="pscm">.BINKEY</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BINKEY</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">102</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Ввод символа с клавиатуры без ожидания. Если в буфере символа нет, возвращается
+	<span class="symb">C</span>=<span class="nmbr">1</span>, иначе в
+	<span class="regn">R0</span> записывается код введённого символа, бит &quot;<span class="symb">C</span>&quot; 
+	обнуляется.</p>
+	<h2 id="_Toc375906560">3.4. Запросы драйвера телевизионного приёмника</h2>
+	<h3 id="_Toc375906561">3.4.1. Вывод символа на экран <span class="pscm">.BTTYOU</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BTTYOU</span>
+			<span class="labl">CODE</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOVB</span>&nbsp; <span class="labl">CODE</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">16</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>По этой макрокоманде производится вывод символа на экран. Обычные алфавитно-цифровые 
+	символы выводятся в позиции курсора, управляющие символы (перемещение курсора, 
+	перевод строки, возврат каретки, стирание строки, табуляция и т. п.) описаны 
+	в <a href="#_Toc375906583">приложении <span class="nmbr">1</span></a>.</p>
+	<p>См. так же макрокоманду <a href="#_Toc375906569"><span class="pscm">.BTVSET</span></a>.</p>
+	<h3 id="_Toc375906562">3.4.2. Вывод строки символов <span class="pscm">.BPRINT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BPRINT</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">20</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Но этой макрокоманде производится вывод на экран строки символов. Символьная 
+	строка в памяти оканчивается байтом, содержащим <span class="nmbr">0</span> 
+	или <span class="nmbr">200</span>. Если строка заканчивается кодом
+	<span class="nmbr">200</span>, курсор после вывода строки помещается в позицию 
+	за последним выведенным символом. Если строка кончается байтом с кодом
+	<span class="nmbr">0</span>, курсор переводится в начало следующей строки.</p>
+	<h3 id="_Toc375906563">3.4.3. Вывод символа в служебную область экрана
+	<span class="pscm">.BSSOUT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BSSOUT</span>
+			<span class="labl">CODE</span>,<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">CODE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,-(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">22</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Выводит символ с кодом <span class="labl">CODE</span> в служебную область 
+	экрана в позицию, задаваемую аргументом <span class="labl">ADDRESS</span>. Управляющие 
+	символы выводятся в режиме <i>&quot;БЛОК РЕД&quot;</i>.</p>
+	<p>В старшем байте аргумента <span class="labl">ADDRESS</span> указывается номер 
+	строки служебной области экрана, в младшем байте номер позиции в строке. При 
+	превышении допустимых значений координат (отсчитываются с нуля) символ не выводится,
+	<span class="cmds">EMT</span> возвращает &quot;<span class="symb">C</span>&quot; 
+	= <span class="nmbr">1</span>.</p>
+	<h3 id="_Toc375906564">3.4.4. Установка координат алфавитно-цифрового курсора
+	<span class="pscm">.BLOCAT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BLOCAT</span>
+			<span class="labl">LINE</span>,<span class="labl">POSITION</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; #&lt;<span class="labl">LINE</span>*<span class="nmbr">400</span>&gt;+<span class="labl">POSITION</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">24</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Устанавливает курсор в заданную позицию. Если номер позиции в строке или 
+	номер строки больше допустимых, соответствующая координата курсора не изменяется.</p>
+	<h3 id="_Toc375906565">3.4.5. Чтение координат алфавитно-цифрового курсора
+	<span class="pscm">.BPOS</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BPOS</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">26</span>
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="regn">R0</span>,<span class="labl">ADDRESS</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Помещает в <span class="regn">R0</span> (и в ячейку с адресом
+	<span class="labl">ADDRESS</span>) текущие координаты алфавитно-цифрового курсора.</p>
+	<h3 id="_Toc375906566">3.4.6. Вывод графической точки <span class="pscm">.BPOINT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BPOINT</span>
+			<span class="labl">BLOCK</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">BLOCK</span>,<span class="regn">R0
+</span><span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">30</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Выводит на экран точку заданного цвета.</p>
+	<p>Аргумент <span class="labl">BLOCK</span> задаёт адрес блока параметров.</p>
+	<p>Блок параметров имеет следующий формат:</p>
+	<table>
+		<tr>
+			<td width="80">Слово <span class="nmbr">1</span> -</td>
+			<td>старший байт не используется. Младший байт содержит цвет точки. 
+			Положительное значение задаёт код цвета (используются только младшие 
+			биты). Отрицательное значение (<span class="nmbr">200</span>-<span class="nmbr">377</span>) 
+			означает текущий цвет.</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">2</span> -</td>
+			<td>содержит координату <i>X</i>. Значение <span class="nmbr">0</span> 
+			означает левую точку строки, значение <span class="nmbr">511</span>. 
+			означает крайнюю правую точку строки.
+			<p class="contn"><span class="attnt">ПРИМЕЧАНИЕ.</span> Аргумент <i>
+			X</i> принимает значения <span class="nmbr">0</span>..<span class="nmbr">511</span>. 
+			независимо от установленного режима экрана.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">3</span> -</td>
+			<td>содержит координату <i>Y</i> точки. Значение <span class="nmbr">
+			0</span> означает верхнюю строку экрана, значение <span class="nmbr">
+			255</span>. - нижнюю. Точки с координатой <i>Y</i> больше
+			<span class="nmbr">215</span>. не отображаются, если установлен режим 
+			отображения служебной строки.</td>
+		</tr>
+	</table>
+	<p>Если координаты выходят за допустимый диапазон, точки на экране не изменяются.</p>
+	<h3 id="_Toc375906567">3.4.7. Чтение цвета точки экрана <span class="pscm">.BGETPNT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BGETPNT</span>
+			<span class="labl">BLOCK</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">BLOCK</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">104</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Записывает в <span class="regn">R0</span> цвет точки экрана. Аргумент
+	<span class="labl">BLOCK</span> определяет адрес блока аргументов. Описание 
+	блока аргументов см. в предыдущей макрокоманде. Если координаты превышают допустимые 
+	пределы, устанавливается бит &quot;<span class="symb">C</span>&quot;.</p>
+	<p>Первое слово блока аргументов не используется.</p>
+	<h3 id="_Toc375906568">3.4.8. Вывод графического вектора <span class="pscm">
+	.BVECT</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BVECT</span>
+			<span class="labl">BLOCK</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">BLOCK</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">32</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Выводит на экран отрезок прямой заданного цвета. Аргумент
+	<span class="labl">BLOCK</span> задаёт адрес блока параметров вызова.</p>
+	<table>
+		<tr>
+			<td class="lfcell">Слово <span class="nmbr">1</span> -</td>
+			<td>младший байт задаёт цвет рисования отрезка (задаётся аналогично 
+			макрокоманде <a href="#_Toc375906566"><span class="pscm">.BPOINT</span></a>)</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">2</span> -</td>
+			<td>координата <i>X</i> начала вектора</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">3</span> -</td>
+			<td>координата <i>Y</i> начала вектора</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">4</span> -</td>
+			<td>координата <i>X</i> конца вектора</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">5</span> -</td>
+			<td>координата <i>Y</i> конца вектора</td>
+		</tr>
+	</table>
+	<p>Если координаты выходят за границы экрана, отображается только видимая часть 
+	отрезка.</p>
+	<h3 id="_TocRref349">3.4.9. Переключение буферов экрана <span class="pscm">.BBUFSET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BBUFSET</span>
+			<span class="labl">VIDEO</span>,<span class="labl">WRITE</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; #&lt;<span class="labl">VIDEO</span>*<span class="nmbr">400</span>&gt;+<span class="labl">WRITE</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">74</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Задаёт номер экрана, на который производится вывод информации (аргумент
+	<span class="labl">WRITE</span>) и номер отображаемого экрана (<span class="labl">VIDEO</span>).</p>
+	<p>Если аргумент превышает <span class="nmbr">1</span>, соответствующий номер 
+	экрана не изменяется.</p>
+	<h3 id="_Toc375906569">3.4.10. Установка параметров драйвера телевизионного 
+	приёмника <span class="pscm">.BTVSET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BTVSET</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">64</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Устанавливает режим работы драйвера телевизионного монитора из буфера по 
+	адресу <span class="labl">ADDRESS</span>. Формат информации см. в
+	<a href="#_Toc375906585">приложении <span class="nmbr">3</span></a>.</p>
+	<h3 id="_Toc375906570">3.4.11. Чтение состояния драйвера телевизионного приёмника
+	<span class="pscm">.BTVGET</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BTVGET</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">34</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Передаёт в буфер, начинающийся с <span class="labl">ADDRESS</span>, информацию 
+	о состоянии драйвера телевизионного монитора. Формат информации см. в
+	<a href="#_Toc375906585">приложении <span class="nmbr">3</span></a>.</p>
+	<h3 id="_Toc375906571">3.4.12. Построчный сдвиг экрана <span class="pscm">.BSCROLL</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BSCROLL</span>
+			<span class="labl">NUMBER</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">NUMBER</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">110</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Вызывает перемещение изображения на экране на указанное число строк растра. 
+	Положительное число означает сдвиг изображения вверх, отрицательное - вниз.</p>
+	<h3 id="_Toc375906572">3.4.13. Рисование дуг и окружностей
+	<span class="pscm">.BCIRCL</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BCIRCL</span>
+			<span class="labl">ADDRESS</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">ADDRESS</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">130</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Вызывает рисование на экране дуги или окружности. Выводит на экран отрезок 
+	прямой заданного цвета. Аргумент <span class="labl">ADDRESS</span> задаёт адрес 
+	блока параметров вызова.</p>
+	<table>
+		<tr>
+			<td class="lfcell">Слово <span class="nmbr">1</span> -</td>
+			<td>младший байт задаёт цвет рисования отрезка (задаётся аналогично 
+			макрокоманде <a href="#_Toc375906566"><span class="pscm">.BPOINT</span></a>)</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">2</span> -</td>
+			<td>координата <i>X</i> центра дуги (окружности).</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">3</span> -</td>
+			<td>координата <i>Y</i> центра цуги (окружности).</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">4</span> -</td>
+			<td>радиус дуги (окружности).</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">5</span> -</td>
+			<td>начальный угол дуги.</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">6</span> -</td>
+			<td>конечный угол.</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">7</span> -</td>
+			<td>коэффициент сжатия по оси <i>X</i>.</td>
+		</tr>
+		<tr>
+			<td>Слово <span class="nmbr">8</span> -</td>
+			<td>коэффициент сжатия по оси <i>Y</i>.</td>
+		</tr>
+	</table>
+	<p>Начальный и конечный углы задаются следующим образом.</p>
+	<table class="border">
+		<tr>
+			<th>Аргумент</th>
+			<th>Значение угла (градусы)</th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">000000</span></td>
+			<td><span class="nmbr">0</span></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">077777</span></td>
+			<td><span class="nmbr">360</span></td>
+		</tr>
+	</table>
+	<p>Если задано отрицательное значение, используется его абсолютная величина, 
+	а соответствующая граничная точка дуги соединяется с центром дуги отрезком прямой.</p>
+	<p>Аргументы <i>&quot;КОЭФ. СЖАТИЯ&quot;</i> кодируются следующим образом:</p>
+	<p><span class="nmbr">0</span> - нет сжатия;</p>
+	<p><span class="nmbr">1</span>-<span class="nmbr">177777</span> - реальная координата 
+	= (ВЫЧИСЛЕННАЯ * КОЭФ.) /<span class="nmbr">32767</span></p>
+	<h3 id="_Toc375906573">3.4.14. Вывод звукового сигнала <span class="pscm">.BSOUND</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BSOUND</span>
+			<span class="labl">LENGTH</span>,<span class="labl">TONE</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">LENGTH</span>,-(<span class="regn">SP</span>)
+<span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">TONE</span>,-(<span class="regn">SP</span>)
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">124</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Вызывает выдачу звукового сигнала частоты <span class="labl">TONE</span> 
+	и длительности <span class="labl">LENGTH</span>.</p>
+	<h2 id="_Toc375906574">3.5. Запросы драйвера магнитофона</h2>
+	<h3 id="_Toc375906575">3.5.1. Вызов драйвера магнитофона формата БК0010
+	<span class="pscm">.BMTB10</span></h3>
+	<table class="mcmd border">
+		<tr>
+			<th>Формат вызова:</th>
+			<td class="colmacr"><span class="pscm">.BMTB10</span>
+			<span class="labl">AREA</span></td>
+		</tr>
+		<tr>
+			<th>&quot;РУЧНОЙ&quot; вызов:</th>
+			<td>
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; <span class="labl">AREA</span>,<span class="regn">R0</span>
+<span class="cmds">EMT</span>&nbsp;&nbsp; <span class="nmbr">36</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>По этой макрокоманде выполняется операция с магнитофоном, причём используется 
+	формат магнитной ленты, совместимый с БК0010. Параметр <span class="labl">AREA</span> 
+	- адрес области ОЗУ, через которую передаются параметры вызова.</p>
+	<p>Формат таблицы параметров вызова.</p>
+	<table class="border">
+		<tr>
+			<td colspan="2" width="110">&nbsp;</td>
+			<td>Смещение в байтах</td>
+		</tr>
+		<tr>
+			<td>XXXXX</td>
+			<td><span class="labl">CODE</span></td>
+			<td><span class="nmbr">0</span></td>
+		</tr>
+		<tr>
+			<td colspan="2">нач. адрес</td>
+			<td><span class="nmbr">2</span></td>
+		</tr>
+		<tr>
+			<td colspan="2">длина в байтах</td>
+			<td><span class="nmbr">4</span></td>
+		</tr>
+		<tr>
+			<td>СТР<span class="nmbr">1</span></td>
+			<td>СТР<span class="nmbr">0</span></td>
+			<td><span class="nmbr">6</span></td>
+		</tr>
+		<tr>
+			<td colspan="2" rowspan="2">имя файла<br>. . . . . .</td>
+			<td><span class="nmbr">10</span></td>
+		</tr>
+		<tr>
+			<td>(<span class="nmbr">16</span>. байтов)</td>
+		</tr>
+		<tr>
+			<td colspan="2">FILE ADDRESS</td>
+			<td><span class="nmbr">030</span></td>
+		</tr>
+		<tr>
+			<td colspan="2">FILE LENGTH</td>
+			<td><span class="nmbr">032</span></td>
+		</tr>
+		<tr>
+			<td colspan="2" rowspan="2">FILE NAME<br>. . . . . .</td>
+			<td><span class="nmbr">034</span></td>
+		</tr>
+		<tr>
+			<td>(<span class="nmbr">16</span>. байтов)</td>
+		</tr>
+	</table>
+	<p>Поле &quot;<span class="labl">CODE</span>&quot; (байт) заполняется пользователем 
+	и содержит код операции: </p>
+	<table class="border">
+		<tr>
+			<td width="80"><b>TAPEOF</b></td>
+			<td width="50">= <span class="nmbr">0</span> -</td>
+			<td>выключить мотор магнитофона</td>
+		</tr>
+		<tr>
+			<td><b>TAPEON</b></td>
+			<td>= <span class="nmbr">1</span> -</td>
+			<td>включить мотор магнитофона</td>
+		</tr>
+		<tr>
+			<td><b>WRITAPE</b></td>
+			<td>= <span class="nmbr">2</span> -</td>
+			<td>записать файл</td>
+		</tr>
+		<tr>
+			<td><b>REATAP</b></td>
+			<td>= <span class="nmbr">3</span> -</td>
+			<td>прочитать файл</td>
+		</tr>
+		<tr>
+			<td><b>FICTP</b></td>
+			<td>= <span class="nmbr">4</span> -</td>
+			<td>фиктивное чтение файла</td>
+		</tr>
+		<tr>
+			<td><b>TAPEDIR</b></td>
+			<td>= <span class="nmbr">5</span> -</td>
+			<td>чтение метки файла</td>
+		</tr>
+		<tr>
+			<td><b>READNXT</b></td>
+			<td>= <span class="nmbr">6</span> -</td>
+			<td>чтение следующего файла</td>
+		</tr>
+	</table>
+	<p>По команде фиктивное чтение файла происходит просмотр файла и останов магнитофона 
+	после конца файла</p>
+	<p>Аргумент <i>&quot;НАЧАЛЬНЫЙ АДРЕС&quot;</i> задаёт начальный адрес области 
+	ОЗУ, из которой выводится информация в файл (операция <b>WRITAPE</b>) или начальный 
+	адрес области ОЗУ, куда производится ввод информации. Если в команде чтения 
+	указан адрес <span class="nmbr">0</span>, информация записывается, начиная с 
+	адреса, указанного в метке файла.</p>
+	<p>Аргумент <i>&quot;ДЛИНА&quot;</i> используется только в операции <i>&quot;ЗАПИСЬ 
+	ФАЙЛА&quot;</i> и задаёт длину в байтах записываемой области ОЗУ.</p>
+	<p>Аргумент <i>&quot;ИМЯ ФАЙЛА&quot;</i> содержит <span class="nmbr">16</span>-байтное 
+	имя файла, с которым необходимо произвести операцию.</p>
+	<p>Аргументы <i>&quot;СТР<span class="nmbr">0</span>&quot;</i> и <i>&quot;СТР<span class="nmbr">1</span>&quot;</i> 
+	задают номера страниц ОЗУ (ПЗУ), подключаемых к окнам <span class="nmbr">40000</span>-<span class="nmbr">100000</span> 
+	и <span class="nmbr">100000</span>-<span class="nmbr">140000</span> при передаче 
+	данных (задают страницы памяти буфера ввода-вывода). Отрицательные значения 
+	соответствующих байтов означают текущее распределение памяти.</p>
+	<p>Следующая <span class="nmbr">20</span>-байтная область служит для возврата 
+	информации о текущем файле при операциях чтение и фиктивное чтение и содержит 
+	начальный адрес, длину и имя, прочитанные из метки текущего файла ленты.</p>
+	<p>При ошибочном завершении операции запрос возвращает установленный бит &quot;<span class="symb">C</span>&quot; 
+	и код ошибки в байте <span class="nmbr">52</span>:</p>
+	<table class="border">
+		<tr>
+			<td width="80"><b>FILNED</b></td>
+			<td width="50">= <span class="nmbr">1</span> -</td>
+			<td>найден файл с именем, не совпадающим с заданным,</td>
+		</tr>
+		<tr>
+			<td><b>CHKERR</b></td>
+			<td>= <span class="nmbr">2</span> -</td>
+			<td>ошибка контрольной суммы,</td>
+		</tr>
+		<tr>
+			<td><b>MEMERR</b></td>
+			<td>= <span class="nmbr">3</span> -</td>
+			<td>недопустимый диапазон адресов,</td>
+		</tr>
+		<tr>
+			<td><b>STPERR</b></td>
+			<td>= <span class="nmbr">4</span> -</td>
+			<td>прерывание по вектору <span class="nmbr">4</span> или клавише <i>&quot;СТОП&quot;</i></td>
+		</tr>
+	</table>
+	<p>При ошибке типа <span class="nmbr">1</span> магнитофон останавливается после 
+	прочитанной метки файла.</p>
+	<h2 id="_Toc375906576">3.6. Запросы драйвера НГМД</h2>
+	<p>Драйвер НГМД размещён в ПЗУ, находящемся в контроллере НГМД, и доступен при 
+	подключении контроллера к ЭВМ.</p>
+	<p>Драйвер имеет несколько точек входа:</p>
+	<table class="border">
+		<tr>
+			<th>Адрес точки входа</th>
+			<th>Функция</th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">160000</span></td>
+			<td><a href="#_Toc375906577">Автоматическая загрузка</a></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">160002</span></td>
+			<td><a href="#_Toc375906578">Загрузка с выбранного привода</a></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">160004</span></td>
+			<td><a href="#_Toc375906579">Чтение-запись по номеру блока</a></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">160006</span></td>
+			<td><a href="#_Toc375906580">Чтение-запись по номеру сектора</a></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">160010</span></td>
+			<td><a href="#_Toc375906581">Инициализация рабочей области драйвера</a></td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">160012</span></td>
+			<td><a href="#_Toc375906582">Форматирование дорожки</a></td>
+		</tr>
+	</table>
+	<p>Для работы драйвера необходима область ОЗУ размером <span class="nmbr">60</span> 
+	байт для размещения параметров и рабочих ячеек.</p>
+	<p>Формат рабочей области:</p>
+	<table class="border">
+		<colgroup>
+			<col width="10%"><col width="5%"><col width="10%"><col width="20%">
+			<col width="*">
+		</colgroup>
+		<tr>
+			<th>Смещение от начала области</th>
+			<th>Длина<br>байт</th>
+			<th>Символическое имя</th>
+			<th>Начальное<br>значение</th>
+			<th>Назначение</th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">CSRW</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>Копия по записи регистра состояния КНГМД</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">CURTRK</span></td>
+			<td>-</td>
+			<td>Адрес текущей дорожки</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">4</span></td>
+			<td><span class="nmbr">4</span></td>
+			<td><span class="labl">TRKTAB</span></td>
+			<td><span class="nmbr">177777</span>, <span class="nmbr">177777</span></td>
+			<td>Таблица текущих дорожек</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">10</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">TDOWN</span></td>
+			<td><span class="nmbr">20000</span> (для 6022)</td>
+			<td>Время опускания головки (в циклах команды <span class="cmds">SOB</span>)</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">12</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">TSTEP</span></td>
+			<td><span class="nmbr">20000</span> (для 6022)</td>
+			<td>Время перехода с дорожки на дорожку</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">14</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">TRKCOR</span></td>
+			<td><span class="nmbr">36</span> (для 6022)</td>
+			<td>Номер дорожки, с которой включается предкомпенсация при записи</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">15</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">BRETRY</span></td>
+			<td><span class="nmbr">30</span> (рекоменд.)</td>
+			<td>Число повторных операций при ошибках</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">16</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">FLAGS</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>Рабочая ячейка драйвера</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">17</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">FILLB</span></td>
+			<td>вх. параметр</td>
+			<td>Код заполнения секторов при форматировании дисков</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">20</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">FLGPTR</span></td>
+			<td>-</td>
+			<td>Указатель на байт признаков</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">22</span></td>
+			<td><span class="nmbr">4</span></td>
+			<td><span class="labl">FLGTAB</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>Таблица признаков (см. ниже)</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">26</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">ADDR</span></td>
+			<td>вх. параметр</td>
+			<td>Адрес буфера ОЗУ</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">30</span></td>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="labl">WCNT</span></td>
+			<td>вх. параметр</td>
+			<td>Число слов для пересылки</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">32</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">SIDE</span></td>
+			<td>вх. параметр</td>
+			<td>Номер стороны диска</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">33</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">TRK</span></td>
+			<td>вх. параметр</td>
+			<td>Номер дорожки</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">34</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">UNIT</span></td>
+			<td>вх. параметр</td>
+			<td>Номер привода</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">35</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="labl">SECTOR</span></td>
+			<td>вх. параметр</td>
+			<td>Номер сектора</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">36</span></td>
+			<td><span class="nmbr">22</span></td>
+			<td>&nbsp;</td>
+			<td>-</td>
+			<td>Рабочие ячейки драйвера</td>
+		</tr>
+	</table>
+	<p>Таблица <span class="labl">FLGTAB</span> содержит па одному байту на привод 
+	и используется для обработки нестандартных дисков. В каждом байте используется 
+	дна бита для указания параметров операции.</p>
+	<p>Бит <span class="nmbr">0</span> - при установке в <span class="nmbr">1</span> 
+	драйвер производит пропуск дорожек при поиске, т.е. фактически обрабатываются 
+	только чётные дорожки. Эта возможность используется для обработки на дисководе, 
+	имеющем <span class="nmbr">80</span> дорожек дискет, размеченных на
+	<span class="nmbr">40</span>-дорожечном дисководе.</p>
+	<p>Бит <span class="nmbr">1</span> - при установке в <span class="nmbr">1</span> 
+	драйвер производит обращение только к нижней стороне дискеты. Эта возможность 
+	используется при подключении дисководов, имеющих только одну головку, а также 
+	при обработке дискет, записанных на таком дисководе, на двустороннем дисководе.</p>
+	<h3 id="_Toc375906577">3.6.1. Автоматическая загрузка</h3>
+	<table class="border">
+		<tr>
+			<th width="65">Вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">JMP</span>&nbsp;&nbsp; @#<span class="nmbr">160000</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Можно также произвести загрузку непосредственно из монитора команд оператора:</p>
+	<pre><span class="nmbr">160000</span>G</pre>
+	<p>Входные параметры отсутствуют</p>
+	<p>Действие: производится попытка загрузить операционную систему с привода
+	<span class="nmbr">0</span>. Если попытка загрузки была неудачной, то драйвер 
+	последовательно пытается загрузить систему с <span class="nmbr">1</span>,
+	<span class="nmbr">2</span> и <span class="nmbr">3</span> привода. Если все 
+	попытки оказались неудачными, драйвер выводит на экран знак <i>&quot;?&quot;</i> 
+	и производит выход в монитор команд оператора.</p>
+	<p>Алгоритм загрузки:</p>
+	<ol start="1" style="margin-top: 0cm" type="1">
+		<li>инициализируется рабочая область драйвера в ОЗУ (базовый адрес -
+		<span class="nmbr">2000</span>) с параметрами для дисковода 6022.</li>
+		<li>считывается <span class="nmbr">1</span> сектор <span class="nmbr">0</span> 
+		дорожки выбранного дисковода в ОЗУ, начиная с адреса <span class="nmbr">
+		1000</span>.</li>
+		<li>в следующих случаях попытка загрузки считается неудачной:
+		<ul>
+			<li>в приводе отсутствует дискета,</li>
+			<li>не закрыта крышка привода,</li>
+			<li>привод неисправен,</li>
+			<li>дискета не размечена,</li>
+			<li>при считывании указанного сектора возникла ошибка,</li>
+			<li>на диске нет загрузчика операционной системы.</li>
+		</ul>
+		</li>
+	</ol>
+	<p>При удачной загрузке драйвер передаёт управление по адресу
+	<span class="nmbr">1000</span>, при этом в <span class="regn">R0</span> помещается 
+	номер привода, откуда произошла загрузка.</p>
+	<h3 id="_Toc375906578">3.6.2. Загрузка с выбранного привода</h3>
+	<table class="border">
+		<tr>
+			<th width="65">Вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">MOV</span>&nbsp;&nbsp; #N,<span class="regn">R0</span>
+<span class="cmds">JMP</span>&nbsp;&nbsp; @#<span class="nmbr">160002</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Из монитора команд оператора:</p>
+	<pre><span class="regn">R0</span>/XXXXXX <b>N</b>&lt;ВК&gt;
+<span class="nmbr">160002</span>G.</pre>
+	<p>где <b>N</b> - номер выбранного привода.</p>
+	<p>Действие аналогично автоматической загрузке, однако загрузка начинается сразу 
+	с выбранного привода, и при неудачной загрузке попыток загрузиться с других 
+	приводов не производится.</p>
+	<h3 id="_Toc375906579">3.6.3. Чтение-запись логического блока</h3>
+	<table class="border">
+		<tr>
+			<th width="65">Вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">JSR</span>&nbsp;&nbsp; <span class="regn">PC</span>,@#<span class="nmbr">160004</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Входные параметры:</p>
+	<p><span class="regn">R0</span> - номер блока на диске,</p>
+	<p><span class="regn">R1</span> - длина пересылаемого массива данных,</p>
+	<p><span class="regn">R2</span> - начальный адрес массива данных,</p>
+	<p><span class="regn">R3</span> - базовый адрес рабочей области драйвера,</p>
+	<p>Поле <span class="labl">UNIT</span> в рабочей области - номер привода.</p>
+	<p>Блок является логической единицей информации на внешних носителях и равен
+	<span class="nmbr">512</span>. байтам. В используемом формате записи на диск 
+	размер блока совпадает с размером сектора. Первый сектор нижней стороны нулевой 
+	дорожки соответствует блоку <span class="nmbr">0</span>. Вычисление номера сектора 
+	и дорожки по номеру блока производится с учётом установленных признаков в таблице
+	<span class="labl">FLGTAB</span>. Алгоритм этого вычисления совпадает с алгоритмом 
+	драйвера MY для ЭВМ серии ДВК.</p>
+	<p>Длина массива данных задаёт число слов, подлежащих пересылке, а так же тип 
+	операции: положительное - чтение, отрицательное - запись. При записи пересыпаемое 
+	число слов равно абсолютному значению длины. Если заданное число слов превышает 
+	размер сектора, осуществляется автоматический переход к следующему сектору, 
+	а если необходимо, то и на другую сторону и дорожку. Если при записи число слов 
+	не кратно размеру сектора, то остаток последнего сектора заполняется нулями.</p>
+	<p>Перед самым первым вызовом драйвера поля <span class="labl">CSRW</span>,
+	<span class="labl">TRKTAB</span>, <span class="labl">FLAGS</span> в рабочей 
+	области должны быть заполнены значениями, указанными в таблице, и не должны 
+	изменяться программой пользователя. Поля <span class="labl">TDOWN</span>,
+	<span class="labl">TSTEP</span>, <span class="labl">TRKCOR</span>,
+	<span class="labl">BRETRY</span>, <span class="labl">FLGTAB</span> рекомендуется 
+	заполнять значениями, указанными в таблице, однако они могут быть изменены в 
+	зависимости от конкретных условий.</p>
+	<p>Возврат из драйвера осуществляется командой </p>
+	<pre><span class="cmds">RTS</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="regn">PC</span></pre>
+	<p>Содержимое регистров процессора <span class="regn">R0</span>,
+	<span class="regn">R1</span>, <span class="regn">R2</span>,
+	<span class="regn">R4</span>, <span class="regn">R5</span> не сохраняется.</p>
+	<p>При возникновении ошибки бит &quot;<span class="symb">C</span>&quot; в слове 
+	состояния процессора устанавливается в <span class="nmbr">1</span>, и в байт 
+	с абсолютным адресом <span class="nmbr">52</span> помещается код ошибки.</p>
+	<table class="border">
+		<tr>
+			<th width="40">Код</th>
+			<th>Причина ошибки</th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">1</span></td>
+			<td>При чтении - ошибка CRC в зоне данных<br>при записи - установлена 
+			защита записи</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span></td>
+			<td>ошибка CRC в зоне заголовка сектора</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">3</span></td>
+			<td>нет позиционирования на <span class="nmbr">0</span> дорожку</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">4</span></td>
+			<td>ошибка позиционирования</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">5</span></td>
+			<td>не найден сектор</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">6</span></td>
+			<td>нет диска или диск не вращается</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">7</span></td>
+			<td>прерывание по вектору <span class="nmbr">4</span> при операции</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">10</span></td>
+			<td>не найден адресный маркер</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">11</span></td>
+			<td>не найден маркер данных</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">12</span></td>
+			<td>недопустимые параметры команды или нестандартный формат диска.</td>
+		</tr>
+	</table>
+	<p><span class="attnt">ВНИМАНИЕ!</span> возникновение прерывания по вектору
+	<span class="nmbr">4</span> (нажатие клавиши <i>СТОП</i>) во время записи на 
+	диск приведёт к появлению сбоя в секторе, в который осуществлялась запись. Этот 
+	сбой может быть устранён при повторной записи в этот сектор.</p>
+	<p>После завершения операции драйвер оставляет двигатель дисковода включённым. 
+	Для остановки двигателя программа пользователя должна записать
+	<span class="nmbr">0</span> по адресу <span class="nmbr">177130</span>, а также 
+	в ячейку <span class="labl">CSRW</span> рабочей области.</p>
+	<h3 id="_Toc375906580">3.6.4. Чтение-запись по номеру сектора и дорожки</h3>
+	<table class="border">
+		<tr>
+			<th width="65">Вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">JSR</span>&nbsp;&nbsp; <span class="regn">PC</span>,@#<span class="nmbr">160006</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Входные параметры:</p>
+	<p><span class="regn">R3</span> - адрес рабочей области</p>
+	<p>Поля рабочей области</p>
+	<table class="border">
+		<tr>
+			<td width="80"><span class="labl">ADDR</span></td>
+			<td>- начальный адрес массива данных,</td>
+		</tr>
+		<tr>
+			<td><span class="labl">WCNT</span></td>
+			<td>- длина массива данных,</td>
+		</tr>
+		<tr>
+			<td><span class="labl">SIDE</span></td>
+			<td>- номер стороны (<span class="nmbr">0</span> - нижняя,
+			<span class="nmbr">1</span> - верхняя),</td>
+		</tr>
+		<tr>
+			<td><span class="labl">TRK</span></td>
+			<td>- номер дорожки</td>
+		</tr>
+		<tr>
+			<td><span class="labl">UNIT</span></td>
+			<td>- номер привода (<span class="nmbr">0</span>..<span class="nmbr">3</span>),</td>
+		</tr>
+		<tr>
+			<td><span class="labl">SECTOR</span></td>
+			<td>- номер сектора (<span class="nmbr">1</span>..<span class="nmbr">12</span><sub>8</sub>).</td>
+		</tr>
+	</table>
+	<p>Действие аналогично чтению-записи логического блока.</p>
+	<h3 id="_Toc375906581">3.6.5. Инициализация рабочей области</h3>
+	<p>Эта точка входа является вспомогательной и служит для облегчения написания 
+	программ, использующих драйвер НГМД.</p>
+	<table class="border">
+		<tr>
+			<th width="65">Вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">JSR</span>&nbsp;&nbsp; <span class="regn">PC</span>,@#<span class="nmbr">160010</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Входной параметр:</p>
+	<p><span class="regn">R3</span> - базовый адрес рабочей области</p>
+	<p>Действие: заполняются следующие поля рабочей области</p>
+	<table class="border">
+		<tr>
+			<td><span class="labl">CSRW</span></td>
+			<td>- <span class="nmbr">0</span>.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">TRKTAB</span></td>
+			<td>- <span class="nmbr">177777</span>, <span class="nmbr">177777</span></td>
+		</tr>
+		<tr>
+			<td><span class="labl">TDOWN</span></td>
+			<td>- <span class="nmbr">10000</span>.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">TSTEP</span></td>
+			<td>- <span class="nmbr">10000</span>.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">TRKCOR</span></td>
+			<td>- <span class="nmbr">30</span>.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">BRETRY</span></td>
+			<td>- <span class="nmbr">30</span>.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">FLAGS</span></td>
+			<td>- <span class="nmbr">0</span>.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">FLGTAB</span></td>
+			<td>- <span class="nmbr">0</span>,<span class="nmbr">0</span>.</td>
+		</tr>
+	</table>
+	<h3 id="_Toc375906582">3.6.6. Форматирование дорожки</h3>
+	<table class="border">
+		<tr>
+			<th width="65">Вызов:</th>
+			<td width="240">
+			<pre><span class="cmds">JSR</span>&nbsp;&nbsp; <span class="regn">PC</span>,@#<span class="nmbr">160012</span></pre>
+			</td>
+		</tr>
+	</table>
+	<p>Входные параметры:</p>
+	<table class="border">
+		<tr>
+			<td><span class="regn">R3</span></td>
+			<td>- базовый адрес рабочей области.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">FILLB</span></td>
+			<td>- код, которым будет заполнено поле данных сектора при формировании.</td>
+		</tr>
+		<tr>
+			<td><span class="labl">SIDE</span></td>
+			<td>- номер стороны,</td>
+		</tr>
+		<tr>
+			<td><span class="labl">TRK</span></td>
+			<td>- номер дорожки,</td>
+		</tr>
+		<tr>
+			<td><span class="labl">UNIT</span></td>
+			<td>- номер привода.</td>
+		</tr>
+	</table>
+	<p>Действие: форматируется указанная дорожка с указанной стороны, поле данных 
+	всех секторов заполняется кодом <span class="labl">FILLB</span>.</p>
+	<p>&nbsp;</p>
+	<br clear="all" style="page-break-before: always">
+	<h1 id="_Toc375906583" class="right"><b>Приложение <span class="nmbr">1</span></b></h1>
+	<h3>Кодировка символов ЭВМ</h3>
+	<p>Для кодировки символов ЭВМ используется код, разработанный на базе кода КОИ-8 
+	и расширенный графическими символами и рядом нестандартных управляющих символов. 
+	Ниже приведена таблица кодов символов.</p>
+	<center>
+	<table class="cntr">
+		<tr>
+			<th width="32">&nbsp;</th>
+			<th width="32">0</th>
+			<th width="32">1</th>
+			<th width="32">2</th>
+			<th width="32">3</th>
+			<th width="32">4</th>
+			<th width="32">5</th>
+			<th width="32">6</th>
+			<th width="32">7</th>
+			<th width="32">8</th>
+			<th width="32">9</th>
+			<th width="32">A</th>
+			<th width="32">B</th>
+			<th width="32">C</th>
+			<th width="32">D</th>
+			<th width="32">E</th>
+			<th width="32">F</th>
+		</tr>
+		<tr>
+			<th>0</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>˽</td>
+			<td>0</td>
+			<td>@</td>
+			<td>P</td>
+			<td>`</td>
+			<td>p</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>►</td>
+			<td>ю</td>
+			<td>п</td>
+			<td>Ю</td>
+			<td>П</td>
+		</tr>
+		<tr>
+			<th>1</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>!</td>
+			<td>1</td>
+			<td>A</td>
+			<td>Q</td>
+			<td>a</td>
+			<td>q</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>☺</td>
+			<td>◄</td>
+			<td>а</td>
+			<td>я</td>
+			<td>А</td>
+			<td>Я</td>
+		</tr>
+		<tr>
+			<th>2</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&quot;</td>
+			<td>2</td>
+			<td>B</td>
+			<td>R</td>
+			<td>b</td>
+			<td>r</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>☻</td>
+			<td>↕</td>
+			<td>б</td>
+			<td>р</td>
+			<td>Б</td>
+			<td>Р</td>
+		</tr>
+		<tr>
+			<th>3</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>#</td>
+			<td>3</td>
+			<td>C</td>
+			<td>S</td>
+			<td>c</td>
+			<td>s</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♥</td>
+			<td>‼</td>
+			<td>ц</td>
+			<td>с</td>
+			<td>Ц</td>
+			<td>С</td>
+		</tr>
+		<tr>
+			<th>4</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>¤</td>
+			<td>4</td>
+			<td>D</td>
+			<td>T</td>
+			<td>d</td>
+			<td>t</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♦</td>
+			<td>¶</td>
+			<td>д</td>
+			<td>т</td>
+			<td>Д</td>
+			<td>Т</td>
+		</tr>
+		<tr>
+			<th>5</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>%</td>
+			<td>5</td>
+			<td>E</td>
+			<td>Y</td>
+			<td>e</td>
+			<td>y</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♣</td>
+			<td>§</td>
+			<td>е</td>
+			<td>у</td>
+			<td>Е</td>
+			<td>У</td>
+		</tr>
+		<tr>
+			<th>6</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&amp;</td>
+			<td>6</td>
+			<td>F</td>
+			<td>V</td>
+			<td>f</td>
+			<td>v</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♠</td>
+			<td>═</td>
+			<td>ф</td>
+			<td>ж</td>
+			<td>Ф</td>
+			<td>Ж</td>
+		</tr>
+		<tr>
+			<th>7</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>'</td>
+			<td>7</td>
+			<td>G</td>
+			<td>W</td>
+			<td>g</td>
+			<td>w</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><img height="16" src="img/00008013201/c01.png" width="14"></td>
+			<td>↨</td>
+			<td>г</td>
+			<td>в</td>
+			<td>Г</td>
+			<td>В</td>
+		</tr>
+		<tr>
+			<th>8</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>(</td>
+			<td>8</td>
+			<td>H</td>
+			<td>X</td>
+			<td>h</td>
+			<td>x</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><img height="16" src="img/00008013201/c03.png" width="14"></td>
+			<td>&uarr;</td>
+			<td>х</td>
+			<td>ь</td>
+			<td>Х</td>
+			<td>Ь</td>
+		</tr>
+		<tr>
+			<th>9</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>)</td>
+			<td>9</td>
+			<td>I</td>
+			<td>Y</td>
+			<td>i</td>
+			<td>y</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><img height="16" src="img/00008013201/c02.png" width="14"></td>
+			<td>&darr;</td>
+			<td>и</td>
+			<td>ы</td>
+			<td>И</td>
+			<td>Ы</td>
+		</tr>
+		<tr>
+			<th>A</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>*</td>
+			<td>:</td>
+			<td>J</td>
+			<td>Z</td>
+			<td>j</td>
+			<td>z</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td><span style="font-size: 130%">◙</span></td>
+			<td>&rarr;</td>
+			<td>й</td>
+			<td>з</td>
+			<td>Й</td>
+			<td>З</td>
+		</tr>
+		<tr>
+			<th>B</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>+</td>
+			<td>;</td>
+			<td>K</td>
+			<td>[</td>
+			<td>k</td>
+			<td>{</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♂</td>
+			<td>&larr;</td>
+			<td>к</td>
+			<td>ш</td>
+			<td>К</td>
+			<td>Ш</td>
+		</tr>
+		<tr>
+			<th>C</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>,</td>
+			<td>&lt;</td>
+			<td>L</td>
+			<td>\</td>
+			<td>l</td>
+			<td>|</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♀</td>
+			<td>⌙</td>
+			<td>л</td>
+			<td>э</td>
+			<td>Л</td>
+			<td>Э</td>
+		</tr>
+		<tr>
+			<th>D</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>-</td>
+			<td>=</td>
+			<td>M</td>
+			<td>]</td>
+			<td>m</td>
+			<td>}</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♪</td>
+			<td>↔</td>
+			<td>м</td>
+			<td>щ</td>
+			<td>М</td>
+			<td>Щ</td>
+		</tr>
+		<tr>
+			<th>E</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>.</td>
+			<td>&gt;</td>
+			<td>N</td>
+			<td>^</td>
+			<td>n</td>
+			<td>~</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>♫</td>
+			<td>▲</td>
+			<td>н</td>
+			<td>ч</td>
+			<td>Н</td>
+			<td>Ч</td>
+		</tr>
+		<tr>
+			<th>F</th>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>/</td>
+			<td>?</td>
+			<td>O</td>
+			<td>_</td>
+			<td>o</td>
+			<td>■</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>☼</td>
+			<td>▼</td>
+			<td>о</td>
+			<td>ъ</td>
+			<td>О</td>
+			<td>Ъ</td>
+		</tr>
+	</table>
+	</center>
+	<p>&nbsp;</p>
+	<center>
+	<table class="border">
+		<caption><b>Управляющие символы</b></caption>
+		<tr>
+			<th>Код</th>
+			<th colspan="2">Отображение<br>&nbsp;в БЛОК РЕД.</th>
+			<th>Функция</th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">0</span></td>
+			<td>инверсное</td>
+			<td>@</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">1</span></td>
+			<td>инверсное</td>
+			<td>А</td>
+			<td>установка режима двойной ширины символа</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span></td>
+			<td>инверсное</td>
+			<td>В</td>
+			<td>снятие режима двойной ширины символа</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">3</span></td>
+			<td>инверсное</td>
+			<td>С</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">4</span></td>
+			<td>инверсное</td>
+			<td>D</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">5</span></td>
+			<td>инверсное</td>
+			<td>Е</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">6</span></td>
+			<td>инверсное</td>
+			<td>F</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">7</span></td>
+			<td>инверсное</td>
+			<td>G</td>
+			<td>Звонок</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">10</span></td>
+			<td>инверсное</td>
+			<td><img alt="" height="20" src="img/kbd/kblt.png" width="23"></td>
+			<td>Курсор влево</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">11</span></td>
+			<td>инверсное</td>
+			<td>I</td>
+			<td>Горизонтальная табул.</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">12</span></td>
+			<td>инверсное</td>
+			<td><img alt="" height="20" src="img/kbd/kbenter.png" width="35"></td>
+			<td>Перевод строки &quot;ВВОД&quot;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">13</span></td>
+			<td>инверсное</td>
+			<td>К</td>
+			<td>Стирание конца строки</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">14</span></td>
+			<td>инверсное</td>
+			<td>L</td>
+			<td>Очистка экрана</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">15</span></td>
+			<td>инверсное</td>
+			<td>М</td>
+			<td>Курсор в начало тек. строки.</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">16</span></td>
+			<td>инверсное</td>
+			<td>N</td>
+			<td>Переход на русский регистр</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">17</span></td>
+			<td>инверсное</td>
+			<td>O</td>
+			<td>Переход на латинский регистр</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">20</span></td>
+			<td>инверсное</td>
+			<td>P</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">21</span></td>
+			<td>инверсное</td>
+			<td>Q</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">22</span></td>
+			<td>инверсное</td>
+			<td>R</td>
+			<td>Курсор в нач. экрана</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">23</span></td>
+			<td>инверсное</td>
+			<td>S</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">24</span></td>
+			<td>инверсное</td>
+			<td>T</td>
+			<td>Уст. реж. КОИ7-Н2</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">25</span></td>
+			<td>инверсное</td>
+			<td>U</td>
+			<td>Перевод курсора в начало след. строки</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">26</span></td>
+			<td>инверсное</td>
+			<td>&nbsp;</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">27</span></td>
+			<td>инверсное</td>
+			<td>&nbsp;</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">30</span></td>
+			<td>инверсное</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">31</span></td>
+			<td>инверсное</td>
+			<td><img alt="" height="20" src="img/kbd/kbrt.png" width="23"></td>
+			<td>Курсор вправо</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">32</span></td>
+			<td>инверсное</td>
+			<td><img alt="" height="20" src="img/kbd/kbup.png" width="23"></td>
+			<td>Курсор вверх</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">33</span></td>
+			<td>инверсное</td>
+			<td><img alt="" height="20" src="img/kbd/kbdn.png" width="23"></td>
+			<td>Курсор вниз</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">34</span></td>
+			<td>инверсное</td>
+			<td>/</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">35</span></td>
+			<td>инверсное</td>
+			<td>]</td>
+			<td>Уст. цвета</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">36</span></td>
+			<td>инверсное</td>
+			<td>&larr;┐</td>
+			<td>&quot;ОБРАТНЫЙ ПС&quot;</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">37</span></td>
+			<td>инверсное</td>
+			<td>-</td>
+			<td>-</td>
+		</tr>
+	</table>
+	</center>
+	<p>При работе монитора команд оператора действует ещё одни дополнительный управляющий 
+	символ: <i>&quot;АР2/; &quot;</i>. По этому символу монитор ожидает ввода одного 
+	символа, младшие два бита двоичного кода которого определяют новый режим экрана 
+	(<span class="nmbr">128</span>, <span class="nmbr">256</span> или
+	<span class="nmbr">512</span> точек в строке). Кодировка режима совпадает с 
+	кодировкой в макро <a href="#_Toc375906569"><span class="pscm">.BTVSET</span></a>.</p>
+	<p>Функции курсор влево и курсор вправо, поданные в начале и конце строки соответственно, 
+	вызывают перемещение курсора в последнюю (первую) позицию предыдущей (следующей) 
+	строки, если то не запрещено путём установки бита в слове состояния драйвера 
+	терминала (см. макро <a href="#_Toc375906569"><span class="pscm">.BTVSET</span></a>). 
+	В противном случае функции игнорируются.</p>
+	<p>Функции курсор вверх и курсор вниз соответственно на первой и последней строках 
+	экрана игнорируются.</p>
+	<p>Функция перевод строки вызывает перемещение курсора вниз в ту же позицию 
+	следующей строки. Если курсор находился па последней строке экрана, происходит 
+	сдвиг текста вверх.</p>
+	<p>Функция <i>&quot;ОБРАТНЫЙ ПС&quot;</i> вызывает сдвиг курсора вверх на одну 
+	строку. Если курсор находился на первой строке, текст сдвигается вниз.</p>
+	<p>Горизонтальная табуляция перемещает курсор вправо до ближайшей позиции из 
+	ряда <span class="nmbr">8</span>, <span class="nmbr">16</span>,
+	<span class="nmbr">24</span>. В последних <span class="nmbr">8</span> позициях 
+	строки действует аналогично функции
+	<img alt="" height="20" src="img/kbd/kbrt.png" width="23">, но никогда не вызывает 
+	перевода на следующую строку. Функция установки цвета работает следующим образом: 
+	драйвер терминала ожидает получения двух следующих символов и рассматривает 
+	младшие биты их двоичных кодов как цвет символов и цвет фона. Количество рассматриваемых 
+	битов зависит от режима работы терминала (<span class="nmbr">512</span>,
+	<span class="nmbr">256</span> или <span class="nmbr">128</span> точек в строке).
+	<i>&quot;ПЕРЕКРАШИВАНИЕ&quot;</i> уже выведенного изображения при этом не производится.</p>
+	<p>Выполнение функций управляющих символов осуществляется при одновременном 
+	нажатии клавиш <i>СУ </i>и <i>X</i>, где <i>X</i> - символ, указанный в столбце
+	<i>&quot;Отображение в БЛОК РЕД»</i>.</p>
+	<br clear="all" style="page-break-before: always">
+	<h1 id="_Toc375906584" class="right"><b>Приложение <span class="nmbr">2</span></b></h1>
+	<h3>Редактирование строки</h3>
+	<p>Редактирование строки по макрокоманде <a href="#_Toc375906554">
+	<span class="pscm">.BGTLIN</span> </a>выполняется следующим образом:</p>
+	<ul>
+		<li>включается отображение курсора на экране;</li>
+		<li>ЭВМ переходит в режим ввода символов с клавиатуры.</li>
+	</ul>
+	<p>Обычные графические символы (буквы, цифры и т. д.) вводятся обычным образом 
+	и отображаются на экране.</p>
+	<p>Управляющие символы, не используемые для редактирования строки (см. ниже), 
+	вводятся в строку и отображаются в режиме <i>&quot;БЛОК РЕД&quot;</i>.</p>
+	<p>Управляющие символы, используемые при редактировании строки, обрабатываются 
+	в зависимости от установленного режима:</p>
+	<ul>
+		<li>в режиме <i>&quot;БЛОК РЕД&quot;</i> все символы вводятся в строку;</li>
+		<li>при выключенном режиме <i>&quot;БЛОК РЕД&quot;</i> выполняется редактирование 
+		строки</li>
+	</ul>
+	<p>Редактирование строки заканчивается при нажатии клавиши <i>&quot;ВВОД&quot;</i>. 
+	Перечислим управляющие символы, используемые для редактирования строки, и опишем 
+	их функции:</p>
+	<p><img alt="" height="20" src="img/kbd/kblt.png" width="23"> - перемещает курсор 
+	на позицию влево. Если символ вводится, когда курсор находится в первой позиции 
+	логической строки, функция не выполняется.</p>
+	<p><img alt="" height="20" src="img/kbd/kbenter.png" width="35"> - завершает 
+	редактирование строки. Независимо от положения курсора в момент подачи команды 
+	программе передаётся вся логическая строка.</p>
+	<p><img alt="" height="20" src="img/kbd/kbdelrt.png" width="35"> - стирание 
+	всех символов от курсора до конца логической строки.</p>
+	<p><b>СБРОС</b> - очистка экрана и вывод редактируемой строки в текущем состоянии, 
+	начиная с первой позиции первой строки экрана. Курсор после выполнения операции 
+	помещается в конце строки.</p>
+	<p><b>ВС</b> - нажатие этой клавший может вызвать выполнение одной из следующих 
+	функций:</p>
+	<ul>
+		<li>если в процессе выполнения макро <a href="#_Toc375906554">
+		<span class="pscm">.BGTLIN</span> </a>в строку ещё не вводился ни один символ, 
+		в строку помещается из внутреннего буфера последняя редактировавшаяся по
+		<a href="#_Toc375906554"><span class="pscm">.BGTLIN</span> </a>или
+		<a href="#_Toc375906556"><span class="pscm">.BEDIT</span></a> строка и курсор 
+		помещается в ее конце,</li>
+		<li>если строка вводилась, но была полностью стёрта нажатием клавиши
+		<img alt="" height="20" src="img/kbd/kbdelrt.png" width="35"> и, когда курсор 
+		находился в начале строки, будет восстановлена стёртая строка;</li>
+		<li>если курсор находился в первой позиции редактируемой строки, он переместится 
+		в ее конец;</li>
+		<li>в противном случае курсор переместится в начало редактируемой строки.</li>
+	</ul>
+	<p><img alt="" height="20" src="img/kbd/kbdel.png" width="35"> - стирание символа 
+	(сдвижка строки). Символ, на котором находится курсор, будет стёрт. Символы 
+	от курсора до конца строки сдвинутся влево, заполняя освободившееся место</p>
+	<p><img alt="" height="20" src="img/kbd/kbins.png" width="35"> - раздвижка строки. 
+	Символы от курсора до конца строки сдвинутся вправо, и в строку вставится символ
+	<i>&quot;ПРОБЕЛ&quot;</i>.</p>
+	<p><img alt="" height="20" src="img/kbd/kbbs.png" width="35"> - символ перед 
+	курсором будет стёрт. Символы от курсора до конца строки сдвинутся, заполняя 
+	освободившееся место. Курсор переместится на позицию влево.</p>
+	<p><b>АР2/<img alt="" height="20" src="img/kbd/kbbs.png" width="35"></b> - стирание 
+	всех символов от начала строки до курсора. Оставшиеся символы (от курсора до 
+	конца строки) сдвинутся влево для заполнения освободившегося места.</p>
+	<p><img alt="" height="20" src="img/kbd/kbrt.png" width="23"> - перемещение 
+	курсора на символ вперёд.</p>
+	<p><img alt="" height="20" src="img/kbd/kbup.png" width="23"> - перенесение 
+	курсора вверх на соответствующую позицию предыдущей физической строки. Если 
+	эта позиция не принадлежит редактируемой логической строке, функция игнорируется.</p>
+	<p><img alt="" height="20" src="img/kbd/kbdn.png" width="23"> - перемещение 
+	вниз на следующую физическую строку, работает аналогично предыдущей команде.</p>
+	<p><b>АР2/<img alt="" height="20" src="img/kbd/kblt.png" width="23"></b> - переключение 
+	режима вставка-замена. В режиме замены вводимые символы помещаются на место, 
+	указанное курсором, замещая находящиеся там символы. В режиме вставки символы 
+	от курсора до конца строки смещаются вправо, освобождая место для вводимого 
+	символа.</p>
+	<br clear="all" style="page-break-before: always">
+	<h1 id="_Toc375906585" class="right"><b>Приложение <span class="nmbr">3</span></b></h1>
+	<h3>Формат таблицы управления режимом ТВ.</h3>
+	<p>Байт <span class="nmbr">0</span></p>
+	<pre>
+┌──┬──┬──┬──┬──┬──┬──┬──┐
+│  │ X│ X│ X│ X│  │  │  │
+└──┴──┴──┴──┴──┴──┼──┴──┤
+  │               └──┬──┘
+  │                  │
+  │                  └── Режим работы
+  │                    <span class="nmbr">0</span> - <span class="nmbr">128</span> точек в строке
+  │                    <span class="nmbr">1</span> - <span class="nmbr">256</span> точек в строке
+  │                    <span class="nmbr">2</span> - <span class="nmbr">512</span> точек в строке
+  │                    <span class="nmbr">3</span> - <span class="nmbr">128</span> точек в строке
+  └── <span class="nmbr">0</span> - КОИ8; <span class="nmbr">1</span> - КОИ7
+</pre>
+	<p>Байт <span class="nmbr">1</span></p>
+	<pre>
+┌──┬──┬──┬──┬──┬──┬──┬──┐
+│  │  │  │  │  │  │  │  │
+└──┴──┴──┴──┴──┴──┴──┴──┘
+  │  │  │  │  │  │     │
+  │  │  │  │  │  │    В КОИ7 <span class="nmbr">1</span> - &gt; игнорировать
+  │  │  │  │  │  │    &quot;РУС&quot;, &quot;ЛАТ&quot;, вывод
+  │  │  │  │  │  │    только больших букв.
+  │  │  │  │  │  │
+  │  │  │  │  │ Инверсия строки
+  │  │  │  │  │
+  │  │  │  │ Подчёркивание строки
+  │  │  │  │
+  │  │  │ Запрет перехода курсора через
+  │  │  │ границу строки
+  │  │  │
+  │  │ Запрет инд. курсора
+  │  │
+  │ Режим отображения управл. символов
+  │
+ Запрет индикации служ. строки
+</pre>
+	<p>Байты <span class="nmbr">2</span>, <span class="nmbr">3</span> (слово)</p>
+	<p>Значение, системного регистра для таблицы знакогенератора алф-цифр. символов.
+	<span class="nmbr">0</span> - станд. Знакогенератор.</p>
+	<p>&nbsp;</p>
+	<p>Байты <span class="nmbr">4</span>, <span class="nmbr">5</span> (слово)</p>
+	<p>Адрес таблицы знакогенератора алфавитно-цифровых символов.</p>
+	<p>&nbsp;</p>
+	<p>Байты <span class="nmbr">6</span>, <span class="nmbr">7</span> (слово)</p>
+	<p>Значение системного регистра для таблицы знакогенератора граф. символов.
+	<span class="nmbr">0</span> - станд. знакогенератор.</p>
+	<p>&nbsp;</p>
+	<p>Байты <span class="nmbr">10</span>, <span class="nmbr">11</span> (слово)</p>
+	<p>Адрес таблицы знакогенератора графических символов.</p>
+	<p>&nbsp;</p>
+	<p>Байт <span class="nmbr">12</span></p>
+	<p>Цвет символов.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="nmbr">200</span> 
+	- не изменяется.</p>
+	<p>&nbsp;</p>
+	<p>Байт <span class="nmbr">13</span></p>
+	<p>Цвет фона.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<span class="nmbr">200</span> - не изменяется.</p>
+	<p>&nbsp;</p>
+	<p>Формат таблицы знакогенератора: каждый символ занимает <span class="nmbr">
+	9</span> байт. Формат символа: <span class="nmbr">9</span> строк по
+	<span class="nmbr">8</span> точек в строке растра соответствует один байт знакогенератора, 
+	причём младший бит соответствует самой левой точке. Строки растра располагаются, 
+	начиная с верхней строки.</p>
+	<p>Текущее значение системного регистра можно прочитать из ячейки с адресом
+	<span class="nmbr">66</span>.</p>
+	<br clear="all" style="page-break-before: always">
+	<h1 id="_Toc375906586" class="right"><b>Приложение <span class="nmbr">4</span></b></h1>
+	<center>
+	<table class="border">
+		<caption><b>Таблица палитр</b></caption>
+		<tr>
+			<th class="centr" rowspan="2">Номер<br>палитры</th>
+			<th class="centr" colspan="4">Код палитры</th>
+			<th class="centr" colspan="4">Код точки</th>
+		</tr>
+		<tr>
+			<th class="centr">Р11</th>
+			<th class="centr">P10</th>
+			<th class="centr">Р9</th>
+			<th class="centr">Р8</th>
+			<th class="centr"><span class="nmbr">00</span></th>
+			<th class="centr"><span class="nmbr">10</span></th>
+			<th class="centr"><span class="nmbr">01</span></th>
+			<th class="centr"><span class="nmbr">11</span></th>
+		</tr>
+		<tr>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>зелёный</td>
+			<td>синий</td>
+			<td>красный</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>сиреневый</td>
+			<td>жёлтый</td>
+			<td>красный</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">2</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>синий</td>
+			<td>голубой</td>
+			<td>сиреневый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">3</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>голубой</td>
+			<td>зелёный</td>
+			<td>жёлтый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">4</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>голубой</td>
+			<td>сиреневый</td>
+			<td>белый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">5</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>белый</td>
+			<td>белый</td>
+			<td>белый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">6</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>красно-коричн.</td>
+			<td>темно-красный</td>
+			<td>красный</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">7</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>светло-зелёный</td>
+			<td>салатовый</td>
+			<td>жёлтый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">8</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>фиолетов. синий</td>
+			<td>фиолетовый</td>
+			<td>сиреневый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">9</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>фиолетов. синий</td>
+			<td>светло-зелёный</td>
+			<td>красно-коричн.</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">10</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>фиолетовый</td>
+			<td>салатовый</td>
+			<td>темно-красный</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">11</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>жёлтый</td>
+			<td>голубой</td>
+			<td>красный</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">12</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>зелёный</td>
+			<td>красный</td>
+			<td>голубой</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">13</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>жёлтый</td>
+			<td>голубой</td>
+			<td>белый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">14</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">0</span></td>
+			<td>чёрный</td>
+			<td>зелёный</td>
+			<td>жёлтый</td>
+			<td>белый</td>
+		</tr>
+		<tr>
+			<td><span class="nmbr">15</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td><span class="nmbr">1</span></td>
+			<td>чёрный</td>
+			<td>зелёный</td>
+			<td>голубой</td>
+			<td>белый</td>
+		</tr>
+	</table>
+	</center><br clear="all" style="page-break-before: always">
+	<h1 id="_Toc375906587" class="right"><b>Приложение <span class="nmbr">5</span></b></h1>
+	<center>
+	<table class="border cntr2">
+		<caption><b>Таблица соответствия клавиш клавиатуры и обозначения клавиш 
+		в тексте</b></caption>
+		<tr>
+			<th>Условное обозначение<br>клавиш в тексте</th>
+			<th>Клавишная клавиатура</th>
+		</tr>
+		<tr>
+			<td>&larr;┘, &quot;ВВОД&quot;, &quot;ВК&quot;</td>
+			<td><img alt="" height="20" src="img/kbd/kbenter.png" width="35"></td>
+		</tr>
+		<tr>
+			<td>─┼&rarr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbdelrt.png" width="35"></td>
+		</tr>
+		<tr>
+			<td>│&larr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbdel.png" width="35"></td>
+		</tr>
+		<tr>
+			<td>│&rarr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbins.png" width="35"></td>
+		</tr>
+		<tr>
+			<td>&lt;==, &quot;ЗАБОЙ&quot;</td>
+			<td><img alt="" height="20" src="img/kbd/kbbs.png" width="35"></td>
+		</tr>
+		<tr>
+			<td>&rarr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbrt.png" width="23"></td>
+		</tr>
+		<tr>
+			<td>&uarr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbup.png" width="23"></td>
+		</tr>
+		<tr>
+			<td>&darr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbdn.png" width="23"></td>
+		</tr>
+		<tr>
+			<td>&larr;</td>
+			<td><img alt="" height="20" src="img/kbd/kblt.png" width="23"></td>
+		</tr>
+		<tr>
+			<td>&dArr;</td>
+			<td><img alt="" height="20" src="img/kbd/kbshift.png" width="23"></td>
+		</tr>
+	</table>
+	</center>
+	<p>&nbsp;</p>
+	<br clear="all" style="page-break-before: always">
+	<table width="100%">
+		<tr>
+			<td>
+			<p class="ann">Заказ № <span class="nmbr">2584</span>.</p>
+			</td>
+			<td>
+			<p class="ann">Тираж <span class="nmbr">2000</span>.</p>
+			</td>
+		</tr>
+		<tr>
+			<td class="cst___s" colspan="2">
+			<p class="ann">Советская типография<br>Марийского республиканского<br>
+			полиграфическо-редакционного объединения</p>
+			</td>
+		</tr>
+	</table>
+	<div style="padding: 12pt 0 0;">
+		<p style="text-align: right; color: #999999; font-size: 80%">Performed by &copy; 
+		gid, 2012-2020. </p>
+	</div>
+</div>
+
+</body>
+
+</html>

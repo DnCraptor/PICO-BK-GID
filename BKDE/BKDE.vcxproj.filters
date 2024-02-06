@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Файлы исходного кода">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы\imgos">
+      <UniqueIdentifier>{1e91e69a-fd0c-441a-9521-4eb216d1ff5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\imgos">
+      <UniqueIdentifier>{220fb63d-a656-47a7-aae2-0a91ac1840d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\SprView">
+      <UniqueIdentifier>{97e0421d-99fa-4933-88e5-93175c747e72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\SprView">
+      <UniqueIdentifier>{c38dd580-2f2d-4767-832e-ec52bd90cc79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\shared">
+      <UniqueIdentifier>{7e9d3244-97f0-48a7-aa25-c126a5b59f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\shared">
+      <UniqueIdentifier>{c5d58fa8-53a7-4f99-8256-8c12680b5e01}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BKDE.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKDEDefines.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_ANDos.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_MKDos.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_Prototype.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_RT11.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\ImgUtil.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="BKImage.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlgbars.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="BKListCtrl.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="SprView\SprScr.h">
+      <Filter>Заголовочные файлы\SprView</Filter>
+    </ClInclude>
+    <ClInclude Include="SprView\SprView.h">
+      <Filter>Заголовочные файлы\SprView</Filter>
+    </ClInclude>
+    <ClInclude Include="SprView\SprWnd.h">
+      <Filter>Заголовочные файлы\SprView</Filter>
+    </ClInclude>
+    <ClInclude Include="RenameDialog.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_Csidos3.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_HCDos.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_AODos.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_NORD.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_MicroDos.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="FFPickerDlg.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_MSDOS.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="BKDEDlg.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\fdrawcmd.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKImgFile.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKParseImage.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\BKDRT11Header.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeAddrDialog.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKDirDataItem.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_Optok.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\StringUtil.h">
+      <Filter>Заголовочные файлы\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="TrueColorToolBar.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_Holography.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+    <ClInclude Include="imgos\BKFloppyImage_DaleOS.h">
+      <Filter>Заголовочные файлы\imgos</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BKDE.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_ANDos.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_MKDos.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_Prototype.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_RT11.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\ImgUtil.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="BKImage.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlgbars.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="BKListCtrl.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="BKFileView.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="SprView\SprScr.cpp">
+      <Filter>Файлы исходного кода\SprView</Filter>
+    </ClCompile>
+    <ClCompile Include="SprView\SprView.cpp">
+      <Filter>Файлы исходного кода\SprView</Filter>
+    </ClCompile>
+    <ClCompile Include="SprView\SprWnd.cpp">
+      <Filter>Файлы исходного кода\SprView</Filter>
+    </ClCompile>
+    <ClCompile Include="RenameDialog.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_Csidos3.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_HCDos.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_AODos.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_NORD.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_MicroDos.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="FFPickerDlg.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_MSDOS.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="BKDEDlg.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\BKParseImage.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\BKImgFile.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeAddrDialog.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_Optok.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\StringUtil.cpp">
+      <Filter>Файлы исходного кода\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="TrueColorToolBar.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_Holography.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+    <ClCompile Include="imgos\BKFloppyImage_DaleOS.cpp">
+      <Filter>Файлы исходного кода\imgos</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BKDE.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\BKDE.rc2">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\html1.htm">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\BKDE.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="res\SprToolbar.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
