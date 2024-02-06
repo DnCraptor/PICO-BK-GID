@@ -1477,9 +1477,10 @@ uint16_t Global::OctStringToWord(const CString &str)
 
 CString Global::IntToString(int iInt, int radix)
 {
-	CString str;
-	_itot_s(iInt, str.GetBufferSetLength(256), 256, radix);
-	str.ReleaseBuffer();
+	std::string s = std::to_string(iInt);
+	CString str(s.c_str());
+//	_itot_s(iInt, str.GetBufferSetLength(256), 256, radix);
+//	str.ReleaseBuffer();
 	return str;
 }
 
@@ -1802,6 +1803,8 @@ bool Global::SaveBinFile(uint8_t *buf, uint16_t addr, uint16_t len, const fs::pa
 	return false;
 }
 
+#define min(X, Y) (X < Y ? X : Y)
+
 /*
 * Загрузить массив в формате bin
 * Вход: buf - указатель на массив данных
@@ -1913,6 +1916,7 @@ bool Global::isEmptyUnit(const fs::path &s)
 
 void Global::SetMonospaceFont(HWND hwnd, CFont *pFont)
 {
+	#ifdef UI
 	LOGFONT lf{};
 	::GetObject((HGDIOBJ)::SendMessage(hwnd, WM_GETFONT, 0, 0), sizeof(LOGFONT), &lf);
 	_tcscpy_s(lf.lfFaceName, LF_FACESIZE, _T("Courier New\0"));
@@ -1922,5 +1926,6 @@ void Global::SetMonospaceFont(HWND hwnd, CFont *pFont)
 		_tcscpy_s(lf.lfFaceName, LF_FACESIZE, _T("Lucida Console\0"));
 		pFont->CreateFontIndirect(&lf);
 	}
+	#endif
 }
 

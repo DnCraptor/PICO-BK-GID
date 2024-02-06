@@ -50,6 +50,18 @@ class CString {
             m_pszData = 0;
         }
     }
+    PXSTR GetBufferSetLength(size_t sz) {
+        if (m_pszData) {
+            delete m_pszData;
+        }
+        m_pszData = new XCHAR[sz];
+        m_pszData[sz - 1] = 0;
+        return m_pszData;
+    }
+    void ReleaseBuffer(size_t sz) {
+        if (!m_pszData) return;
+        m_pszData[sz] = 0;
+    }
     PCXSTR GetString() const {
         return( m_pszData );
     }
@@ -70,7 +82,12 @@ class CString {
             for ( ; *p; ++p) *p = tolower(*p);
         }
     }
-    int CollateNoCase(const char* str) {
+    int CollateNoCase(const char* str) const {
+        CString s1(str); s1.MakeLower();
+        CString s2(GetString()); s2.MakeLower();
+        return s1.Compare(s2);
+    }
+    int CollateNoCase(const CString& str) const {
         CString s1(str); s1.MakeLower();
         CString s2(GetString()); s2.MakeLower();
         return s1.Compare(s2);
@@ -186,6 +203,24 @@ class CString {
         }
         return (*this);
     }
+    CString& Insert(int, const char*) {
+        // TODO:
+        return (*this);
+    }
+    CString& Replace(char c1, char c2) {
+        if (!m_pszData) return (*this);
+        PXSTR p = m_pszData;
+        while (*p) {
+            if (*p == c1) *p = c2;
+            p++;
+        }
+        return (*this);
+    }
+    CString& SetAt(size_t i, char c) {
+        if (!m_pszData) return (*this);
+        m_pszData[i] = c;
+        return (*this);
+    }
     private:
     	PXSTR m_pszData;
 };
@@ -202,7 +237,8 @@ class COleDateTime {
 extern "C" {
 #include <stdlib.h>
 }
-
+typedef int                           errno_t;
 inline static int _ttoi(const CString& c) { return atoi(c.GetString()); }
 inline static int _tstoi(const CString& c) { return atoi(c.GetString()); }
 #define _ttof(X) atof(X.GetString())
+inline static long _tcstol(const CString& c, char **__restrict __end_PTR, int __base) { return strtol(c.GetString(), __end_PTR, __base); }

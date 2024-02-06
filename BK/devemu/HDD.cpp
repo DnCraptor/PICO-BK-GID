@@ -154,7 +154,7 @@ void CHDD::detach_hdd()
 
 bool CHDD::is_attached() const
 {
-	return (m_fHDDImageFile.m_hFile != CFile::hFileNull);
+	return (m_fHDDImageFile.m_o);
 }
 
 

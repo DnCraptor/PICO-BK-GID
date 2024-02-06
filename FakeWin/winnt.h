@@ -26,7 +26,9 @@ typedef char CHAR;
 typedef CHAR *PCHAR, *LPCH, *PCH;
 typedef CONST CHAR *LPCCH, *PCCH;
 typedef _Null_terminated_ CONST CHAR *LPCWSTR, *PCWSTR;
+typedef _Null_terminated_ CHAR *LPWSTR;
 typedef LPCWSTR PCTSTR, LPCTSTR;
+typedef LPWSTR PTSTR, LPTSTR;
 
 typedef _Null_terminated_ CHAR *NPSTR, *LPSTR, *PSTR;
 typedef _Null_terminated_ PSTR *PZPSTR;
