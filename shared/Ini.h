@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include <afx.h>
+#include "framework.h"
 
 constexpr auto INI_BUFFER_LENGTH = 1024;
 

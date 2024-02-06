@@ -16,6 +16,11 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 
+#include "Board_10.h"
+#include "Config.h"
+#include "resource.h"
+#include <WinUser.h>
+
 extern "C" {
 //#include "psram_spi.h"
 #include "nespad.h"
@@ -326,6 +331,32 @@ int main() {
 		return 1;
 	}
 #endif
+
+    g_Config.InitConfig(CString(MAKEINTRESOURCE(IDS_INI_FILENAME)));
+    g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
+    CMotherBoard_10 *m_pBoard = new CMotherBoard_10();
+	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
+	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
+	//	m_pBoard->AttachWindow(this);  // цепляем к MotherBoard этот класс
+		// порядок имеет значение. сперва нужно делать обязательно AttachWindow(this)
+		// и только затем m_pBoard->SetMTC(). И эта функция обязательна, там звуковой буфер вычисляется
+		// и выделяется
+	//	m_pBoard->SetMTC(nMtc); // и здесь ещё. тройная работа получается.
+		// Присоединяем к новосозданному чипу устройства
+	//	m_pBoard->AttachSound(m_pSound.get());
+	//	m_pBoard->AttachSpeaker(&m_speaker);
+	//	m_pBoard->AttachMenestrel(&m_menestrel);
+	//	m_pBoard->AttachCovox(&m_covox);
+	//	m_pBoard->AttachAY8910(&m_aySnd);
+		// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
+		m_pBoard->NormalizeCPU();
+		// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
+	//	m_pDebugger->AttachBoard(GetBoard());
+	//	m_paneRegistryDumpViewCPU.SetFreqParam();
+		// Цепляем обработчик скриптов
+	//	m_Script.AttachBoard(GetBoard());
+	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr))
+
 
     if_manager(true);
     // TODO:

@@ -7,6 +7,7 @@
 #define AFXAPI
 
 #include <limits.h>
+#include <afxwin.h>
 #define ENSURE(X)
 #define ASSERT_VALID(X)
 #define memcpy_s(X, Y, Z, S) memcpy(X, Z, S)
@@ -29,7 +30,7 @@ AFX_INLINE void AFXAPI CopyElements(TYPE* pDest, const TYPE* pSrc, INT_PTR nCoun
 // CArray<TYPE, ARG_TYPE>
 
 template<class TYPE, class ARG_TYPE = const TYPE&>
-class CArray : public CObject
+class CArray : public CObject 
 {
 public:
 // Construction

@@ -2,6 +2,7 @@
 //
 #pragma once
 #include <winnt.h>
+#include <afxwin.h>
 // флаги операций для функций обащения к системным регистрам
 #define GSSR_NONE 0
 #define GSSR_BYTEOP 1

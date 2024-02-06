@@ -7,7 +7,7 @@
 
 class CFileException{};
 
-class CFile : public CObject {
+class CFile /***: public CObject*/ {
     public:
 // Flag values
 	enum OpenFlags {
