@@ -27,7 +27,7 @@ class CString {
         strcpy(m_pszData, src);
     }
     CString(const DWORD resource): m_pszData(0) {
-        // TODO:
+        LoadString((int)resource);
     }
     void Empty() {
         if (m_pszData) {
@@ -37,10 +37,7 @@ class CString {
         m_pszData = new XCHAR[1];
         m_pszData[0] = 0;
     }
-    BOOL LoadString(int res) {
-        // TODO:
-        return false;
-    }
+    BOOL LoadString(int res);
     void Format(int res, const CString& arg) {
 // TODO:
     }

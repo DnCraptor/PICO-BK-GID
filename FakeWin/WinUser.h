@@ -361,5 +361,4 @@ WINAPI
 GetAsyncKeyState(
     _In_ int vKey);
 
-#define MAKEINTRESOURCEA(i) ((LPSTR)((ULONG_PTR)((WORD)(i))))
-#define MAKEINTRESOURCE  MAKEINTRESOURCEA
+#define MAKEINTRESOURCE(i)  ((int)(i))

@@ -1,5 +1,6 @@
 #pragma once
 #include <windef.h>
+#include <inttypes.h>
 
 #define WM_USER 100
 
