@@ -11,3 +11,10 @@ extern void logMsg(char* msg);
 #endif
 
 #endif
+
+#ifdef __cplusplus
+
+#include "BKMessageBox.h"
+#define TRACE_T(...) { char tmp[80]; snprintf(tmp, 80, __VA_ARGS__); g_BKMsgBox.Show(CString(tmp), 0); }
+
+#endif

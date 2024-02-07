@@ -2,6 +2,7 @@
 //
 #pragma once
 #include <WinUser.h>
+#include <CString.h>
 #ifdef UI
 #include "resource.h"
 
@@ -26,8 +27,8 @@ class CBKMessageBox {
 	public:
 	CBKMessageBox() {}
 	virtual ~CBKMessageBox() = default;
-	int Show(UINT strID, UINT nType = MB_OK, UINT nIDHelp = 0) { return S_OK; }
-	int Show(CString strText, UINT nType, UINT nIDHelp = 0) { return S_OK; }
+	int Show(UINT strID, UINT nType = MB_OK, UINT nIDHelp = 0);
+	int Show(const CString& strText, UINT nType, UINT nIDHelp = 0);
 };
 #endif
 

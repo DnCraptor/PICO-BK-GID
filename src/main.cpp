@@ -3,7 +3,6 @@ extern "C" {
 #include "f_util.h"
 #include "config_em.h"
 #include "manager.h"
-#include "debug.h"
 }
 
 #include <pico/time.h>
@@ -19,6 +18,7 @@ extern "C" {
 #include "Board_10.h"
 #include "Config.h"
 #include "resource.h"
+#include "debug.h"
 #include <WinUser.h>
 
 extern "C" {

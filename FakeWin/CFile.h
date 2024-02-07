@@ -2,6 +2,7 @@
 
 #include <winnt.h>
 #include <ff.h>
+#include <debug.h>
 
 #define AFX_DATA
 
@@ -63,6 +64,7 @@ class CFile /***: public CObject*/ {
     }
     virtual BOOL Open(LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pError = NULL) {
         m_o = f_open(&m_file, lpszFileName, (nOpenFlags & CFile::modeWrite) ? (FA_WRITE | FA_READ) : FA_READ) == FR_OK;
+        TRACE_T("[Open] %s %d", lpszFileName, nOpenFlags);
         return m_o;
     }
     virtual size_t GetLength() const { return f_size(&m_file); }
