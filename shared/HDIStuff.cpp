@@ -27,15 +27,16 @@ std::wstring HDIStuff::GenerateSerialNumber()
 // копирование строки в системный сектор.
 void HDIStuff::CopyString2Sys(uint8_t *dst, const std::wstring &str, const size_t max_len)
 {
+	TRACE_T("CopyString2Sys %s", str.c_str());
 #pragma warning(disable:4996)
 	const size_t sizeOfString = str.length();
-	using convert_typeX = std::codecvt_utf8<wchar_t>;
-	std::wstring_convert<convert_typeX, wchar_t> converterX;
-	std::string lpszAscii = converterX.to_bytes(str);
+///	using convert_typeX = std::codecvt_utf8<wchar_t>;
+///	std::wstring_convert<convert_typeX, wchar_t> converterX;
+///	std::string lpszAscii = converterX.to_bytes(str);
 
 	for (size_t i = 0; i < max_len; ++i)
 	{
-		dst[i] = (i < sizeOfString) ? lpszAscii[i] : ' ';
+		dst[i] = (i < sizeOfString) ? /***lpszAscii*/str[i] : ' ';
 	}
 
 	// а теперь по традиции переставим байты в словах

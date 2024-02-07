@@ -145,16 +145,17 @@ bool CConfig::InitConfig(const CString &strIniName)
 {
 	GetConfCurrPath(); // инициализация переменной m_strCurrentPath
 	m_strIniFileName = m_strCurrentPath / strIniName.GetString();
+	TRACE_T("m_strIniFileName: %s", m_strIniFileName.c_str());
 	iniFile.SetIniFileName(m_strIniFileName);
 	bool bNewConfig = false;
-
 	if (!fs::exists(m_strIniFileName))
 	{
+		TRACE_T("DefaultConfig");
 		// если файла нету - создадим конфиг по умолчанию
 		DefaultConfig();
 		bNewConfig = true;
 	}
-
+    TRACE_T("LoadConfig");
 	LoadConfig();
 	return bNewConfig;
 }
@@ -165,24 +166,10 @@ void CConfig::UnInitConfig()
 	iniFile.Clear();
 }
 
-const fs::path &CConfig::GetConfCurrPath()
-{
-	if (m_strCurrentPath.empty())
-	{
-	//	CString pModuleName;
-	//	BOOL res = ::GetModuleFileName(AfxGetInstanceHandle(), pModuleName.GetBufferSetLength(_MAX_PATH), _MAX_PATH);
-	//	pModuleName.ReleaseBuffer();
-
-	//	if (res)
-	//	{
-	//		m_strCurrentPath = fs::path(pModuleName.GetString()).parent_path();
-	//	}
-	//	else
-		{
-			m_strCurrentPath = "\\";
-		}
+const fs::path &CConfig::GetConfCurrPath() {
+	if (m_strCurrentPath.empty()) {
+    	m_strCurrentPath = "\\";
 	}
-
 	return m_strCurrentPath;
 }
 
@@ -733,28 +720,23 @@ void CConfig::SaveConfig()
 	iniFile.FlushIni();
 }
 
-void CConfig::DefaultConfig()
-{
+void CConfig::DefaultConfig() {
 	// идея следующая.
 	// Создадим конфиг со значениями по умолчанию, и сохраним его на диске.
 	// Создание Rom модулей
 	int id, i = 0;
-
-	while ((id = m_romModules[i].nID) != 0)
-	{
+	while ((id = m_romModules[i].nID) != 0) {
+		TRACE_T("m_romModules[%d] %s", i, m_romModules[i].defValue.c_str());
 		iniFile.SetValueString(IDS_INI_SECTIONNAME_ROMMODULES, id, m_romModules[i].defValue.c_str());
 		i++;
 	}
-
 	// Создание директорий
 	i = 0;
-
-	while ((id = m_Directories[i].nID) != 0)
-	{
+	while ((id = m_Directories[i].nID) != 0) {
+		TRACE_T("m_Directories[%d] %s", i, m_Directories[i].defValue.c_str());
 		iniFile.SetValueString(IDS_INI_SECTIONNAME_DIRECTORIES, id, m_Directories[i].defValue.c_str());
 		i++;
 	}
-
 	// Создание параметров
 	//      Основные параметры
 	iniFile.SetValueString(IDS_INI_SECTIONNAME_MAIN, IDS_INI_BKMODEL, g_mstrConfigBKModelParameters[static_cast<int>(CONF_BKMODEL::BK_0010_01)].strBKModelConfigName);
@@ -789,13 +771,10 @@ void CConfig::DefaultConfig()
 	iniFile.SetValueInt(IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_CPU_FREQUENCY, 0);  // если 0, то берётся значение по умолчанию для своей конфигурации
 	iniFile.SetValueInt(IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_REGSDUMP_INTERVAL, 10);
 	iniFile.SetValueString(IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_SOUNDVOLUME, _T("30%")); // Громкость
-
-	for (int n = 0; n < NUMBER_VIEWS_MEM_DUMP; ++n)
-	{
+	for (int n = 0; n < NUMBER_VIEWS_MEM_DUMP; ++n) {
 		iniFile.SetValueString(IDS_INI_SECTIONNAME_PARAMETERS, g_arStrDumpAddrID[n], _T("000000"));
 		iniFile.SetValueString(IDS_INI_SECTIONNAME_PARAMETERS, g_arStrDumpListID[n], _T("0 : 0"));
 	}
-
 	iniFile.SetValueString(IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_ADDR_DISASM, _T("001000"));
 	// Создание опций
 	iniFile.SetValueBool(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SAVES_DEFAULT, false);

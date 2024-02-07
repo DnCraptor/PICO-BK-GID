@@ -28,7 +28,7 @@ class CBKMessageBox {
 	CBKMessageBox() {}
 	virtual ~CBKMessageBox() = default;
 	int Show(UINT strID, UINT nType = MB_OK, UINT nIDHelp = 0);
-	int Show(const CString& strText, UINT nType, UINT nIDHelp = 0);
+	int Show(const CString& strText, UINT nType = MB_OK, UINT nIDHelp = 0);
 };
 #endif
 

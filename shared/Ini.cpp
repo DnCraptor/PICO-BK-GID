@@ -341,8 +341,8 @@ bool CIni::ReadIni()
 	return true;
 }
 
-bool CIni::FlushIni()
-{
+bool CIni::FlushIni() {
+	TRACE_T("FlushIni");
 	if (m_iniStatus == IniStatus::NOTREADED // если ини не прочитан, то и записывать нечего
 	        || m_iniStatus == IniStatus::FLUSHED   // если ини уже записан, то второй раз - не надо
 	        || SetOfSections.empty()               // если инифайл пустой, то и делать нечего

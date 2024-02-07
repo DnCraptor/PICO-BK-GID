@@ -22,5 +22,4 @@
 
 #include <iostream>
 #include <memory>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <fs.h>

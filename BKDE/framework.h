@@ -37,10 +37,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <filesystem>
-namespace fs = std::filesystem;
-
-
+#include <fs.h>
 
 #ifdef _UNICODE
 #if defined _M_IX86

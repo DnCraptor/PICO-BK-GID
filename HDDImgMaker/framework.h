@@ -24,8 +24,7 @@
 #include <afxext.h>         // расширения MFC
 #include <cstdint>
 #include <memory>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <fs.h>
 
 // #include <afxdisp.h>        // классы автоматизации MFC
 

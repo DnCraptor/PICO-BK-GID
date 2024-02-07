@@ -36,7 +36,7 @@ int CBKMessageBox::Show(UINT strID, UINT nType, UINT nIDHelp) {
 
 int CBKMessageBox::Show(const CString& strText, UINT nType, UINT nIDHelp) {
 	FIL file;
-	f_open(&file, "\\bk.log", FA_OPEN_ALWAYS | FA_OPEN_APPEND);
+	f_open(&file, "\\bk.log", FA_WRITE | FA_OPEN_ALWAYS | FA_OPEN_APPEND);
 	UINT bw;
 	f_write(&file, strText.GetString(), strText.GetLength(), &bw);
 	f_write(&file, "\n", 1, &bw);

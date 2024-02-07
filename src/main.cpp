@@ -331,10 +331,12 @@ int main() {
 		return 1;
 	}
 #endif
-
     g_Config.InitConfig(CString("bk.ini"));
+    TRACE_T("VerifyRoms");
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
+    TRACE_T("new CMotherBoard_10()");
     CMotherBoard_10 *m_pBoard = new CMotherBoard_10();
+    TRACE_T("SetFDDType");
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
 	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
 	//	m_pBoard->AttachWindow(this);  // цепляем к MotherBoard этот класс
@@ -348,15 +350,17 @@ int main() {
 	//	m_pBoard->AttachMenestrel(&m_menestrel);
 	//	m_pBoard->AttachCovox(&m_covox);
 	//	m_pBoard->AttachAY8910(&m_aySnd);
-		// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
-		m_pBoard->NormalizeCPU();
+	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
+    TRACE_T("NormalizeCPU");
+	m_pBoard->NormalizeCPU();
 		// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
 	//	m_pDebugger->AttachBoard(GetBoard());
 	//	m_paneRegistryDumpViewCPU.SetFreqParam();
 		// Цепляем обработчик скриптов
 	//	m_Script.AttachBoard(GetBoard());
+    TRACE_T("InitBoard");
 	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr))
-
+        TRACE_T("InitBoard failed");
 
     if_manager(true);
     // TODO:

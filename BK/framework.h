@@ -48,8 +48,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include "fs.h"
 
 #include <SetupAPI.h>
 #ifdef _UNICODE

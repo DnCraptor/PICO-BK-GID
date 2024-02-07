@@ -10,7 +10,6 @@
 #include <cstdio>
 #include <tchar.h>
 #include <string>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <fs.h>
 
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы

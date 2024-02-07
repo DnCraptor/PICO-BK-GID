@@ -13,8 +13,7 @@
 
 #include <vector>
 #include <algorithm>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <fs.h>
 
 #include <windows.h>
 

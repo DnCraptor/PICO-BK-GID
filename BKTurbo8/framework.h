@@ -13,8 +13,7 @@
 // TODO: Установите здесь ссылки на дополнительные заголовки, требующиеся для программы
 #include <string>
 #include <vector>
-#include <filesystem>
-namespace fs = std::filesystem;
+#include <fs.h>
 
 #include <cassert>
 #include <windows.h>
