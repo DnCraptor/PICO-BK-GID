@@ -179,7 +179,7 @@ const fs::path &CConfig::GetConfCurrPath()
 	//	}
 	//	else
 		{
-			m_strCurrentPath = fs::current_path();
+			m_strCurrentPath = "\\";
 		}
 	}
 

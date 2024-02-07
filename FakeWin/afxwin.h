@@ -16,9 +16,9 @@ class AFX_NOVTABLE CObject {
 protected:
    CObject() {}
 public:
-   virtual ~CObject() = 0;
-   BOOL IsSerializable() const;
-   virtual void Serialize(CArchive& ar);
+   virtual ~CObject() = default;
+   virtual BOOL IsSerializable() const { return false; }
+   virtual void Serialize(CArchive& ar) {}
 };
 
 DECLARE_HANDLE(HDC);

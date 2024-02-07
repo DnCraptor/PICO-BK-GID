@@ -332,7 +332,7 @@ int main() {
 	}
 #endif
 
-    g_Config.InitConfig(CString(MAKEINTRESOURCE(IDS_INI_FILENAME)));
+    g_Config.InitConfig(CString("bk.ini"));
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
     CMotherBoard_10 *m_pBoard = new CMotherBoard_10();
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
