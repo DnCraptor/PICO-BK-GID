@@ -766,58 +766,49 @@ bool CIni::GetValueBool(const int nSection, const int nKey, const bool bDefault)
 }
 
 
-bool CIni::SetValueString(const CString &strSection, const CString &strKey, const CString &strVal)
-{
-	if (Add(strSection, strKey, strVal, _T(""), false))
-	{
+bool CIni::SetValueString(const CString &strSection, const CString &strKey, const CString &strVal) {
+	TRACE_T("1 SetValueString %s : %s : %s", strSection.GetString(), strKey.GetString(), strVal.GetString());
+	if (Add(strSection, strKey, strVal, _T(""), false))	{
 		m_iniStatus = IniStatus::READED;
 		return true;
 	}
-
 	return false;
 }
 
-bool CIni::SetValueString(int nSection, const CString &strKey, const CString &strVal)
-{
+bool CIni::SetValueString(int nSection, const CString &strKey, const CString &strVal) {
+	TRACE_T("2 SetValueString %d : %s : %s", nSection, strKey.GetString(), strVal.GetString());
 	CString strSection;
-
-	if (strSection.LoadString(nSection))
-	{
+	if (strSection.LoadString(nSection)) {
 		return SetValueString(strSection, strKey, strVal);
 	}
-
 	return false;
 }
 
-bool CIni::SetValueString(const int nSection, const int nKey, const CString &strVal)
-{
+bool CIni::SetValueString(const int nSection, const int nKey, const CString &strVal) {
+	TRACE_T("3 SetValueString %d : %d : %s", nSection, nKey, strVal.GetString());
 	CString strSection, strKey;
-
-	if (strSection.LoadString(nSection) && strKey.LoadString(nKey))
-	{
+	if (strSection.LoadString(nSection) && strKey.LoadString(nKey)) {
 		return SetValueString(strSection, strKey, strVal);
 	}
-
 	return false;
 }
 
-
-bool CIni::SetValueInt(const int nSection, const int nKey, const int iVal)
-{
+bool CIni::SetValueInt(const int nSection, const int nKey, const int iVal) {
+	TRACE_T("SetValueInt %d : %d : %d", nSection, nKey, iVal);
 	CString str;
 	str.Format(_T("%d"), iVal);
 	return SetValueString(nSection, nKey, str);
 }
 
-bool CIni::SetValueFloat(const int nSection, const int nKey, const double fVal)
-{
+bool CIni::SetValueFloat(const int nSection, const int nKey, const double fVal) {
+	TRACE_T("SetValueFloat %d : %d : %f", nSection, nKey, fVal);
 	CString str;
 	str.Format(_T("%.16f"), fVal);
 	return SetValueString(nSection, nKey, str);
 }
 
-bool CIni::SetValueBool(const int nSection, const int nKey, const bool bVal)
-{
+bool CIni::SetValueBool(const int nSection, const int nKey, const bool bVal) {
+	TRACE_T("SetValueBool %d : %d : %d", nSection, nKey, bVal);
 	CString str = bVal ? _T("Yes") : _T("No");
 	return SetValueString(nSection, nKey, str);
 }

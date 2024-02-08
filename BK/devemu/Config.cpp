@@ -666,7 +666,7 @@ void CConfig::SaveConfig()
 	}
 
 	iniFile.SetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_ADDR_DISASM, Global::WordToOctString(m_nDisasmAddr));
-	SavePalettes(strCustomize);
+///	SavePalettes(strCustomize);
 	SaveJoyParams(strCustomize);
 	SaveAYVolPanParams(strCustomize);
 	// Сохранение опций
@@ -811,7 +811,7 @@ void CConfig::DefaultConfig() {
 	iniFile.SetValueBool(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SHOW_PERFORMANCE_STRING, true);
 	iniFile.SetValueBool(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_EMULATE_FDDIO, true);
 	iniFile.SetValueInt(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_VKBD_TYPE, 0);
-	MakeDefaultPalettes();
+///	MakeDefaultPalettes();
 	MakeDefaultJoyParam();
 	MakeDefaultAYVolPanParam();
 	// Создание приводов
@@ -1211,12 +1211,14 @@ static const UINT arJoyparamIni[BKJOY_PARAMLEN] =
 	IDS_INI_BKJOY_A,
 	IDS_INI_BKJOY_B
 };
-void CConfig::MakeDefaultJoyParam()
-{
-	for (int i = 0; i < BKJOY_PARAMLEN; ++i)
-	{
+void CConfig::MakeDefaultJoyParam() {
+	for (int i = 0; i < BKJOY_PARAMLEN; ++i) {
+		TRACE_T("MakeDefaultJoyParam %d", i);
 		m_arJoystick[i] = m_arJoystick_std[i];
+		TRACE_T("MakeDefaultJoyParam m_arJoystick[%d] strVKeyName: %s; nVKey: %d; nMask: 0%05o",
+		        i, m_arJoystick[i].strVKeyName.GetString(), m_arJoystick[i].nVKey, m_arJoystick[i].nMask);
 		CString str = m_arJoystick[i].strVKeyName + _T(" : ") + Global::WordToOctString(m_arJoystick[i].nMask);
+		TRACE_T("str: %s", str.GetString());
 		iniFile.SetValueString(IDS_INI_SECTIONNAME_JOYSTICK, arJoyparamIni[i], str);
 	}
 }
@@ -1420,17 +1422,15 @@ CString Global::ByteToOctString(uint8_t byte)
 	return str;
 }
 
-void Global::WordToOctString(uint16_t word, CString &str)
-{
+void Global::WordToOctString(uint16_t word, CString &str) {
+	TRACE_T("WordToOctString 0%05o", word);
 	LPTSTR pstr = str.GetBufferSetLength(7);
-
-	for (int i = 5; i >= 0; --i)
-	{
+	for (int i = 5; i >= 0; --i) {
 		pstr[i] = TCHAR(060 + (word & 7));
 		word >>= 3;
 	}
-
 	str.ReleaseBuffer(6);
+	TRACE_T("WordToOctString s%s", str.GetString());
 }
 
 void Global::ByteToOctString(uint8_t byte, CString &str)

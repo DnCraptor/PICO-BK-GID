@@ -4,242 +4,148 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string>
+#include <algorithm>
 
 class CString {
-    public:
+    std::string s;
+public:
     typedef char XCHAR;
 	typedef LPSTR PXSTR;
     typedef LPSTR PCXSTR;
-    CString(): m_pszData(0) {}
-    CString(const PCXSTR src) {
-        size_t len = strlen(src);
-        m_pszData = new XCHAR[len + 1];
-        strcpy(m_pszData, src);
-    }
-    CString(const PCXSTR src, size_t len) {
-        m_pszData = new XCHAR[len + 1];
-        strncpy(m_pszData, src, len);
-        m_pszData[len] = 0;
-    }
-    CString(const char* src) {
-        size_t len = strlen(src);
-        m_pszData = new XCHAR[len + 1];
-        strcpy(m_pszData, src);
-    }
-    CString(const DWORD resource): m_pszData(0) {
-        LoadString((int)resource);
-    }
-    void Empty() {
-        if (m_pszData) {
-            delete m_pszData;
-            m_pszData = 0;
-        }
-        m_pszData = new XCHAR[1];
-        m_pszData[0] = 0;
-    }
+    CString(): s() {}
+    CString(const std::string& _s): s(_s) {}
+    CString(const CString& c): s(c.s) {}
+    CString(const PCXSTR src) : s(src) {}
+    CString(const char* src) : s(src) {}
+    CString(const PCXSTR src, size_t len) : s(src, len) {}
+    CString(const DWORD resource) { LoadString((int)resource); }
+    inline void Empty() { s.clear(); }
     BOOL LoadString(int res);
-    void Format(int res, const CString& arg) {
-// TODO:
-    }
-    ~CString() {
-        if (m_pszData) {
-            delete m_pszData;
-            m_pszData = 0;
+    inline void Format(int res, const CString& arg) {
+        if (LoadString(res)) {
+            char tmp[80];
+            snprintf(tmp, 80, arg.s.c_str());
+            s = tmp;
         }
     }
-    PXSTR GetBufferSetLength(size_t sz) {
-        if (m_pszData) {
-            delete m_pszData;
-        }
-        m_pszData = new XCHAR[sz];
-        m_pszData[sz - 1] = 0;
-        return m_pszData;
+    ~CString() {}
+    inline PXSTR GetBufferSetLength(size_t sz) { // TODO:
+        s.reserve(sz);
+        return (PXSTR)s.c_str();
     }
-    void ReleaseBuffer() {
+    inline void ReleaseBuffer() {
         // TODO: ?
     }
-    void ReleaseBuffer(size_t sz) {
-        if (!m_pszData) return;
-        m_pszData[sz] = 0;
+    inline void ReleaseBuffer(size_t sz) {
+        s[sz] = 0;
     }
-    PCXSTR GetString() const {
-        return( m_pszData );
+    inline PCXSTR GetString() const {
+        return (PCXSTR)s.c_str();
     }
-    PXSTR GetBuffer() { return m_pszData; }
-    bool IsEmpty() const {
-        if (m_pszData)
-            return m_pszData[0] == 0;
-        return true;
-    }
-    size_t GetLength() const {
-        if (m_pszData)
-            return strlen(m_pszData);
-        return 0;
-    }
-    CHAR operator[](size_t s) const { return m_pszData[s]; }
-    void MakeLower() {
-        if (m_pszData) {
-            PXSTR p = m_pszData;
-            for ( ; *p; ++p) *p = tolower(*p);
-        }
-    }
-    CString& MakeUpper() {
-        if (m_pszData) {
-            PXSTR p = m_pszData;
-            for ( ; *p; ++p) *p = toupper(*p);
-        }
+    inline PXSTR GetBuffer() { return (PXSTR)s.c_str(); } // TODO:
+    inline bool IsEmpty() const { return s.empty(); }
+    inline size_t GetLength() const { return s.length(); }
+    inline CHAR operator[](size_t si) const { return s[si]; }
+    inline CString& MakeLower() {
+        for(auto& c : s)
+            c = tolower(c);
         return *this;
     }
-    int CollateNoCase(const char* str) const {
+    inline CString& MakeUpper() {
+        for(auto& c : s)
+            c = toupper(c);
+        return *this;
+    }
+    inline int CollateNoCase(const CString& str) const {
         CString s1(str); s1.MakeLower();
         CString s2(GetString()); s2.MakeLower();
         return s1.Compare(s2);
     }
-    int CollateNoCase(const CString& str) const {
-        CString s1(str); s1.MakeLower();
-        CString s2(GetString()); s2.MakeLower();
-        return s1.Compare(s2);
-    }
-    void Format(PCXSTR pszFormat, ...) {
+    inline void Format(PCXSTR pszFormat, ...) {
 	    va_list argList;
         size_t len = strlen(pszFormat) << 1;
         PXSTR t = new XCHAR[len];
         snprintf(t, len, pszFormat, argList);
-        len = strlen(t);
-        m_pszData = new XCHAR[len + 1];
-        strcpy(m_pszData, t);
+        s = t;
         delete t;
     }
-    int Compare(const CString& s) const {
-        if (!m_pszData && !s.m_pszData) return 0;
-        if (!m_pszData) return -1;
-        if (!s.m_pszData) return 1;
-        return strcmp(m_pszData, s.m_pszData);
+    inline int Compare(const CString& si) const {
+        return strcmp(s.c_str(), si.s.c_str());
     }
-    friend CString operator+(const CString& str1, char ch2) {
+    inline friend CString operator+(const CString& str1, char ch2) {
         CString strResult(str1);
-        strResult.AddChar(ch2);
+        strResult.s += ch2;
         return( strResult );
     }
-    friend CString operator+(const CString& str1, const CString& str2) {
+    inline friend CString operator+(const CString& str1, const CString& str2) {
         CString strResult(str1);
-        strResult += str2;
+        strResult.s += str2.s;
         return( strResult );
     }
-    friend BOOL operator==(const CString& str1, const CString& str2) {
-        return str1.Compare(str2) == 0;
+    inline friend BOOL operator==(const CString& str1, const CString& str2) {
+        return str1.s == str2.s;
     }
-    int Find(char c, size_t from = 0) const {
-        if (!m_pszData) return -1;
-        PXSTR p = m_pszData + from;
+    inline int Find(char c, size_t from = 0) const {
+        const char* p = s.c_str() + from;
         int res = 0;
         while(*p != c) ++res;
         return res;
     }
-    int Find(const CString& str, size_t from = 0) const {
-        if (!m_pszData) return -1;
-        PXSTR p = m_pszData + from;
+    inline int Find(const CString& str, size_t from = 0) const {
+        const char* p = s.c_str() + from;
         char* r = strstr(p, str.GetString());
-        return m_pszData - r;
+        return s.c_str() - r;
     }
-    char GetAt(size_t d) const {
-        return m_pszData[d];
-    }
-    void AddChar(char c) {
-        if (!m_pszData) {
-            m_pszData = new XCHAR[2];
-            m_pszData[0] = c;
-            m_pszData[1] = 0;
-        } else {
-            size_t len = strlen(m_pszData) + 2;
-            PXSTR t = new XCHAR[len];
-            strcpy(t, m_pszData);
-            t[--len] = 0;
-            t[--len] = c;
-            delete m_pszData;
-            m_pszData = t;
-        }
-    }
-    CString& TrimRight(char c) {
-        int idx0 = strlen(m_pszData);
-        while(idx0 > 0 && (m_pszData[idx0 - 1] == c)) { m_pszData[--idx0] = 0; }
+    inline char GetAt(size_t d) const { return s[d]; }
+    inline void AddChar(char c) { s += c; }
+    inline CString& TrimRight(char c) {
+        s.erase(s.find_last_not_of(c) + 1);
         return (*this);
     }
-    CString& Trim() {
-        if (!m_pszData) return (*this);
-        PXSTR p1 = m_pszData;
-        while (*p1 == ' ' || *p1 == '\t') { p1++; }
-        int idx0 = strlen(m_pszData);
-        while(idx0 > 0 && (m_pszData[idx0 - 1] == ' ' || m_pszData[idx0 - 1] == '\t')) { m_pszData[--idx0] = 0; }
-        if (m_pszData == p1) return (*this);
-        strcpy(m_pszData, p1);
+    inline CString& Trim() {
+        static const char* ws = " \t\n\r\f\v";
+        s.erase(s.find_last_not_of(ws) + 1); // rtrim
+        s.erase(0, s.find_first_not_of(ws)); // ltrim
         return (*this);
     }
-    CString& Trim(char c) {
-        if (!m_pszData) return (*this);
-        PXSTR p1 = m_pszData;
-        while (*p1 == c) { p1++; }
-        int idx0 = strlen(m_pszData);
-        while(idx0 > 0 && (m_pszData[idx0 - 1] == c)) { m_pszData[--idx0] = 0; }
-        if (m_pszData == p1) return (*this);
-        strcpy(m_pszData, p1);
+    inline CString& Trim(char c) {
+        s.erase(s.find_last_not_of(c) + 1); // rtrim
+        s.erase(0, s.find_first_not_of(c)); // ltrim
         return (*this);
     }
-    CString Left(int i) const {
-        CString res(m_pszData, i);
-        return res;
+    inline CString Left(int i) const {
+        return CString(s.substr(0, i));
     }
-    CString Right(int i) const {
-        CString res(m_pszData + i);
-        return res;
+    inline CString Right(int i) const {
+        return CString(s.substr(i));
     }
-    CString Mid(int i) const {
-        CString res(m_pszData + i);
-        return res;
+    inline CString Mid(int i) const {
+        return CString(s.substr(i));
     }
-    CString Mid(int i, int y) const {
-        CString res(m_pszData + i, y - i);
-        return res;
+    inline CString Mid(int i, int y) const {
+        return CString(s.substr(i, y));
     }
-    CString& operator+=(const CString& str) {
-        size_t len2 = str.GetLength();
-        if (!m_pszData) {
-            m_pszData = new XCHAR[len2 + 1];
-            strcpy(m_pszData, str.GetString());
-        } else {
-            size_t len1 = strlen(m_pszData);
-            PXSTR t = new XCHAR[len1 + len2];
-            strcpy(t, m_pszData);
-            strcpy(t + len1, str.GetString());
-            delete m_pszData;
-            m_pszData = t;
-        }
+    inline CString& operator+=(const CString& str) {
+        s += str.s;
         return (*this);
     }
-    CString& Insert(int, const char*) {
-        // TODO:
+    inline CString& Insert(int i, const char* pc) {
+        s.insert(i, pc);
         return (*this);
     }
-    CString& Insert(int, const CString&) {
-        // TODO:
+    inline CString& Insert(int i, const CString& cs) {
+        s.insert(i, cs.s);
         return (*this);
     }
-    CString& Replace(char c1, char c2) {
-        if (!m_pszData) return (*this);
-        PXSTR p = m_pszData;
-        while (*p) {
-            if (*p == c1) *p = c2;
-            p++;
-        }
+    inline CString& Replace(char c1, char c2) {
+        std::replace(s.begin(), s.end(), c1, c2);
         return (*this);
     }
-    CString& SetAt(size_t i, char c) {
-        if (!m_pszData) return (*this);
-        m_pszData[i] = c;
+    inline CString& SetAt(size_t i, char c) {
+        s[i] = c;
         return (*this);
     }
-    private:
-    	PXSTR m_pszData;
 };
 
 typedef char TCHAR;
