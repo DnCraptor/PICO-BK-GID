@@ -271,13 +271,14 @@ void CConfig::_intLoadConfig(bool bLoadMain) {
 		// реализуем возможность задания произвольного пути
 		fs::path strDefPath = iniFile.GetValueString(IDS_INI_SECTIONNAME_DIRECTORIES, id, m_Directories[i].defValue.c_str()).GetString();
 		//если есть имя диска или "\\" в начале - то это абсолютный путь
+		TRACE_T(" m_Directories[%d] %s <- %s", i, m_Directories[i].pstrValue->c_str(), strDefPath.c_str());
 		if (strDefPath.has_root_name()) {
 			*m_Directories[i].pstrValue = strDefPath;
 		} else {
 			// иначе - это относительный путь от домашней директории
 			*m_Directories[i].pstrValue = GetConfCurrPath() / strDefPath;
 		}
-		TRACE_T(" m_Directories[%d]", i, m_Directories[i].pstrValue->c_str());
+		TRACE_T(" m_Directories[%d] %s", i, m_Directories[i].pstrValue->c_str());
 		i++;
 	}
 	// Инициализация параметров
@@ -1408,14 +1409,14 @@ CString Global::ByteToOctString(uint8_t byte)
 }
 
 void Global::WordToOctString(uint16_t word, CString &str) {
-	TRACE_T("WordToOctString 0%05o", word);
+///	TRACE_T("WordToOctString 0%05o", word);
 	LPTSTR pstr = str.GetBufferSetLength(7);
 	for (int i = 5; i >= 0; --i) {
 		pstr[i] = TCHAR(060 + (word & 7));
 		word >>= 3;
 	}
 	str.ReleaseBuffer(6);
-	TRACE_T("WordToOctString s%s", str.GetString());
+///	TRACE_T("WordToOctString s%s", str.GetString());
 }
 
 void Global::ByteToOctString(uint8_t byte, CString &str)

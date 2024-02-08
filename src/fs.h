@@ -11,7 +11,9 @@ public:
     path() {}
     path(const char* _p) : p(_p) {}
     path(const std::string& _p) : p(_p) {}
+    path(const path& _p) : p(_p.p) {}
     ~path() {}
+    inline path& operator = (const path& _p) { p = _p.p; return *this; }
     friend path operator / (const path& p1, const path& p2) {
         if (p1.p.at(p1.p.size() - 1) == '\\')
            return path(p1.p + p2.p);

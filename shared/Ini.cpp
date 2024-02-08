@@ -754,7 +754,7 @@ bool CIni::GetValueBool(const int nSection, const int nKey, const bool bDefault)
 
 
 bool CIni::SetValueString(const CString &strSection, const CString &strKey, const CString &strVal) {
-	TRACE_T("1 SetValueString %s : %s : %s", strSection.GetString(), strKey.GetString(), strVal.GetString());
+///	TRACE_T("1 SetValueString %s : %s : %s", strSection.GetString(), strKey.GetString(), strVal.GetString());
 	if (Add(strSection, strKey, strVal, _T(""), false))	{
 		m_iniStatus = IniStatus::READED;
 		return true;
@@ -763,7 +763,7 @@ bool CIni::SetValueString(const CString &strSection, const CString &strKey, cons
 }
 
 bool CIni::SetValueString(int nSection, const CString &strKey, const CString &strVal) {
-	TRACE_T("2 SetValueString %d : %s : %s", nSection, strKey.GetString(), strVal.GetString());
+///	TRACE_T("2 SetValueString %d : %s : %s", nSection, strKey.GetString(), strVal.GetString());
 	CString strSection;
 	if (strSection.LoadString(nSection)) {
 		return SetValueString(strSection, strKey, strVal);
@@ -772,7 +772,7 @@ bool CIni::SetValueString(int nSection, const CString &strKey, const CString &st
 }
 
 bool CIni::SetValueString(const int nSection, const int nKey, const CString &strVal) {
-	TRACE_T("3 SetValueString %d : %d : %s", nSection, nKey, strVal.GetString());
+///	TRACE_T("3 SetValueString %d : %d : %s", nSection, nKey, strVal.GetString());
 	CString strSection, strKey;
 	if (strSection.LoadString(nSection) && strKey.LoadString(nKey)) {
 		return SetValueString(strSection, strKey, strVal);
@@ -781,38 +781,35 @@ bool CIni::SetValueString(const int nSection, const int nKey, const CString &str
 }
 
 bool CIni::SetValueInt(const int nSection, const int nKey, const int iVal) {
-	TRACE_T("SetValueInt %d : %d : %d", nSection, nKey, iVal);
+///	TRACE_T("SetValueInt %d : %d : %d", nSection, nKey, iVal);
 	CString str;
 	str.Format(_T("%d"), iVal);
 	return SetValueString(nSection, nKey, str);
 }
 
 bool CIni::SetValueFloat(const int nSection, const int nKey, const double fVal) {
-	TRACE_T("SetValueFloat %d : %d : %f", nSection, nKey, fVal);
+///	TRACE_T("SetValueFloat %d : %d : %f", nSection, nKey, fVal);
 	CString str;
 	str.Format(_T("%.16f"), fVal);
 	return SetValueString(nSection, nKey, str);
 }
 
 bool CIni::SetValueBool(const int nSection, const int nKey, const bool bVal) {
-	TRACE_T("SetValueBool %d : %d : %d", nSection, nKey, bVal);
+///	TRACE_T("SetValueBool %d : %d : %d", nSection, nKey, bVal);
 	CString str = bVal ? _T("Yes") : _T("No");
 	return SetValueString(nSection, nKey, str);
 }
 
-std::unique_ptr<CHAR[]> CIni::ConvertUnicodetoStr(UINT type, const CString &ustr) const
-{
+std::unique_ptr<CHAR[]> CIni::ConvertUnicodetoStr(UINT type, const CString &ustr) const {
 	// сперва узнаем, какого размера будет новая строка
 	int t_len = ustr.GetLength(); // WideCharToMultiByte(type, 0, ustr, -1, nullptr, 0, nullptr, nullptr);
 	const int sizeOfString = t_len + 1; // и +1 для завершающего нуля
 	auto lpszAscii = std::make_unique<CHAR[]>(sizeOfString); // а потом, необходимо самим делать delete [] использованных строк
-
 	if (lpszAscii)
 	{
 		//t_len = WideCharToMultiByte(type, 0, ustr, -1, lpszAscii.get(), sizeOfString, nullptr, nullptr);
 		stpcpy(lpszAscii.get(), ustr.GetString());
 	}
-
 	return lpszAscii;
 }
 
