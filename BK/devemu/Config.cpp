@@ -264,34 +264,24 @@ confStringParam CConfig::m_Directories[] =
 	{ 0,                            nullptr,                _T("") }
 };
 
-void CConfig::_intLoadConfig(bool bLoadMain)
-{
+void CConfig::_intLoadConfig(bool bLoadMain) {
 	int id, i = 0;
-
 	// Инициализация директорий
-
-	while ((id = m_Directories[i].nID) != 0)
-	{
+	while ((id = m_Directories[i].nID) != 0) {
 		// реализуем возможность задания произвольного пути
 		fs::path strDefPath = iniFile.GetValueString(IDS_INI_SECTIONNAME_DIRECTORIES, id, m_Directories[i].defValue.c_str()).GetString();
-
 		//если есть имя диска или "\\" в начале - то это абсолютный путь
-		if (strDefPath.has_root_name())
-		{
+		if (strDefPath.has_root_name()) {
 			*m_Directories[i].pstrValue = strDefPath;
-		}
-		else
-		{
+		} else {
 			// иначе - это относительный путь от домашней директории
 			*m_Directories[i].pstrValue = GetConfCurrPath() / strDefPath;
 		}
-
+		TRACE_T(" m_Directories[%d]", i, m_Directories[i].pstrValue->c_str());
 		i++;
 	}
-
 	// Инициализация параметров
-	if (bLoadMain)
-	{
+	if (bLoadMain) {
 		//      Основные параметры
 		m_strBKBoardType = iniFile.GetValueString(IDS_INI_SECTIONNAME_MAIN, IDS_INI_BKMODEL, g_mstrConfigBKModelParameters[static_cast<int>(CONF_BKMODEL::BK_0010_01)].strBKModelConfigName);
 		m_nScreenshotNumber = iniFile.GetValueInt(IDS_INI_SECTIONNAME_MAIN, IDS_INI_SSHOT_NUM, 1);
@@ -325,52 +315,47 @@ void CConfig::_intLoadConfig(bool bLoadMain)
 		CheckSndChipFreq();
 		CheckSndChipModel();
 	}
-
 	// теперь подготовим индивидуальное имя секции
 	CString strCustomize = m_strBKBoardType;
 	// Инициализация Rom модулей, читаем их лишь для того, чтобы проверить наличие
 	// и если их нет, то создаём
 	i = 0;
-
-	while ((id = m_romModules[i].nID) != 0)
-	{
+	while ((id = m_romModules[i].nID) != 0) {
 		*m_romModules[i].pstrValue = iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_ROMMODULES, id, m_romModules[i].defValue.c_str()).GetString();
 		i++;
 	}
-
 	//      Вариативные параметры
 	m_nCPURunAddr       = Global::OctStringToWord(iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_CPU_RUN_ADDR, _T("000000")));  // если 0, то берётся значение по умолчанию для своей конфигурации
 	m_nCPUFrequency     = iniFile.GetValueIntEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_CPU_FREQUENCY, 0);  // если 0, то берётся значение по умолчанию для своей конфигурации
 	m_nRegistersDumpInterval = iniFile.GetValueIntEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_REGSDUMP_INTERVAL, 0);  // если 0, то выключено
 	CString strSoundVal = iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_SOUNDVOLUME, _T("30%"));// Громкость
 	m_nSoundVolume      = 0xffff * _tstoi(strSoundVal) / 100;
-
-	for (int i = 0; i < NUMBER_VIEWS_MEM_DUMP; ++i)
-	{
+    TRACE_T("NUMBER_VIEWS_MEM_DUMP");
+	for (int i = 0; i < NUMBER_VIEWS_MEM_DUMP; ++i) {
 		m_arDumper[i].nAddr = Global::OctStringToWord(iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, g_arStrDumpAddrID[i], _T("000000")));
+		TRACE_T("m_arDumper[%d].nAddr: 0%05o", i, m_arDumper[i].nAddr);
 		CString str = iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, g_arStrDumpListID[i], _T("0 : 0"));
 		str.Trim();
+		TRACE_T("m_arDumper[%d] str: %s", i, str.GetString());
 		int colon = str.Find(_T(':'), 0); // поищем начало разделителя
-
 		if (colon >= 0)
 		{
 			CString strPagePos = str.Left(colon).Trim();
 			CString strAddrPos = str.Right(str.GetLength() - colon - 1).Trim();
 			m_arDumper[i].nPageListPos = Global::ToInt(strPagePos);
 			m_arDumper[i].nAddrListPos = Global::ToInt(strAddrPos);
-		}
-		else
-		{
+		} else {
 			m_arDumper[i].nPageListPos = 0;
 			m_arDumper[i].nAddrListPos = 0;
 		}
 	}
-
-	m_nDisasmAddr       = Global::OctStringToWord(iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_ADDR_DISASM, _T("001000")));
+    TRACE_T("m_nDisasmAddr");
+	m_nDisasmAddr = Global::OctStringToWord(iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_ADDR_DISASM, _T("001000")));
 	LoadPalettes(strCustomize);
 	LoadJoyParams(strCustomize);
 	LoadAYVolPanParams(strCustomize);
 	// Инициализация опций
+	TRACE_T("m_bSavesDefault");
 	m_bSavesDefault     = iniFile.GetValueBoolEx(strCustomize, IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SAVES_DEFAULT, false);
 	m_bSpeaker          = iniFile.GetValueBoolEx(strCustomize, IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SPEAKER, true);
 	m_bSpeakerFilter    = iniFile.GetValueBoolEx(strCustomize, IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SPEAKER_FILTER, true);
@@ -666,7 +651,7 @@ void CConfig::SaveConfig()
 	}
 
 	iniFile.SetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_ADDR_DISASM, Global::WordToOctString(m_nDisasmAddr));
-///	SavePalettes(strCustomize);
+	SavePalettes(strCustomize);
 	SaveJoyParams(strCustomize);
 	SaveAYVolPanParams(strCustomize);
 	// Сохранение опций
@@ -811,7 +796,7 @@ void CConfig::DefaultConfig() {
 	iniFile.SetValueBool(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SHOW_PERFORMANCE_STRING, true);
 	iniFile.SetValueBool(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_EMULATE_FDDIO, true);
 	iniFile.SetValueInt(IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_VKBD_TYPE, 0);
-///	MakeDefaultPalettes();
+	MakeDefaultPalettes();
 	MakeDefaultJoyParam();
 	MakeDefaultAYVolPanParam();
 	// Создание приводов

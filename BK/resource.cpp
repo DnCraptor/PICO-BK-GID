@@ -1,5 +1,6 @@
 ﻿#include "resource.h"
 #include "CString.h"
+#include "debug.h"
 
 BOOL CString::LoadString(int res) {
     switch (res) {
@@ -25,7 +26,103 @@ BOOL CString::LoadString(int res) {
        case IDS_FILEEXT_SCRIPT :            s = ".bkscript"; break;
        case IDS_FILEEXT_TAPE  :             s = ".tap"; break;
        case IDS_FILEEXT_WAVE  :             s = ".wav"; break;
-       default: s.clear();  return false;
+       case IDS_INI_MEM_DIRECTORY    :      s ="Memory directory"; break;
+       case IDS_INI_OSCRENDER_TYPE   :      s ="Oscilloscope render type"; break;
+       case IDS_INI_PAUSE_CPU        :      s ="Pause CPU after emulator start"; break;
+       case IDS_INI_PROGRAM_DIRECTORY  :    s ="Program directory"; break;
+       case IDS_INI_REGSDUMP_INTERVAL  :    s ="Registers dump interval"; break;
+       case IDS_INI_ROM_DIRECTORY    :      s ="Rom directory"; break;
+       case IDS_INI_SAVES_DEFAULT    :      s ="Use Saves directory as default"; break;
+       case IDS_INI_SAVES_DIRECTORY  :      s ="User Saves directory"; break;
+       case IDS_INI_SCRIPTS_DIRECTORY  :    s ="Scripts directory"; break;
+       case IDS_INI_SCRRENDER_TYPE   :      s ="Screen render type"; break;
+       case IDS_INI_SECTIONNAME_DIRECTORIES:s ="Directories"; break;
+       case IDS_INI_SECTIONNAME_DRIVES  :   s ="Drives"; break;
+       case IDS_INI_SECTIONNAME_MAIN  :     s ="Main"; break;
+       case IDS_INI_SECTIONNAME_OPTIONS  :  s ="Options"; break;
+       case IDS_INI_SECTIONNAME_PARAMETERS: s ="Parameters"; break;
+       case IDS_INI_BK11M_RE2_330_MSTD :    s ="BK11M MSTD"; break;
+       case IDS_INI_BKKEYBOARD      :       s ="Emulate BK keyboard"; break;
+       case IDS_INI_BKMODEL         :       s ="BK model"; break;
+       case IDS_INI_BLACK_WHITE     :       s ="Adapt black & white mode"; break;
+       case IDS_INI_COLOR_MODE      :       s ="Run in color mode"; break;
+       case IDS_INI_COVOX           :       s ="Covox enabled"; break;
+       case IDS_INI_COVOX_FILTER    :       s ="Covox filter enabled"; break;
+       case IDS_INI_COVOX_STEREO    :       s ="Stereo covox"; break;
+       case IDS_INI_CPU_FREQUENCY   :       s ="CPU frequency"; break;
+       case IDS_INI_CPU_RUN_ADDR    :       s ="CPU start address"; break;
+       case IDS_INI_DRIVEA          :       s ="Drive A:"; break;
+       case IDS_INI_DRIVEB          :       s ="Drive B:"; break;
+       case IDS_INI_DRIVEC          :       s ="Drive C:"; break;
+       case IDS_INI_DRIVED          :       s ="Drive D:"; break;
+       case IDS_INI_PALCOL12        :       s ="Color Palette 12"; break;
+       case IDS_INI_PALCOL13        :       s ="Color Palette 13"; break;
+       case IDS_INI_PALCOL14        :       s ="Color Palette 14"; break;
+       case IDS_INI_PALCOL15        :       s ="Color Palette 15"; break;
+       case IDS_INI_MOUSEM          :       s ="Emulate Mouse"; break;
+       case IDS_INI_BKJOY_UP        :       s ="Joystick Up"; break;
+       case IDS_INI_BKJOY_RIGHT     :       s ="Joystick Right"; break;
+       case IDS_INI_BKJOY_DOWN      :       s ="Joystick Down"; break;
+       case IDS_INI_BKJOY_LEFT      :       s ="Joystick Left"; break;
+       case IDS_INI_BKJOY_FIRE      :       s ="Joystick Fire"; break;
+       case IDS_INI_BKJOY_ALTFIRE   :       s ="Joystick AltFire"; break;
+       case IDS_INI_BKJOY_A         :       s ="Joystick A Button"; break;
+       case IDS_INI_BKJOY_B         :       s ="Joystick B Button"; break;
+       case IDS_INI_SECTIONNAME_PALETTES :  s ="Palettes"; break;
+       case IDS_INI_SECTIONNAME_JOYSTICK :  s ="Joystick Parameters"; break;
+       case IDS_MEMORY_177130OUT    :       s ="177130|Зп"; break;
+       case IDS_MEMORY_177132IN     :       s ="177132|Чт"; break;
+       case IDS_MEMORY_177132OUT    :       s ="177132|Зп"; break;
+       case IDS_MEMORY_177660       :       s ="177660"; break;
+       case IDS_MEMORY_177662IN     :       s ="177662|Чт"; break;
+       case IDS_MEMORY_177662OUT    :       s ="177662|Зп"; break;
+       case IDS_MEMORY_177664       :       s ="177664"; break;
+       case IDS_MEMORY_177700       :       s ="177700"; break;
+       case IDS_MEMORY_177702       :       s ="177702"; break;
+       case IDS_MEMORY_177704       :       s ="177704"; break;
+       case IDS_MEMORY_177706       :       s ="177706"; break;
+       case IDS_MEMORY_177710       :       s ="177710"; break;
+       case IDS_MEMORY_177712       :       s ="177712"; break;
+       case IDS_MEMORY_177714IN     :       s ="177714|Чт"; break;
+       case IDS_MEMORY_177714OUT    :       s ="177714|Зп"; break;
+       case IDS_MEMORY_177716IN     :       s ="177716|Чт"; break;
+       case IDS_MEMORY_177130IN     :       s ="177130|Чт"; break;
+       case IDS_INI_SECTIONNAME_ROMMODULES :s ="Rom modules"; break;
+       case IDS_INI_SHOW_PERFORMANCE_STRING:s ="Show performance string"; break;
+       case IDS_INI_SOUND_SAMPLE_RATE :     s ="Sound Sample Rate"; break;
+       case IDS_INI_SOUNDVOLUME     :       s ="Sound volume"; break;
+       case IDS_INI_SPEAKER         :       s ="Speaker enabled"; break;
+       case IDS_INI_SPEAKER_FILTER  :       s ="Speaker filter enabled"; break;
+       case IDS_INI_SSHOT_DIRECTORY :       s ="Screenshots directory"; break;
+       case IDS_INI_SSHOT_NUM       :       s ="Screenshot number"; break;
+       case IDS_INI_TAPES_DIRECTORY :       s ="Tapes directory"; break;
+       case IDS_INI_TOOLS_DIRECTORY :       s ="Tools directory"; break;
+       case IDS_INI_VKBD_TYPE       :       s ="Virtual Keyboard Type"; break;
+       case IDS_INI_SOUNDCHIPFREQ   :       s ="SoundChip Frequency"; break;
+       case IDS_INI_SOUNDCHIPMODEL  :       s ="SoundChip Model"; break;
+       case IDS_INI_LONGBIN         :       s ="Use long Bin format"; break;
+       case IDS_INI_FFMPEGCMDLINE   :       s ="FFMPEG Cmd Line"; break;
+       case IDS_INI_SMOOTHING       :       s ="Smoothing Screen"; break;
+       case IDS_INI_EMUL_LOAD_TAPE  :       s ="Emulate load tape operations"; break;
+       case IDS_INI_EMUL_SAVE_TAPE  :       s ="Emulate save tape operations"; break;
+       case IDS_INI_EMULATE_FDDIO   :       s ="Emulate FDD IO"; break;
+       case IDS_INI_FDR             :       s ="FDD KNGMD"; break;
+       case IDS_INI_FDR_A16M        :       s ="FDD A16M"; break;
+       case IDS_INI_FDR_SAMARA      :       s ="FDD Samara"; break;
+       case IDS_INI_FDR_SMK512      :       s ="FDD SMK512"; break;
+       case IDS_INI_FDR253          :       s ="FDD KNGMD253"; break;
+       case IDS_INI_FILENAME        :       s ="bk.ini"; break;
+       case IDS_INI_FULL_SCREEN     :       s ="Run in fullscreen mode"; break;
+       case IDS_INI_HDD0            :       s ="HDD0"; break;
+       case IDS_INI_HDD1            :       s ="HDD1"; break;
+       case IDS_INI_ICLBLOCK        :       s ="IC Load Block"; break;
+       case IDS_INI_IMG_DIRECTORY   :       s ="IMG directory"; break;
+       case IDS_INI_JOYSTICK        :       s ="Joystick enabled"; break;
+       case IDS_INI_LUMINOFOREMODE  :       s ="Screen fade emulation"; break;
+       default:
+            TRACE_T("LoadString failed for %d", res);
+            s.clear();
+            return false;
     }
     return true;
 }

@@ -13,6 +13,8 @@
 /*============================================================================*/
 // STDIO file implementation
 
-class CStdioFile : public CFile
-{
+class CStdioFile : public CFile {
+public:
+     CStdioFile() : CFile() {}
+     virtual ~CStdioFile() {}
 };

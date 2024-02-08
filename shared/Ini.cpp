@@ -343,26 +343,24 @@ bool CIni::ReadIni()
 
 bool CIni::FlushIni() {
 	TRACE_T("FlushIni");
-	if (m_iniStatus == IniStatus::NOTREADED // если ини не прочитан, то и записывать нечего
+	if (       m_iniStatus == IniStatus::NOTREADED // если ини не прочитан, то и записывать нечего
 	        || m_iniStatus == IniStatus::FLUSHED   // если ини уже записан, то второй раз - не надо
 	        || SetOfSections.empty()               // если инифайл пустой, то и делать нечего
 	        || m_strFileName.empty()               // если имя файла не задано, то и записывать нечего
 	   )
 	{
+		TRACE_T("[FlushIni] m_iniStatus: %d; SetOfSections.empty(): %d; m_strFileName.empty(): %d",
+	    	     m_iniStatus, SetOfSections.empty(), m_strFileName.empty());
 		return false;
 	}
-
 	CStdioFile file; // CMemFile - для создания файла в памяти
-
-	if (!file.Open(m_strFileName.c_str(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite | CFile::typeText))
-	{
+	if (!file.Open(m_strFileName.c_str(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite | CFile::typeText)) {
 		m_iniError = IniError::WRITE_ERROR;
+		TRACE_T("IniError::WRITE_ERROR for %s", m_strFileName.c_str());
 		return false;
 	}
-
 	m_LineNum = 0;
 	CString strOut;
-
 	for (auto &pISS : SetOfSections)
 	{
 		strOut = _T("[") + pISS.Name + _T("]\n");
@@ -680,41 +678,30 @@ bool CIni::DeleteKey(const CString &strSection, const CString &strKey)
 	return false;
 }
 
-CString CIni::GetValueString(const CString &strSection, const CString &strKey, const CString &strDefault)
-{
+CString CIni::GetValueString(const CString &strSection, const CString &strKey, const CString &strDefault) {
 	CString strValue;
-
-	if (_intGetValueString(strSection, strKey, strValue))
-	{
+	if (_intGetValueString(strSection, strKey, strValue)) {
+		TRACE_T("GetValueString(%s, %s, %s)", strSection.GetString(), strKey.GetString(), strDefault.GetString());
 		return strValue;
 	}
-
 	// не нашли. тогда надо его добавить
 	SetValueString(strSection, strKey, strDefault);
 	return strDefault;
 }
 
-CString CIni::GetValueString(int nSection, const CString &strKey, const CString &strDefault)
-{
+CString CIni::GetValueString(int nSection, const CString &strKey, const CString &strDefault) {
 	CString strSection;
-
-	if (strSection.LoadString(nSection))
-	{
+	if (strSection.LoadString(nSection)) {
 		return GetValueString(strSection, strKey, strDefault);
 	}
-
 	return strDefault;
 }
 
-CString CIni::GetValueString(const int nSection, const int nKey, const CString &strDefault)
-{
+CString CIni::GetValueString(const int nSection, const int nKey, const CString &strDefault) {
 	CString strSection, strKey;
-
-	if (strSection.LoadString(nSection) && strKey.LoadString(nKey))
-	{
+	if (strSection.LoadString(nSection) && strKey.LoadString(nKey)) {
 		return GetValueString(strSection, strKey, strDefault);
 	}
-
 	return strDefault;
 }
 

@@ -60,15 +60,22 @@ class CFile /***: public CObject*/ {
     char pc;
     CFile() : m_o(false), pc(0) {}
     virtual ~CFile() {
-       if (m_o) Close();
+        if (m_o) Close();
     }
     virtual BOOL Open(LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pError = NULL) {
-        m_o = f_open(&m_file, lpszFileName, (nOpenFlags & CFile::modeWrite) ? (FA_WRITE | FA_READ) : FA_READ) == FR_OK;
-        TRACE_T("[Open] %s %d", lpszFileName, nOpenFlags);
+        UINT mode = FA_READ;
+        if (nOpenFlags & CFile::modeWrite) mode |= (FA_WRITE | FA_OPEN_APPEND);
+        if (nOpenFlags & CFile::modeCreate) mode |= FA_CREATE_ALWAYS;
+        m_o = f_open(&m_file, lpszFileName, mode) == FR_OK;
+        if (m_o) TRACE_T("[Open] file: '%s'; flags: %08Xh; &m_file: %08Xh; res: %d", lpszFileName, nOpenFlags, &m_file, m_o);
         return m_o;
     }
     virtual size_t GetLength() const { return f_size(&m_file); }
-    virtual void Close() { f_close(&m_file); m_o = false; }
+    virtual void Close() {
+        TRACE_T("[Close] &m_file: %08Xh", &m_file);
+        if (m_o) f_close(&m_file);
+        m_o = false;
+    }
     virtual UINT Read(void* lpBuf, UINT nCount) {
         UINT rd;
         f_read(&m_file, lpBuf, nCount, &rd);
