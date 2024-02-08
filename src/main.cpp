@@ -332,7 +332,6 @@ int main() {
 	}
 #endif
     g_Config.InitConfig(CString("bk.ini"));
-    TRACE_T("VerifyRoms");
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
     TRACE_T("new CMotherBoard_10()");
     CMotherBoard_10 *m_pBoard = new CMotherBoard_10();

@@ -271,14 +271,14 @@ void CConfig::_intLoadConfig(bool bLoadMain) {
 		// реализуем возможность задания произвольного пути
 		fs::path strDefPath = iniFile.GetValueString(IDS_INI_SECTIONNAME_DIRECTORIES, id, m_Directories[i].defValue.c_str()).GetString();
 		//если есть имя диска или "\\" в начале - то это абсолютный путь
-		TRACE_T(" m_Directories[%d] %s <- %s", i, m_Directories[i].pstrValue->c_str(), strDefPath.c_str());
+	///	TRACE_T(" m_Directories[%d] %s <- %s", i, m_Directories[i].pstrValue->c_str(), strDefPath.c_str());
 		if (strDefPath.has_root_name()) {
 			*m_Directories[i].pstrValue = strDefPath;
 		} else {
 			// иначе - это относительный путь от домашней директории
 			*m_Directories[i].pstrValue = GetConfCurrPath() / strDefPath;
 		}
-		TRACE_T(" m_Directories[%d] %s", i, m_Directories[i].pstrValue->c_str());
+	///	TRACE_T(" m_Directories[%d] %s", i, m_Directories[i].pstrValue->c_str());
 		i++;
 	}
 	// Инициализация параметров
@@ -331,32 +331,37 @@ void CConfig::_intLoadConfig(bool bLoadMain) {
 	m_nRegistersDumpInterval = iniFile.GetValueIntEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_REGSDUMP_INTERVAL, 0);  // если 0, то выключено
 	CString strSoundVal = iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_SOUNDVOLUME, _T("30%"));// Громкость
 	m_nSoundVolume      = 0xffff * _tstoi(strSoundVal) / 100;
-    TRACE_T("NUMBER_VIEWS_MEM_DUMP");
+///    TRACE_T("NUMBER_VIEWS_MEM_DUMP: %d", NUMBER_VIEWS_MEM_DUMP);
 	for (int i = 0; i < NUMBER_VIEWS_MEM_DUMP; ++i) {
 		m_arDumper[i].nAddr = Global::OctStringToWord(iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, g_arStrDumpAddrID[i], _T("000000")));
-		TRACE_T("m_arDumper[%d].nAddr: 0%05o", i, m_arDumper[i].nAddr);
+	///	TRACE_T("m_arDumper[%d].nAddr: 0%05o", i, m_arDumper[i].nAddr);
 		CString str = iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, g_arStrDumpListID[i], _T("0 : 0"));
 		str.Trim();
-		TRACE_T("m_arDumper[%d] str: %s", i, str.GetString());
+	///	TRACE_T("m_arDumper[%d] str: '%s'", i, str.GetString());
 		int colon = str.Find(_T(':'), 0); // поищем начало разделителя
 		if (colon >= 0)
 		{
+	///		TRACE_T("colon: %d", colon);
 			CString strPagePos = str.Left(colon).Trim();
-			CString strAddrPos = str.Right(str.GetLength() - colon - 1).Trim();
+	///		TRACE_T("strPagePos: '%s'", strPagePos.GetString());
+			CString strAddrPos = str.Right(colon + 1).Trim();
+	///		TRACE_T("strAddrPos: '%s'", strAddrPos.GetString());
 			m_arDumper[i].nPageListPos = Global::ToInt(strPagePos);
 			m_arDumper[i].nAddrListPos = Global::ToInt(strAddrPos);
+	///		TRACE_T("nPageListPos: %d; nAddrListPos: %d", m_arDumper[i].nPageListPos, m_arDumper[i].nAddrListPos);
 		} else {
 			m_arDumper[i].nPageListPos = 0;
 			m_arDumper[i].nAddrListPos = 0;
+	///		TRACE_T("nPageListPos: %d; nAddrListPos: %d", m_arDumper[i].nPageListPos, m_arDumper[i].nAddrListPos);
 		}
 	}
-    TRACE_T("m_nDisasmAddr");
+//    TRACE_T("m_nDisasmAddr tBA");
 	m_nDisasmAddr = Global::OctStringToWord(iniFile.GetValueStringEx(strCustomize, IDS_INI_SECTIONNAME_PARAMETERS, IDS_INI_ADDR_DISASM, _T("001000")));
 	LoadPalettes(strCustomize);
 	LoadJoyParams(strCustomize);
 	LoadAYVolPanParams(strCustomize);
 	// Инициализация опций
-	TRACE_T("m_bSavesDefault");
+///	TRACE_T("m_bSavesDefault");
 	m_bSavesDefault     = iniFile.GetValueBoolEx(strCustomize, IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SAVES_DEFAULT, false);
 	m_bSpeaker          = iniFile.GetValueBoolEx(strCustomize, IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SPEAKER, true);
 	m_bSpeakerFilter    = iniFile.GetValueBoolEx(strCustomize, IDS_INI_SECTIONNAME_OPTIONS, IDS_INI_SPEAKER_FILTER, true);
@@ -1199,12 +1204,11 @@ static const UINT arJoyparamIni[BKJOY_PARAMLEN] =
 };
 void CConfig::MakeDefaultJoyParam() {
 	for (int i = 0; i < BKJOY_PARAMLEN; ++i) {
-		TRACE_T("MakeDefaultJoyParam %d", i);
 		m_arJoystick[i] = m_arJoystick_std[i];
-		TRACE_T("MakeDefaultJoyParam m_arJoystick[%d] strVKeyName: %s; nVKey: %d; nMask: 0%05o",
-		        i, m_arJoystick[i].strVKeyName.GetString(), m_arJoystick[i].nVKey, m_arJoystick[i].nMask);
+	///	TRACE_T("MakeDefaultJoyParam m_arJoystick[%d] strVKeyName: %s; nVKey: %d; nMask: 0%05o",
+	///	        i, m_arJoystick[i].strVKeyName.GetString(), m_arJoystick[i].nVKey, m_arJoystick[i].nMask);
 		CString str = m_arJoystick[i].strVKeyName + _T(" : ") + Global::WordToOctString(m_arJoystick[i].nMask);
-		TRACE_T("str: %s", str.GetString());
+	///	TRACE_T("str: %s", str.GetString());
 		iniFile.SetValueString(IDS_INI_SECTIONNAME_JOYSTICK, arJoyparamIni[i], str);
 	}
 }
@@ -1234,7 +1238,7 @@ void CConfig::LoadJoyParams(CString &strCustomize)
 		if (colon >= 0)
 		{
 			CString strName = strJoy.Left(colon).Trim(); // выделим имя клавиши
-			CString strMask = strJoy.Right(strJoy.GetLength() - colon - 1).Trim(); // выделим маску
+			CString strMask = strJoy.Right(colon + 1).Trim(); // выделим маску
 			UINT nVKey = ::getKeyValue(strName);
 
 			if (nVKey != -1)

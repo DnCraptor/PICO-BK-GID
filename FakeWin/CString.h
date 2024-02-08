@@ -87,15 +87,10 @@ public:
         return str1.s == str2.s;
     }
     inline int Find(char c, size_t from = 0) const {
-        const char* p = s.c_str() + from;
-        int res = 0;
-        while(*p != c) ++res;
-        return res;
+        return s.find_first_of(c, from);
     }
     inline int Find(const CString& str, size_t from = 0) const {
-        const char* p = s.c_str() + from;
-        char* r = strstr(p, str.GetString());
-        return s.c_str() - r;
+        return s.find_first_of(str.s, from);
     }
     inline char GetAt(size_t d) const { return s[d]; }
     inline void AddChar(char c) { s += c; }

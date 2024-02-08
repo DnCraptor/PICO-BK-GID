@@ -681,7 +681,7 @@ bool CIni::DeleteKey(const CString &strSection, const CString &strKey)
 CString CIni::GetValueString(const CString &strSection, const CString &strKey, const CString &strDefault) {
 	CString strValue;
 	if (_intGetValueString(strSection, strKey, strValue)) {
-		TRACE_T("GetValueString(%s, %s, %s)", strSection.GetString(), strKey.GetString(), strDefault.GetString());
+		TRACE_T("GetValueString('%s', '%s', '%s')", strSection.GetString(), strKey.GetString(), strDefault.GetString());
 		return strValue;
 	}
 	// не нашли. тогда надо его добавить
