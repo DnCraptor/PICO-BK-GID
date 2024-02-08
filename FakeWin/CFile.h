@@ -57,8 +57,7 @@ class CFile /***: public CObject*/ {
     static const HANDLE hFileNull;
     FIL m_file;
     bool m_o;
-    char pc;
-    CFile() : m_o(false), pc(0) {}
+    CFile() : m_o(false) {}
     virtual ~CFile() {
         if (m_o) Close();
     }
@@ -83,21 +82,25 @@ class CFile /***: public CObject*/ {
     }
     virtual UINT GetPosition() const { return f_tell(&m_file); }
     virtual BOOL ReadString(CString& rString) {
-        bool sn = false;
-        bool sr = false;
         UINT br;
+        rString.Empty();
         char c;
-        do {
-            if (pc) rString.AddChar(pc);
-            if (f_read(&m_file, &c, 1, &br) != FR_OK) return false;
-            if (br != 1) return true;
-            if (sr && c == '\n') return true;
-            if (sn && c == '\r') return true;
-            if (c == '\n') { sn = true; pc = 0; }
-            else if (c == '\r') { sr = true; pc = 0; }
-            else if (sn || sr) { pc = c; return true; }
-            else pc = c;
-        } while(1);
+        while (f_size(&m_file) >= f_tell(&m_file)) {
+            if (f_read(&m_file, &c, 1, &br) != FR_OK) {
+            //    TRACE_T("F1 %s", rString.GetString());
+                return false;
+            }
+            if (br != 1) {
+            //    TRACE_T("F2 %s", rString.GetString());
+                return false;
+            }
+            if (c == '\r') continue;
+            if (c == '\n') {
+            //    TRACE_T("T %s", rString.GetString());
+                return true;
+            }
+            rString.AddChar(c);
+        }
     }
     virtual BOOL WriteString(const CString& rString) {
         const char * pstr = rString.GetString();

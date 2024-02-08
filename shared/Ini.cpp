@@ -224,34 +224,23 @@ int CIni::CheckComment(const CString &str, int &clen) const
 	return -1;
 }
 
-bool CIni::ReadIni()
-{
+bool CIni::ReadIni() {
 	m_iniStatus = IniStatus::NOTREADED;
 	m_iniError = IniError::OK_NOERROR;
-
-	if (m_strFileName.empty())
-	{
+	if (m_strFileName.empty()) {
 		return false;    // если имя файла не задано, то и читать нечего
 	}
-
 	CStdioFile file;
-
-	if (!file.Open(m_strFileName.c_str(), CFile::modeRead | CFile::shareDenyWrite | CFile::typeText))
-	{
+	if (!file.Open(m_strFileName.c_str(), CFile::modeRead | CFile::shareDenyWrite | CFile::typeText)) {
 		m_iniError = IniError::READ_ERROR;
 		return false;
 	}
-
 	CString strRead;
 	CString strCurrentSectionName = _T("");
 	m_LineNum = 0;
-
-	while (file.ReadString(strRead))
-	{
+	while (file.ReadString(strRead)) {
 		m_LineNum++;
-
-		if (strRead.IsEmpty())
-		{
+		if (strRead.IsEmpty()) {
 			continue;    // если пустая строка - игнорируем
 		}
 
