@@ -1,6 +1,6 @@
 #include <CPU.h>
 
-static CCPU::ExecuteMethodRef __in_flash() __aligned(4096) DEFAULT_CPU_EIS_MAP[] = {
+CCPU::ExecuteMethodRef __in_flash() __aligned(4096) CCPU::DEFAULT_CPU_EIS_MAP[] = {
   &CCPU::ExecuteHALT	,	// 0000000
   &CCPU::ExecuteWAIT	,	// 0000001
   &CCPU::ExecuteRTI	,	// 0000002

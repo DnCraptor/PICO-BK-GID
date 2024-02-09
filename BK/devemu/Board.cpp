@@ -739,17 +739,13 @@ void CMotherBoard::ResetDevices()
 }
 
 
-bool CMotherBoard::InitBoard(uint16_t nNewStartAddr)
-{
-	if (nNewStartAddr == 0)
-	{
+bool CMotherBoard::InitBoard(uint16_t nNewStartAddr) {
+	if (nNewStartAddr == 0) {
 		nNewStartAddr = m_nStartAddr;    // Используем адрес по умолчанию
-	}
-	else
-	{
+	} else {
 		m_nStartAddr = nNewStartAddr;    // иначе используем адрес из конфигурации
 	}
-
+    TRACE_T("InitBoard m_nStartAddr: 0%05o", m_nStartAddr);
 	// инициализация регистров
 	m_reg177716in = nNewStartAddr & 0177400;
 	m_reg177662out = 047400;
@@ -757,23 +753,16 @@ bool CMotherBoard::InitBoard(uint16_t nNewStartAddr)
 	m_pParent->GetScreen()->SetExtendedMode(!(m_reg177664 & 01000));
 	m_reg177662in = 0;
 	m_reg177716out_mem = 0;
-
 	// инициализация карты памяти
-	if (!InitMemoryModules())
-	{
+	if (!InitMemoryModules()) {
 		return false;
 	}
-
-	if (m_pSpeaker)
-	{
+	if (m_pSpeaker)	{
 		m_pSpeaker->Reset();
 	}
-
-	if (m_pCovox)
-	{
+	if (m_pCovox) {
 		m_pCovox->Reset();
 	}
-
 	m_cpu.InitCPU();
 	m_pParent->SendMessage(WM_RESET_KBD_MANAGER, 1); // почистим индикацию управляющих клавиш в статусбаре
 	return true;
@@ -1848,17 +1837,19 @@ void CMotherBoard::TimerThreadFunc()
 				// Если время пришло, выполняем текущую инструкцию
 				if (--m_sTV.nCPUTicks <= 0)
 				{
+				//	TRACE_T("m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
 					try
 					{
 						if (Interception()) // если был перехват разных подпрограмм монитора, для их эмуляции
 						{
 							m_sTV.nCPUTicks = 8; // сколько-нибудь
+				//			TRACE_T("1 m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
 						}
 						else // если не был -
 						{
 							// Выполняем одну инструкцию, возвращаем время выполнения одной инструкции в тактах.
 							m_sTV.nCPUTicks = m_cpu.TranslateInstruction();
-
+                //            TRACE_T("2 m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
 							if (m_nKeyCleanEvent)
 							{
 								if ((m_nKeyCleanEvent -= m_sTV.nCPUTicks) <= 0)
@@ -1868,9 +1859,9 @@ void CMotherBoard::TimerThreadFunc()
 								}
 							}
 						}
-
 						// Сохраняем текущее значение PC для отладки
 						nPreviousPC = m_cpu.GetRON(CCPU::REGISTER::PC);
+				//		TRACE_T("nPreviousPC: 0%05o", nPreviousPC);
 					}
 					catch (CExceptionHalt &halt)
 					{
@@ -1900,6 +1891,7 @@ void CMotherBoard::TimerThreadFunc()
 				///		}
 				///		else
 						{
+				//			TRACE_T("ReplyError()");
 							m_sTV.nCPUTicks = 64;
 							m_cpu.ReplyError();  // Делаем прер. по вектору 4(halt) в следующем цикле
 						}
@@ -1925,6 +1917,7 @@ void CMotherBoard::TimerThreadFunc()
 					    || (m_sTV.nGotoAddress == GO_OUT && CDebugger::IsInstructionOut(m_cpu.GetCurrentInstruction()))  // Отладочный останов если команда выхода из п/п
 					)
 					{
+				//		TRACE_T("BreakCPU()");
 						BreakCPU();
 					}
 				}
@@ -1933,18 +1926,21 @@ void CMotherBoard::TimerThreadFunc()
 				{
 					do
 					{
+				//		TRACE_T("Make_One_Screen_Cycle()");
 						Make_One_Screen_Cycle();  // тут выполняются циклы экрана
 						m_sTV.fMemoryTicks += m_sTV.fMemory_Mod;
 					}
 					while (m_sTV.fMemoryTicks < 1.0);
 				}
-
-				m_pSpeaker->RCFilterLF(m_sTV.fCpuTickTime); // эмуляция конденсатора на выходе линейного входа.
-
+                if (m_pSpeaker) {
+				//	TRACE_T("RCFilterLF()");
+					m_pSpeaker->RCFilterLF(m_sTV.fCpuTickTime); // эмуляция конденсатора на выходе линейного входа.
+				}
 				if (--m_sTV.fMediaTicks <= 0.0)
 				{
 					do
 					{
+				//		TRACE_T("MediaTick()");
 						MediaTick();  // тут делается звучание всех устройств и обработка прочих устройств
 						m_sTV.fMediaTicks += m_sTV.fMedia_Mod;
 					}
@@ -1955,6 +1951,7 @@ void CMotherBoard::TimerThreadFunc()
 				{
 					do
 					{
+				//		TRACE_T("m_fdd.Periodic()");
 						m_fdd.Periodic();     // Вращаем диск на одно слово на дорожке
 						m_sTV.fFDDTicks += m_sTV.fFDD_Mod;
 					}
@@ -1966,6 +1963,7 @@ void CMotherBoard::TimerThreadFunc()
 		}
 		else
 		{
+		//	TRACE_T("Sleep(20)");
 			Sleep(20);
 		}
 	}

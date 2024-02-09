@@ -137,9 +137,10 @@ class CMotherBoard : public CDevice
 		int                 m_nKeyCleanEvent;   // счётчик для события сброса бита 7 в 177660
 
 		void                MediaTick();
-
+    public:
 		// поток с точным таймером
 		void                TimerThreadFunc();  // собственно функция
+	protected:
 	///	std::thread         m_TimerThread;
 	///	std::mutex          m_mutLockTimerThread; // флаг работы потока.
 	///	std::mutex          m_mutRunLock;       // блокировка работы фрейма.

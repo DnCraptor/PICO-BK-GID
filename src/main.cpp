@@ -350,16 +350,17 @@ int main() {
 	//	m_pBoard->AttachCovox(&m_covox);
 	//	m_pBoard->AttachAY8910(&m_aySnd);
 	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
-    TRACE_T("NormalizeCPU");
 	m_pBoard->NormalizeCPU();
 		// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
 	//	m_pDebugger->AttachBoard(GetBoard());
 	//	m_paneRegistryDumpViewCPU.SetFreqParam();
 		// Цепляем обработчик скриптов
 	//	m_Script.AttachBoard(GetBoard());
-    TRACE_T("InitBoard");
-	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr))
-        TRACE_T("InitBoard failed");
+	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr)) {
+		m_pBoard->StartTimerThread();
+		m_pBoard->RunCPU();   
+        m_pBoard->TimerThreadFunc();
+    }
 
     if_manager(true);
     // TODO:
