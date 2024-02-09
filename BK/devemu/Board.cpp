@@ -1812,6 +1812,7 @@ void CMotherBoard::FrameParam()
 	}
 }
 
+extern "C" int if_manager(bool force);
 
 void CMotherBoard::TimerThreadFunc()
 {
@@ -1819,41 +1820,33 @@ void CMotherBoard::TimerThreadFunc()
 	uint16_t nPreviousPC = ADDRESS_NONE;    // предыдущее значение регистра РС
 	// типы nPreviousPC и m_sTV.nGotoAddress не должны совпадать, иначе будет всегда срабатывать условие отладочного
 	// останова, даже если нам этого не надо
-
-	do
+////	do
 	{
+		int tormoz = if_manager(false);
 		if (m_bRunning) // если процессор работает, выполняем эмуляцию
 		{
 ///			m_mutRunLock.lock(); // блокируем участок, чтобы при остановке обязательно дождаться, пока фрейм не закончится
-
 			if (m_bBreaked) // если процессор в отладочном останове
 			{
 ///				DrawDebugScreen();  // продолжаем обновлять экран
 ///				Sleep(20);          // со стандартной частотой примерно 50Гц
-			}
-			else
-			{
+			} else {
 				// Выполняем набор инструкций
 				// Если время пришло, выполняем текущую инструкцию
-				if (--m_sTV.nCPUTicks <= 0)
-				{
+				if (--m_sTV.nCPUTicks <= 0) {
 				//	TRACE_T("m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
-					try
-					{
+					try {
 						if (Interception()) // если был перехват разных подпрограмм монитора, для их эмуляции
 						{
 							m_sTV.nCPUTicks = 8; // сколько-нибудь
 				//			TRACE_T("1 m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
-						}
-						else // если не был -
+						} else // если не был -
 						{
 							// Выполняем одну инструкцию, возвращаем время выполнения одной инструкции в тактах.
 							m_sTV.nCPUTicks = m_cpu.TranslateInstruction();
                 //            TRACE_T("2 m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
-							if (m_nKeyCleanEvent)
-							{
-								if ((m_nKeyCleanEvent -= m_sTV.nCPUTicks) <= 0)
-								{
+							if (m_nKeyCleanEvent) {
+								if ((m_nKeyCleanEvent -= m_sTV.nCPUTicks) <= 0) {
 									m_nKeyCleanEvent = 0;
 									m_reg177660 &= ~0200;
 								}
@@ -1915,59 +1908,46 @@ void CMotherBoard::TimerThreadFunc()
 					    || (m_sTV.nGotoAddress == nPreviousPC)	// Если останов на адресе где стоит отладочный курсор
 					    || (m_sTV.nGotoAddress == GO_INTO)		// Отладочный останов если только одиночный шаг
 					    || (m_sTV.nGotoAddress == GO_OUT && CDebugger::IsInstructionOut(m_cpu.GetCurrentInstruction()))  // Отладочный останов если команда выхода из п/п
-					)
-					{
+					) {
 				//		TRACE_T("BreakCPU()");
 						BreakCPU();
 					}
 				}
-
-				if (--m_sTV.fMemoryTicks <= 0.0)
-				{
-					do
-					{
+				if (--m_sTV.fMemoryTicks <= 0.0) {
+					if (m_sTV.fMemoryTicks < 1.0) {
 				//		TRACE_T("Make_One_Screen_Cycle()");
 						Make_One_Screen_Cycle();  // тут выполняются циклы экрана
 						m_sTV.fMemoryTicks += m_sTV.fMemory_Mod;
 					}
-					while (m_sTV.fMemoryTicks < 1.0);
 				}
                 if (m_pSpeaker) {
 				//	TRACE_T("RCFilterLF()");
 					m_pSpeaker->RCFilterLF(m_sTV.fCpuTickTime); // эмуляция конденсатора на выходе линейного входа.
 				}
-				if (--m_sTV.fMediaTicks <= 0.0)
-				{
-					do
-					{
+				if (--m_sTV.fMediaTicks <= 0.0) {
+					if (m_sTV.fMediaTicks < 1.0) {
 				//		TRACE_T("MediaTick()");
 						MediaTick();  // тут делается звучание всех устройств и обработка прочих устройств
 						m_sTV.fMediaTicks += m_sTV.fMedia_Mod;
 					}
-					while (m_sTV.fMediaTicks < 1.0);
 				}
-
-				if (--m_sTV.fFDDTicks <= 0.0)
-				{
-					do
-					{
+				if (--m_sTV.fFDDTicks <= 0.0) {
+					if (m_sTV.fFDDTicks < 1.0)	{
 				//		TRACE_T("m_fdd.Periodic()");
 						m_fdd.Periodic();     // Вращаем диск на одно слово на дорожке
 						m_sTV.fFDDTicks += m_sTV.fFDD_Mod;
 					}
-					while (m_sTV.fFDDTicks < 1.0);
 				}
 			}
-
 ///			m_mutRunLock.unlock();
 		}
 		else
 		{
 		//	TRACE_T("Sleep(20)");
-			Sleep(20);
+////			Sleep(20);
 		}
 	}
-	while (!m_bKillTimerEvent);       // пока не придёт событие остановки
+////	while (!m_bKillTimerEvent);       // пока не придёт событие остановки
 	m_bKillTimerEvent = false;
 }
 
@@ -2079,7 +2059,7 @@ void CMotherBoard::Make_One_Screen_Cycle()
 
 ///	if (!(m_sTV.bVgate || m_sTV.bHgate))
 	{
-		m_pParent->GetScreen()->SetExtendedMode(!(m_reg177664 & 01000));
+		m_pParent->GetScreen()->SetExtendedMode(!(m_reg177664 & 01000)); // TODO: own driver
 		DWORD_PTR nScrAddr = (static_cast<DWORD_PTR>(GetScreenPage())) << 14;
 		uint8_t *nScr = GetMainMemory() + nScrAddr; /// + m_sTV.nVideoAddress;
 		if (graphics_get_buffer2() != nScr)

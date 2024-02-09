@@ -92,6 +92,18 @@ static bool __not_in_flash_func(Wii_Joystick_Timer_CB)(repeating_timer_t *rt) {
 }
 #endif
 
+static repeating_timer_t main_timer;
+static bool __not_in_flash_func(main_timer_callback)(repeating_timer_t *rt) {
+    if (manager_started) {
+        return true;
+    }
+    CMotherBoard* m_pBoard = (CMotherBoard*)rt->user_data;
+    int i = 20;
+    while(--i)
+        m_pBoard->TimerThreadFunc();
+    return true;
+}
+
 #ifdef SOUND_SYSTEM
 static repeating_timer_t timer;
 static bool __not_in_flash_func(AY_timer_callback)(repeating_timer_t *rt) {
@@ -327,23 +339,21 @@ int main() {
 	int hz = 44100;	//44000 //44100 //96000 //22050
 	// negative timeout means exact delay (rather than delay between callbacks)
 	if (!add_repeating_timer_us(-1000000 / hz, AY_timer_callback, NULL, &timer)) {
-		logMsg("Failed to add timer");
-		return 1;
+		TRACE_T("Failed to add AY_timer_callback timer");
 	}
 #endif
     g_Config.InitConfig(CString("bk.ini"));
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
-    TRACE_T("new CMotherBoard_10()");
+    CMainFrame *mf = new CMainFrame(new CScreen());
     CMotherBoard_10 *m_pBoard = new CMotherBoard_10();
-    TRACE_T("SetFDDType");
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
 	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
-	//	m_pBoard->AttachWindow(this);  // цепляем к MotherBoard этот класс
-		// порядок имеет значение. сперва нужно делать обязательно AttachWindow(this)
-		// и только затем m_pBoard->SetMTC(). И эта функция обязательна, там звуковой буфер вычисляется
-		// и выделяется
+	m_pBoard->AttachWindow(mf);  // цепляем к MotherBoard этот класс
+	// порядок имеет значение. сперва нужно делать обязательно AttachWindow(this)
+	// и только затем m_pBoard->SetMTC(). И эта функция обязательна, там звуковой буфер вычисляется
+	// и выделяется
 	//	m_pBoard->SetMTC(nMtc); // и здесь ещё. тройная работа получается.
-		// Присоединяем к новосозданному чипу устройства
+	// Присоединяем к новосозданному чипу устройства
 	//	m_pBoard->AttachSound(m_pSound.get());
 	//	m_pBoard->AttachSpeaker(&m_speaker);
 	//	m_pBoard->AttachMenestrel(&m_menestrel);
@@ -351,18 +361,20 @@ int main() {
 	//	m_pBoard->AttachAY8910(&m_aySnd);
 	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
 	m_pBoard->NormalizeCPU();
-		// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
+	// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
 	//	m_pDebugger->AttachBoard(GetBoard());
 	//	m_paneRegistryDumpViewCPU.SetFreqParam();
-		// Цепляем обработчик скриптов
+	// Цепляем обработчик скриптов
 	//	m_Script.AttachBoard(GetBoard());
 	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr)) {
 		m_pBoard->StartTimerThread();
-		m_pBoard->RunCPU();   
-        m_pBoard->TimerThreadFunc();
+		m_pBoard->RunCPU();
+        if (!add_repeating_timer_us(1, main_timer_callback, m_pBoard, &main_timer)) {
+		    TRACE_T("Failed to add main_timer_callback timer");
+	    }
     }
-
-    if_manager(true);
-    // TODO:
+    while (1) {
+        sleep_ms(1);
+    }
     return 0;
 }

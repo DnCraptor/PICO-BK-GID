@@ -523,8 +523,18 @@ class CMainFrame : public CFrameWndEx
 };
 #else
 class CMainFrame {
-        CScreen            *m_pScreen;
+        CScreen *m_pScreen;
 	public:
+	    CMainFrame(CScreen *pScreen): m_pScreen(pScreen) {
+			//m_bBeginPeriod = (timeBeginPeriod(1) == TIMERR_NOERROR);
+			//m_nStartTick = GetTickCount();
+			// Инициализация звуковой подсистемы
+			//m_pSound = std::make_unique<CBkSound>();
+			//if (!m_pSound) {
+			//	g_BKMsgBox.Show(IDS_BK_ERROR_NOTENMEMR, MB_OK);
+			//}
+		}
+		~CMainFrame() {}
 	    CScreen* GetScreen() const { return m_pScreen; }
 		void OnCpuBreak() {} // TODO:
 		void SendMessage(int, int) {} // TODO: ???
