@@ -249,17 +249,17 @@ static void init_fs() {
     }
 
     if (SD_CARD_AVAILABLE) {
-        DIR dir;
-        if (f_opendir(&dir, "\\BK") != FR_OK) {
-            f_mkdir("\\BK");
-        } else {
-            f_closedir(&dir);
-        }
+///        DIR dir;
+///        if (f_opendir(&dir, "\\BK") != FR_OK) {
+///            f_mkdir("\\BK");
+///        } else {
+///            f_closedir(&dir);
+///        }
     //    insertdisk(0, fdd0_sz(), fdd0_rom(), "\\BK\\fdd0.img");
     //    insertdisk(1, fdd1_sz(), fdd1_rom(), "\\BK\\fdd1.img"); // TODO: why not attached?
     //    insertdisk(2, 819200, 0, "\\BK\\hdd0.img");
     //    insertdisk(3, 819200, 0, "\\BK\\hdd1.img"); // TODO: why not attached?
-        read_config("\\BK\\bk.conf");
+///        read_config("\\BK\\bk.conf");
     }
 }
 

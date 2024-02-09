@@ -1968,7 +1968,6 @@ void CMotherBoard::TimerThreadFunc()
 		}
 	}
 	while (!m_bKillTimerEvent);       // пока не придёт событие остановки
-
 	m_bKillTimerEvent = false;
 }
 
@@ -2069,21 +2068,25 @@ void CMotherBoard::MediaTick()
 	}***/
 }
 
+extern "C" void graphics_set_buffer2(uint8_t* buffer);
+extern "C" uint8_t* graphics_get_buffer2();
 
 // это вариант точного алгоритма из VP1-037
 void CMotherBoard::Make_One_Screen_Cycle()
-{/***
-	uint16_t dww = m_sTV.nVideoAddress & 076; // счётчик слов внутри строки
-	uint16_t dwa = m_sTV.nVideoAddress & 037700; // адрес строки
+{
+///	uint16_t dww = m_sTV.nVideoAddress & 076; // счётчик слов внутри строки
+///	uint16_t dwa = m_sTV.nVideoAddress & 037700; // адрес строки
 
-	if (!(m_sTV.bVgate || m_sTV.bHgate))
+///	if (!(m_sTV.bVgate || m_sTV.bHgate))
 	{
 		m_pParent->GetScreen()->SetExtendedMode(!(m_reg177664 & 01000));
 		DWORD_PTR nScrAddr = (static_cast<DWORD_PTR>(GetScreenPage())) << 14;
-		uint8_t *nScr = GetMainMemory() + nScrAddr + m_sTV.nVideoAddress;
-		m_pParent->GetScreen()->PrepareScreenLineWordRGB32(m_sTV.nLineCounter, dww, *reinterpret_cast<uint16_t *>(nScr));
+		uint8_t *nScr = GetMainMemory() + nScrAddr; /// + m_sTV.nVideoAddress;
+		if (graphics_get_buffer2() != nScr)
+			graphics_set_buffer2(nScr);
+///		m_pParent->GetScreen()->PrepareScreenLineWordRGB32(m_sTV.nLineCounter, dww, *reinterpret_cast<uint16_t *>(nScr));
 	}
-
+/***
 	dww += 2; // переходим к следующему слову
 
 	if (m_sTV.bHgate) // считаем служебное поле в строке

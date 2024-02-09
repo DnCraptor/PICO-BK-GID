@@ -428,6 +428,14 @@ void graphics_shift_screen(uint16_t Word) {
     g_conf.graphics_buffer_height = (Word & 0b01000000000) ? 256 : 256 / 4;
 }
 
+void graphics_set_buffer2(uint8_t* buffer) {
+    graphics_buffer = buffer;
+}
+
+uint8_t* graphics_get_buffer2() {
+    return graphics_buffer;
+}
+
 void graphics_set_buffer(uint8_t* buffer, uint16_t width, uint16_t height) {
     g_conf.v_buff_offset = buffer - 0;
     graphics_buffer = buffer;
