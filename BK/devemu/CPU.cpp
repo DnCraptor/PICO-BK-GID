@@ -127,7 +127,7 @@ const int CCPU::timing_TwoOps_BIS_11[8][8] =
 
 CCPU::CCPU()
 	: m_pBoard(nullptr)
-	, m_pExecuteMethodMap(nullptr)
+///	, m_pExecuteMethodMap(nullptr)
 	, timing_Misk(nullptr)
 	, timing_OneOps_TST(nullptr)
 	, timing_OneOps_CLR(nullptr)
@@ -141,14 +141,18 @@ CCPU::CCPU()
 	, m_bCBug(false)
 	, m_b177702State(true)
 {
+	TRACE_T("CCPU memset(m_RON, 0, sizeof(m_RON))");
 	memset(m_RON, 0, sizeof(m_RON));
 	m_PSW = 0340;
 	// инициализируем маски регистров по записи. В нулевые биты ничего записать нельзя, в единичные - можно.
 	m_vSysRegsMask = {   7,       0,    0377, 0177777,       0,    0377 };
 	// инициализируем значения регистров по чтению
 	m_vSysRegs = { 0177740, 0177777, 0177440, 0000000, 0177777, 0177400 };
+	TRACE_T("CCPU::InitVars()");
 	InitVars();
+	TRACE_T("CCPU::PrepareCPU()");
 	PrepareCPU();
+	TRACE_T("CCPU::CCPU() done");
 }
 
 CCPU::~CCPU()
@@ -447,7 +451,9 @@ int CCPU::TranslateInstruction()
 			}
 
 			// Find command implementation using the command map
-			(this->*m_pExecuteMethodMap[m_instruction])();  // Call command implementation method
+		///	(this->*m_pExecuteMethodMap[m_instruction])();  // Call command implementation method
+		    ExecuteMethodRef cpu_opcode = DEFAULT_CPU_EIS_MAP[m_instruction];
+			(this->*cpu_opcode)();
 		}
 	}
 
@@ -2379,11 +2385,11 @@ void CCPU::ExecuteFDIV()
 
 void CCPU::PrepareCPU()
 {
-	if (m_pExecuteMethodMap)
+///	if (m_pExecuteMethodMap)
 	{
 		return;
 	}
-
+/***
 	m_pExecuteMethodMap = std::make_unique<ExecuteMethodRef[]>(65536);
 
 	if (m_pExecuteMethodMap)
@@ -2492,7 +2498,7 @@ void CCPU::PrepareCPU()
 	else
 	{
 		g_BKMsgBox.Show(IDS_BK_ERROR_NOTENMEMR, MB_OK);
-	}
+	}*/
 }
 
 void CCPU::DoneCPU()
@@ -2503,6 +2509,6 @@ void CCPU::RegisterMethodRef(uint16_t start, uint16_t end, ExecuteMethodRef meth
 {
 	for (int opcode = start; opcode <= end; ++opcode)
 	{
-		m_pExecuteMethodMap[opcode] = methodref;
+///		m_pExecuteMethodMap[opcode] = methodref;
 	}
 }

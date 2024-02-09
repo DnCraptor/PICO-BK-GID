@@ -116,9 +116,11 @@ class CCPU
 			PC,
 			PSW
 		};
-	protected: // Statics
+	public:
 		using ExecuteMethodRef = void (CCPU::*)();
-		std::unique_ptr<ExecuteMethodRef[]> m_pExecuteMethodMap;
+	protected: // Statics
+		static ExecuteMethodRef __in_flash() __aligned(4096) DEFAULT_CPU_EIS_MAP[];
+	///	std::unique_ptr<ExecuteMethodRef[]> m_pExecuteMethodMap;
 		void            RegisterMethodRef(uint16_t start, uint16_t end, ExecuteMethodRef methodref);
 
 		uint16_t        m_RON[static_cast<int>(REGISTER::PSW)];   // PSW не входит в массив
@@ -223,7 +225,7 @@ class CCPU
 		bool            GetV_br() const;
 		bool            GetZ_br() const;
 		bool            GetN_br() const;
-
+    public:
 		void            ExecuteUNKNOWN();
 		// No fields
 		void            ExecuteHALT();

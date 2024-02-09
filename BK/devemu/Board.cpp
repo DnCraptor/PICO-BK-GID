@@ -35,13 +35,19 @@ CMotherBoard::CMotherBoard(BK_DEV_MPI model)
 	, m_nBKPortsIOArea(BK_PURE_PORTSIO_AREA)
 	, m_nKeyCleanEvent(0)
 {
+	TRACE_T("CMotherBoard m_sTV.init()");
 	m_sTV.init();
+	TRACE_T("SetCPUBaseFreq(%d)", CPU_SPEED_BK10);
 	SetCPUBaseFreq(CPU_SPEED_BK10); // частота задаётся этой константой
+	TRACE_T("ZeroMemory(%08X, %d)", m_MemoryMap, sizeof m_MemoryMap);
 	ZeroMemory(m_MemoryMap, sizeof(m_MemoryMap));
+	TRACE_T("AttachBoard(this)");
 	m_cpu.AttachBoard(this);
+	TRACE_T("AttachParent(this)");
 	m_fdd.AttachParent(this);
+	TRACE_T("init_A16M_10()");
 	m_fdd.init_A16M_10(&m_ConfBKModel, ALTPRO_A16M_STD10_MODE);
-
+    TRACE_T("FillWndVectorPtr()");
 	// Инициализация модуля памяти
 	if (!FillWndVectorPtr(0200000))
 	{
@@ -66,6 +72,7 @@ BK_DEV_MPI CMotherBoard::GetBoardModel()
 
 bool CMotherBoard::FillWndVectorPtr(int nMemSize)
 {
+	TRACE_T("FillWndVectorPtr(%d)", nMemSize)
 	m_vWindows.clear();
 	m_pMemory.clear();
 	// Инициализация модуля памяти
