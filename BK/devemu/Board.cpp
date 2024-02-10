@@ -1882,7 +1882,6 @@ void CMotherBoard::TimerThreadFunc()
 							m_sTV.nCPUTicks = 64;
 							m_cpu.ReplyError();  // Делаем прер. по вектору 4(halt) в следующем цикле
 						}
-
 						nPreviousPC = ADDRESS_NONE;
 					}
 					catch (...)

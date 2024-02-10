@@ -345,6 +345,7 @@ int main() {
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
     CMainFrame *mf = new CMainFrame(new CScreen());
     CMotherBoard *m_pBoard = new CMotherBoard();
+    CSpeaker m_speaker;
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
 	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
 	m_pBoard->AttachWindow(mf);  // цепляем к MotherBoard этот класс
@@ -354,7 +355,7 @@ int main() {
 	//	m_pBoard->SetMTC(nMtc); // и здесь ещё. тройная работа получается.
 	// Присоединяем к новосозданному чипу устройства
 	//	m_pBoard->AttachSound(m_pSound.get());
-	//	m_pBoard->AttachSpeaker(&m_speaker);
+	m_pBoard->AttachSpeaker(&m_speaker);
 	//	m_pBoard->AttachMenestrel(&m_menestrel);
 	//	m_pBoard->AttachCovox(&m_covox);
 	//	m_pBoard->AttachAY8910(&m_aySnd);

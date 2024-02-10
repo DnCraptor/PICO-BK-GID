@@ -1,11 +1,10 @@
 ﻿// Speaker.h: interface for the CSpeaker class.
 //
-
-
 #pragma once
 
 #include "BKSoundDevice.h"
 
+#ifdef ORIG_SPEAKER
 class CSpeaker : public CBKSoundDevice
 {
 		static const SAMPLE_INT m_dSpeakerValues[8];
@@ -33,3 +32,17 @@ class CSpeaker : public CBKSoundDevice
 		virtual void    SetData(uint16_t inVal) override;
 		virtual void    GetSample(sOneSample *pSm) override;
 };
+#else
+class CSpeaker : public CBKSoundDevice {
+	public:
+		CSpeaker();
+		virtual ~CSpeaker() override;
+		virtual void    ReInit() override;
+		virtual void    Reset() override;
+		void            ConfigureTapeBuffer(int ips);
+		void            ReceiveTapeBuffer(void *pBuff, int nSampleLen);
+		bool            GetTapeSample();
+		virtual void    SetData(uint16_t inVal) override;
+		virtual void    GetSample(sOneSample *pSm) override;
+};
+#endif
