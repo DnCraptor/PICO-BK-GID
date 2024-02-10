@@ -141,18 +141,14 @@ CCPU::CCPU()
 	, m_bCBug(false)
 	, m_b177702State(true)
 {
-	TRACE_T("CCPU memset(m_RON, 0, sizeof(m_RON))");
 	memset(m_RON, 0, sizeof(m_RON));
 	m_PSW = 0340;
 	// инициализируем маски регистров по записи. В нулевые биты ничего записать нельзя, в единичные - можно.
 	m_vSysRegsMask = {   7,       0,    0377, 0177777,       0,    0377 };
 	// инициализируем значения регистров по чтению
 	m_vSysRegs = { 0177740, 0177777, 0177440, 0000000, 0177777, 0177400 };
-	TRACE_T("CCPU::InitVars()");
 	InitVars();
-	TRACE_T("CCPU::PrepareCPU()");
 	PrepareCPU();
-	TRACE_T("CCPU::CCPU() done");
 }
 
 CCPU::~CCPU()
@@ -407,25 +403,21 @@ void CCPU::SetWord(const uint16_t addr, uint16_t value)
 	}
 }
 
-int CCPU::TranslateInstruction()
-{
+int CCPU::TranslateInstruction() {
 	m_nInternalTick = 0;
 	m_nROMTimingCorrection = 0; // здесь накапливается коррекция тайминга за время выполнения инструкции
-
 	// диспетчер прерываний. проверим, есть ли незамаскированные запросы на прерывания
 	// если есть -  выполняем прерывание, инструкцию не выполняем
 	// если нет - выполняем очередную инструкцию
-	if (!InterruptDispatch())
-	{
+	if (!InterruptDispatch()) {
 		// если была команда WAIT, не надо выполнять инструкцию, но чтобы не зацикливать эмулятор,
 		// надо делать вид, что мы что-то делаем.
-		if (m_bWaitMode)
-		{
+		if (m_bWaitMode) {
 			m_nInternalTick = timing_Misk[TIMING_IDX_BASE];
-		}
-		else
-		{
-			m_instruction = GetWord(m_RON[static_cast<int>(REGISTER::PC)]); // берём следующую инструкцию.
+			TRACE_T("m_nInternalTick: %d", m_nInternalTick);
+		} else {
+			uint16_t pc = m_RON[static_cast<int>(REGISTER::PC)];
+			m_instruction = GetWord(pc); // берём следующую инструкцию.
 			m_RON[static_cast<int>(REGISTER::PC)] += 2;
 			m_datarg = m_ALU = 0;
 			m_bByteOperation = !!(m_instruction & 0100000);
@@ -439,35 +431,31 @@ int CCPU::TranslateInstruction()
 			t >>= 3;
 			m_nMethSrc = t & 7;
 			m_Freg = m_PSW;
-
-			if (m_bCBug)
-			{
+			if (m_bCBug) {
 				m_bCBug = false;
-
-				if (g_Config.m_bEmulateCBug)
-				{
+				if (g_Config.m_bEmulateCBug) {
 					m_Freg &= 0177776;
 				}
 			}
-
+	////		TRACE_T("0%06o: 0%06o", pc, m_instruction);
 			// Find command implementation using the command map
 		///	(this->*m_pExecuteMethodMap[m_instruction])();  // Call command implementation method
 		    ExecuteMethodRef cpu_opcode = DEFAULT_CPU_EIS_MAP[m_instruction];
 			(this->*cpu_opcode)();
+	////		TRACE_T("0%06o: 0%06o done. PC: 0%06o", pc, m_instruction, m_RON[static_cast<int>(REGISTER::PC)]);
 		}
+	} else {
+		TRACE_T("InterruptDispatch");
 	}
-
 	m_nInternalTick -= m_nROMTimingCorrection;
 	// здесь в принципе тоже неточность. таймер должен считать независимо, а не в промежутках между
 	// выполнением команд, при чтении значений таймера тут будет возникать неточность.
 	m_nCmdTicks += m_nInternalTick;
-
-	while (m_nCmdTicks >= 128)
-	{
+	while (m_nCmdTicks >= 128) {
+////		TRACE_T("Timerprocess m_nCmdTicks: %d", m_nCmdTicks);
 		m_nCmdTicks -= 128;
 		Timerprocess(); // Обрабатываем встроенный таймер каждый 128й такт
 	}
-
 	return m_nInternalTick;
 }
 
@@ -663,27 +651,27 @@ bool CCPU::InterruptDispatch()
 // выполнение пультового исключения и прерывания
 //  для вектора установленный бит 18 означает, что PC надо увеличить на 2,
 // как будто  была прочитана текущая инструкция
-void CCPU::SystemInterrupt(uint32_t nVector)
-{
+void CCPU::SystemInterrupt(uint32_t nVector) {
+	TRACE_T("SystemInterrupt(0%06o) m_pBoard: %08Xh", nVector, m_pBoard);
 	//uint16_t w;
 	//m_pBoard->GetSystemRegister(0177716, &w, GSSR_NONE);
 	m_pBoard->SetSystemRegister(0177716, 0210, GSSR_NONE); // выставляем признак HALT режима
 	// при этом в регистр записи попадают данные регистра чтения и происходит некоторая фигня
 	// поэтому будем делать проще, ничего читать не будем, но сразу запишем нужное число - бит 4 и биты звука - нули
+	TRACE_T("m_pBoard->SetWord(0177676, GetPSW())");
 	m_pBoard->SetWord(0177676, GetPSW()); // вот это-то и вызывает прерывание по вектору 4
 	uint16_t pc = m_RON[static_cast<int>(REGISTER::PC)];
-
-	if (nVector & (1 << 18))
-	{
+	if (nVector & (1 << 18)) {
 		pc += 2;
 	}
-
+	TRACE_T("m_pBoard->SetWord(0177674, pc);");
 	m_pBoard->SetWord(0177674, pc);
 	uint16_t nVec = nVector & 0xffff;
 	m_RON[static_cast<int>(REGISTER::PC)] = GetWord(nVec);
 	// SetPSW((GetWord(nVec + 2) & 07777) | (1 << static_cast<int>(PSW_BIT::HALT))); // вот как я думаю должно быть
 	SetPSW(GetWord(nVec + 2) & 0377); // вот как происходит на самом деле
 	m_bTwiceHangup = false;
+	TRACE_T("SystemInterrupt(0%06o) done", nVector);
 }
 
 // выполнение пользовательского исключения и прерывания

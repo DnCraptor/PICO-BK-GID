@@ -15,6 +15,6 @@ extern void logMsg(char* msg);
 #ifdef __cplusplus
 
 #include "BKMessageBox.h"
-#define TRACE_T(...) { char tmp[80]; snprintf(tmp, 80, __VA_ARGS__); g_BKMsgBox.Show(CString(tmp), 0); }
+#define TRACE_T(...) { char tmp[128]; snprintf(tmp, 128, __VA_ARGS__); g_BKMsgBox.Show(CString(tmp), 0); }
 
 #endif

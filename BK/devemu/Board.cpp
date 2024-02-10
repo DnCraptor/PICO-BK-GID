@@ -474,99 +474,76 @@ sblb1:
 }
 
 
-void CMotherBoard::SetWord(const uint16_t addr, uint16_t value)
-{
+void CMotherBoard::SetWord(const uint16_t addr, uint16_t value) {
 	int nTC = 0;
 	SetWordT(addr, value, nTC);
 }
 
-void CMotherBoard::SetWordT(const uint16_t addr, uint16_t value, int &nTC)
-{
+void CMotherBoard::SetWordT(const uint16_t addr, uint16_t value, int &nTC) {
 	const int nBank = (addr >> 12) & 0x0f;
 	BKMEMBank_t &mbPtr = m_MemoryMap[nBank];
 	auto pDst = reinterpret_cast<uint16_t *>(&m_pMemory[static_cast<size_t>(mbPtr.nOffset) + (addr & 07776)]);
-
 	// Сперва проверим, на системные регистры
-	if (nBank == 15)
-	{
+	if (nBank == 15) {
+		TRACE_T("15 SetWordT(0%06o, 0%06o)", addr, value);
 		const BK_DEV_MPI nBKFddType = GetFDDType();
-
-		if (addr >= m_nBKPortsIOArea)
-		{
-			switch (nBKFddType)
-			{
+		if (addr >= m_nBKPortsIOArea) {
+			switch (nBKFddType)	{
 				case BK_DEV_MPI::SMK512:
-					switch (GetAltProMode())
-					{
+					switch (GetAltProMode()) {
 						case ALTPRO_SMK_HLT11_MODE:
 						case ALTPRO_SMK_HLT10_MODE:
 							// case ALTPRO_SMK_OZU10_MODE:
 							// в режиме Hlt11 и Hlt10 в этом диапазоне можно писать, а для старой версии, ещё и в режиме ОЗУ10
 							goto swlb1;
-
 						default:
-							if (SetSystemRegister(addr, value, GSSR_NONE))
-							{
+							if (SetSystemRegister(addr, value, GSSR_NONE)) {
 								nTC += REG_TIMING_CORR_VALUE;
 								return;
 							}
 					}
-
 					// иначе, в этом диапазоне действуют обычные правила
 					break;
-
 				case BK_DEV_MPI::A16M:
-
 					// в режиме Hlt11 в этом диапазоне можно писать
-					if (GetAltProMode() == ALTPRO_A16M_HLT11_MODE)
-					{
+					if (GetAltProMode() == ALTPRO_A16M_HLT11_MODE) {
 swlb1:
 						SetSystemRegister(addr, value, GSSR_NONE);
 						*pDst = value;
 						nTC += mbPtr.nTimingCorrection;
 						return;
 					}
-
 					[[fallthrough]];
 				// иначе, как в обычном режиме, смотрим порты
 				default:
-
 					// в обычном режиме тут только регистры могут быть
-					if (SetSystemRegister(addr, value, GSSR_NONE))
-					{
+					if (SetSystemRegister(addr, value, GSSR_NONE)) {
 						nTC += REG_TIMING_CORR_VALUE;
 						return;
-					}
-					else
-					{
+					} else {
+						TRACE_T("1 Can't write this address 0%06o", addr);
 						throw CExceptionHalt(addr, _T("Can't write this address."));
+						while(1); // TODO:
 					}
-
 					break;
 			}
-		}
-		else
-		{
-			if (nBKFddType == BK_DEV_MPI::SMK512 && GetAltProMode() != ALTPRO_A16M_START_MODE)
-			{
+		} else {
+			if (nBKFddType == BK_DEV_MPI::SMK512 && GetAltProMode() != ALTPRO_A16M_START_MODE) {
 				*pDst = value;
 				nTC += mbPtr.nTimingCorrection;
 				return;
 			}
 		}
 	}
-
-	if (mbPtr.bWritable)
-	{
+	if (mbPtr.bWritable) {
 		*pDst = value;
 		nTC += mbPtr.nTimingCorrection;
-	}
-	else
-	{
+	} else {
+		TRACE_T("2 Can't write this address 0%06o", addr);
 		throw CExceptionHalt(addr, _T("Can't write this address."));
+		while(1); // TODO:
 	}
 }
-
 
 /*
 GetByteIndirect,GetWordIndirect,SetByteIndirect,SetWordIndirect
@@ -1023,7 +1000,7 @@ void CMotherBoard::Set177716RegTap(uint16_t w)
 {
 	constexpr uint16_t mask = 0360;
 	m_reg177716out_tap = (~mask & m_reg177716out_tap) | (mask & w);
-	m_pSpeaker->SetData(m_reg177716out_tap);
+	if (m_pSpeaker)	m_pSpeaker->SetData(m_reg177716out_tap);
 	// пока не решится проблема ложных срабатываний, это лучше не использовать
 	/*
 	if (m_pParent->GetTapePtr()->IsWaveLoaded())
@@ -1126,6 +1103,7 @@ bool CMotherBoard::GetSystemRegister(uint16_t addr, void *pDst, UINT dwFlags)
 */
 bool CMotherBoard::SetSystemRegister(uint16_t addr, uint16_t src, UINT dwFlags)
 {
+	TRACE_T("SetSystemRegister(0%06o, 0%06o, %d)", addr, src, dwFlags);
 	switch (addr & 0177776)
 	{
 		case 0177660:
@@ -1256,7 +1234,6 @@ bool CMotherBoard::SetSystemRegister(uint16_t addr, uint16_t src, UINT dwFlags)
 			return true;
 
 		case 0177716:
-
 			/*
 			177716
 			Системный регистр. Внешний регистр 1(ВР1, SEL1) процессора ВМ1, регистр начального пуска.
@@ -1283,27 +1260,20 @@ bool CMotherBoard::SetSystemRegister(uint16_t addr, uint16_t src, UINT dwFlags)
 			(200)бит 7: включение двигателя магнитофона, "1" -- стоп, "0" -- пуск. Начальное состояние "1".
 			    биты 0,1,3, не используются, "0".
 			*/
-			if (dwFlags & GSSR_BYTEOP)
-			{
+			if (dwFlags & GSSR_BYTEOP) {
 				src &= 0377; // работаем с младшим байтом
-
-				if (addr & 1)
-				{
+				if (addr & 1) {
 					src <<= 8; // работаем со старшим байтом
 				}
 			}
-
+			TRACE_T("case 0177716: src: 0%06o", src);
 			Set177716RegTap(src);
-
 			// В БК 2й разряд SEL1 фиксирует любую запись в этот регистр, взводя триггер D9.1 на неограниченное время, сбрасывается который любым чтением этого регистра.
-			if (!(dwFlags & GSSR_INTERNAL))
-			{
+			if (!(dwFlags & GSSR_INTERNAL))	{
 				m_reg177716in |= 4;
 			}
-
 			return true;
 	}
-
 	return false;
 }
 
@@ -1809,7 +1779,6 @@ void CMotherBoard::FrameParam()
 }
 
 extern "C" int if_manager(bool force);
-extern volatile bool escPressed;
 extern "C" {
 	#include "BKKey.h"
 	#include "ps2.h"
@@ -1826,11 +1795,13 @@ void CMotherBoard::TimerThreadFunc()
 	{
 		uint_fast16_t code = ps2get_raw_code() & 0xFFFF;
 		if (code) {
+			TRACE_T("code: %04Xh", code);
 			uint16_t nInt = INTERRUPT_60; // TODO:
 			code = Key_Translate(code);
+			TRACE_T("codeT: %04Xh", code);
 			if (code != KEY_UNKNOWN) {
 				if (code == KEY_MENU_ESC) {
-                    int tormoz = if_manager(escPressed);
+                    int tormoz = if_manager(true);
 				} else {
 					this->m_reg177662in = code & 0177;
 					// если ещё прошлый код не прочитали, новый игнорируем.
@@ -1849,6 +1820,7 @@ void CMotherBoard::TimerThreadFunc()
 ///			m_mutRunLock.lock(); // блокируем участок, чтобы при остановке обязательно дождаться, пока фрейм не закончится
 			if (m_bBreaked) // если процессор в отладочном останове
 			{
+				TRACE_T("DrawDebugScreen() tba");
 ///				DrawDebugScreen();  // продолжаем обновлять экран
 				Sleep(20);          // со стандартной частотой примерно 50Гц
 			} else {
@@ -1875,14 +1847,15 @@ void CMotherBoard::TimerThreadFunc()
 						}
 						// Сохраняем текущее значение PC для отладки
 						nPreviousPC = m_cpu.GetRON(CCPU::REGISTER::PC);
-				//		TRACE_T("nPreviousPC: 0%05o", nPreviousPC);
+				///		TRACE_T("nPreviousPC: 0%07o", nPreviousPC);
 					}
 					catch (CExceptionHalt &halt)
 					{
+						TRACE_T("CExceptionHalt: 0%07o, m_bAskForBreak: %d", nPreviousPC, g_Config.m_bAskForBreak);
 						// BK Violation exception. Например запись в ПЗУ или чтение из несуществующей памяти
-				///		if (g_Config.m_bAskForBreak)
-				///		{
-				///			BreakCPU();  // Останавливаем CPU для отладки
+						if (g_Config.m_bAskForBreak)
+						{
+							BreakCPU();  // Останавливаем CPU для отладки
 				///			CString strMessage;
 				///			strMessage.Format(IDS_ERRMSG_ROM, halt.m_addr, nPreviousPC, halt.m_info);
 				///			const int answer = g_BKMsgBox.Show(strMessage, MB_ABORTRETRYIGNORE | MB_DEFBUTTON2 | MB_ICONSTOP);
@@ -1900,28 +1873,28 @@ void CMotherBoard::TimerThreadFunc()
 
 				///				case IDABORT: // если выбрали "прервать" - остаёмся в отладочном останове
 				///				default:
-				///					break;
+									break;
 				///			}
-				///		}
-				///		else
+						}
+						else
 						{
-				//			TRACE_T("ReplyError()");
+							TRACE_T("ReplyError()");
 							m_sTV.nCPUTicks = 64;
 							m_cpu.ReplyError();  // Делаем прер. по вектору 4(halt) в следующем цикле
 						}
 
 						nPreviousPC = ADDRESS_NONE;
 					}
-				///	catch (...)
+					catch (...)
 					{
 						// Любое другое исключение. Неизвестное исключение или ошибка доступа к памяти WINDOWS.
 						// Эта ошибка может быть неизвестной ошибкой BK или ошибкой эмулятора
-				///		CString strMessage(MAKEINTRESOURCE(IDS_ERRMSG_INTERNAL));
-				///		g_BKMsgBox.Show(strMessage, MB_OK | MB_ICONSTOP);
-				///		BreakCPU();
+						CString strMessage(MAKEINTRESOURCE(IDS_ERRMSG_INTERNAL));
+						g_BKMsgBox.Show(strMessage, MB_OK | MB_ICONSTOP);
+						BreakCPU();
 				///		m_mutRunLock.unlock();
-				///		StopCPU(false); // внутри этой функции мы пытаемся блокировать m_mutRunLock
-				///		break; // Прекращаем выполнять инструкции - завершаем этот поток
+						StopCPU(false); // внутри этой функции мы пытаемся блокировать m_mutRunLock
+						break; // Прекращаем выполнять инструкции - завершаем этот поток
 					}
 
 					if (
@@ -1930,7 +1903,7 @@ void CMotherBoard::TimerThreadFunc()
 					    || (m_sTV.nGotoAddress == GO_INTO)		// Отладочный останов если только одиночный шаг
 					    || (m_sTV.nGotoAddress == GO_OUT && CDebugger::IsInstructionOut(m_cpu.GetCurrentInstruction()))  // Отладочный останов если команда выхода из п/п
 					) {
-				//		TRACE_T("BreakCPU()");
+						TRACE_T("BreakCPU()");
 						BreakCPU();
 					}
 				}
@@ -1964,12 +1937,13 @@ void CMotherBoard::TimerThreadFunc()
 		}
 		else
 		{
-		//	TRACE_T("Sleep(20)");
+			TRACE_T("Sleep(20)");
 			Sleep(20);
 		}
 	}
 	while (!m_bKillTimerEvent);       // пока не придёт событие остановки
 	m_bKillTimerEvent = false;
+	TRACE_T("The END");
 }
 
 void CMotherBoard::SetMTC(int mtc)

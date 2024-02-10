@@ -16,6 +16,7 @@ extern "C" {
 #include <string.h>
 
 #include "Board_10.h"
+#include "Board_10_FDD.h"
 #include "Config.h"
 #include "resource.h"
 #include "debug.h"
@@ -343,7 +344,7 @@ int main() {
     g_Config.InitConfig(CString("bk.ini"));
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
     CMainFrame *mf = new CMainFrame(new CScreen());
-    CMotherBoard_10 *m_pBoard = new CMotherBoard_10();
+    CMotherBoard *m_pBoard = new CMotherBoard();
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
 	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
 	m_pBoard->AttachWindow(mf);  // цепляем к MotherBoard этот класс
@@ -367,9 +368,10 @@ int main() {
 	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr)) {
 		m_pBoard->StartTimerThread();
 		m_pBoard->RunCPU();
-        if (!add_repeating_timer_ms(20, main_timer_callback, m_pBoard, &main_timer)) {
-		    TRACE_T("Failed to add main_timer_callback timer");
-	    }
+      //  if (!add_repeating_timer_ms(20, main_timer_callback, m_pBoard, &main_timer)) {
+	//	    TRACE_T("Failed to add main_timer_callback timer");
+	 //   }
+        m_pBoard->TimerThreadFunc();
     }
     while (1) {
         sleep_ms(20);
