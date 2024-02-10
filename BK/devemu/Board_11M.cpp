@@ -44,7 +44,7 @@ MSF_CONF CMotherBoard_11M::GetConfiguration()
 bool CMotherBoard_11M::FillWndVectorPtr(int nMemSize)
 {
 	if (CMotherBoard::FillWndVectorPtr(nMemSize))
-	{
+	{/***
 		ZeroMemory(GetMainMemory() + 0640000, nMemSize - 0640000); // доп память обнулим
 		CString str; //заполним список окон
 
@@ -54,7 +54,7 @@ bool CMotherBoard_11M::FillWndVectorPtr(int nMemSize)
 			int addr = (i == 0) ? 0 : -1;
 			m_vWindows.push_back({ str, addr, 040000, GetMainMemory() + i * 040000 });
 		}
-
+**/
 		return true;
 	}
 
@@ -387,7 +387,7 @@ bool CMotherBoard_11M::LoadRomModule11(int iniRomNameIndex, int bank)
 			len = 020000;
 		}
 
-		UINT readed = file.Read(&m_pMemory[static_cast<size_t>(bank) << 12], len);
+		UINT readed = file.Read(&m_psram, static_cast<size_t>(bank) << 12, len);
 		file.Close();
 
 		if (readed == len)
@@ -455,27 +455,17 @@ bool CMotherBoard_11M::InitMemoryModules()
 	return true;
 }
 
-void CMotherBoard_11M::InitMemoryValues(int nMemSize)
-{
+void CMotherBoard_11M::InitMemoryValues(int nMemSize) {
 	uint16_t val = 0;
-	auto pPtr = reinterpret_cast<uint16_t *>(GetMainMemory());
 	int n = 8;
 	int flag = 8;
-
-	for (int i = 0; i < nMemSize / 2; ++i)
-	{
-		pPtr[i] = val;
-
-		if (--n <= 0)
-		{
+	for (int i = 0; i < nMemSize / 2; ++i) {
+		m_psram.set(i, val);
+		if (--n <= 0) {
 			n = 8;
-
-			if (--flag > 0)
-			{
+			if (--flag > 0)	{
 				val = ~val;
-			}
-			else
-			{
+			} else {
 				flag = 8;
 			}
 		}

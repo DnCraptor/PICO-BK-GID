@@ -55,7 +55,7 @@ void CMotherBoard_11_FDD::SetFDDType(BK_DEV_MPI model, bool bInit)
 	switch (model)
 	{
 		case BK_DEV_MPI::A16M:
-			m_vWindows.push_back({ _T("A16M:0"), 0100000, 040000, GetMainMemory() + 0220000 });
+		///	m_vWindows.push_back({ _T("A16M:0"), 0100000, 040000, GetMainMemory() + 0220000 });
 			break;
 
 		case BK_DEV_MPI::SMK512:
@@ -65,9 +65,9 @@ void CMotherBoard_11_FDD::SetFDDType(BK_DEV_MPI model, bool bInit)
 			{
 				for (int i = 0; i < 16; ++i) //заполним список окон
 				{
-					CString str;
-					str.Format(_T("SMK:%02d (%s)"), i, g_arStrSMKPgNums[i].GetString());
-					m_vWindows.push_back({ str, 0100000, 0100000, GetAddMemory() + i * 0100000 });
+				///	CString str;
+				///	str.Format(_T("SMK:%02d (%s)"), i, g_arStrSMKPgNums[i].GetString());
+				///	m_vWindows.push_back({ str, 0100000, 0100000, GetAddMemory() + i * 0100000 });
 				}
 			}
 			else
@@ -84,12 +84,12 @@ BK_DEV_MPI CMotherBoard_11_FDD::GetFDDType()
 {
 	return m_fdd.GetFDDType();
 }
-
+/***
 uint8_t *CMotherBoard_11_FDD::GetAddMemory() const
 {
 	return GetMainMemory() + 0640000;
 }
-
+***/
 void CMotherBoard_11_FDD::OnReset()
 {
 	CMotherBoard_11M::OnReset();
@@ -443,14 +443,14 @@ bool CMotherBoard_11_FDD::RestoreMemory(CMSFManager &msf)
 		{
 			if (msf.IsLoad())
 			{
-				if (!msf.GetBlockMemorySMK512(GetMainMemory() + 0700000))
+			///	if (!msf.GetBlockMemorySMK512(GetMainMemory() + 0700000))
 				{
 					return false;
 				}
 			}
 			else
 			{
-				if (!msf.SetBlockMemorySMK512(GetMainMemory() + 0700000))
+			///	if (!msf.SetBlockMemorySMK512(GetMainMemory() + 0700000))
 				{
 					return false;
 				}

@@ -19,6 +19,7 @@
 #include "ExceptionHalt.h"
 #include "MainFrm.h"
 #include "Config.h"
+#include "CPSRAM.h"
 
 constexpr auto BRD_10_MON10_BNK = 8;
 constexpr auto BRD_10_BASIC10_1_BNK = 10;
@@ -118,10 +119,10 @@ class CMotherBoard : public CDevice
 
 		CFDDController      m_fdd;              // контроллер 1801ВП1-128.
 		CCPU                m_cpu;              // Процессор 1801ВМ1
-		mutable std::vector<uint8_t> m_pMemory; // Основная память БК + дополнительная для контроллеров
+		PSRAM               m_psram;            // Основная память БК + дополнительная для контроллеров (PSRAM only supported for now)
 		BKMEMBank_t         m_MemoryMap[16];    // карта памяти 64кбайтного адресного пространства, там помещается 16 банков по 4 кб.
 		ConfBKModel_t       m_ConfBKModel;
-		std::vector<WindowParam_t> m_vWindows;  // вектор окон для дампера.
+	///	std::vector<WindowParam_t> m_vWindows;  // вектор окон для дампера.
 
 		CBkSound           *m_pSound;           // указатель на модуль звуковой подсистемы
 		CSpeaker           *m_pSpeaker;         // указатель на объект пищалка
@@ -183,10 +184,7 @@ class CMotherBoard : public CDevice
 		virtual MSF_CONF    GetConfiguration();
 		BK_DEV_MPI          GetBoardModel();
 
-		auto                GetWndVectorPtr()
-		{
-			return &m_vWindows;
-		}
+	///	auto                GetWndVectorPtr() { return &m_vWindows; }
 		void                AttachWindow(CMainFrame *pParent);
 		void                AttachSound(CBkSound *pSnd);
 		void                AttachSpeaker(CSpeaker *pDevice);
@@ -310,8 +308,8 @@ class CMotherBoard : public CDevice
 		virtual void        RestoreMemPages() {}
 
 		// функции для карты памяти
-		virtual uint8_t    *GetMainMemory() const;
-		virtual uint8_t    *GetAddMemory() const;
+		virtual const PSRAM*GetMainMemory() const;
+	///	virtual uint8_t    *GetAddMemory() const;
 
 		void                DrawDebugScreen() const;
 };

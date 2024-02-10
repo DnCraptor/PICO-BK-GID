@@ -32,7 +32,7 @@ MSF_CONF CMotherBoard_EXT32::GetConfiguration()
 }
 
 bool CMotherBoard_EXT32::FillWndVectorPtr(int nMemSize)
-{
+{ return true; /**
 	if (CMotherBoard::FillWndVectorPtr(nMemSize))
 	{
 		ZeroMemory(GetAddMemory(), nMemSize - 0200000); // доп память обнулим
@@ -47,7 +47,7 @@ bool CMotherBoard_EXT32::FillWndVectorPtr(int nMemSize)
 		return true;
 	}
 
-	return false;
+	return false;**/
 }
 
 
@@ -152,7 +152,7 @@ void CMotherBoard_EXT32::SetByteT(const uint16_t addr, uint8_t value, int &nTC)
 	if (m_MemoryMap[nBank].bWritable)
 	{
 		nTC += m_MemoryMap[nBank].nTimingCorrection;
-		m_pMemory[static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07777)] = value;
+		m_psram.set(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07777), value);
 	}
 	else
 	{
@@ -188,7 +188,7 @@ void CMotherBoard_EXT32::SetWordT(const uint16_t addr, uint16_t value, int &nTC)
 	if (m_MemoryMap[nBank].bWritable)
 	{
 		nTC += m_MemoryMap[nBank].nTimingCorrection;
-		*(uint16_t *)&m_pMemory[static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07776)] = value;
+		m_psram.set(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07776), value);
 	}
 	else
 	{
@@ -196,12 +196,12 @@ void CMotherBoard_EXT32::SetWordT(const uint16_t addr, uint16_t value, int &nTC)
 	}
 }
 
-
+/***
 uint8_t *CMotherBoard_EXT32::GetAddMemory() const
 {
 	return GetMainMemory() + 0200000;
 }
-
+**/
 bool CMotherBoard_EXT32::RestoreState(CMSFManager &msf, HBITMAP hScreenshot)
 {
 	if (RestorePreview(msf, hScreenshot))
@@ -216,14 +216,14 @@ bool CMotherBoard_EXT32::RestoreState(CMSFManager &msf, HBITMAP hScreenshot)
 					{
 						if (msf.IsLoad())
 						{
-							if (msf.GetBlockExt32Memory(&m_nPage, GetAddMemory()))
+						///	if (msf.GetBlockExt32Memory(&m_nPage, GetAddMemory()))
 							{
 								return true;
 							}
 						}
 						else
 						{
-							if (msf.SetBlockExt32Memory(m_nPage, GetAddMemory()))
+						///	if (msf.SetBlockExt32Memory(m_nPage, GetAddMemory()))
 							{
 								return true;
 							}

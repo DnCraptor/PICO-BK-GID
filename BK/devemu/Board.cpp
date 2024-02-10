@@ -49,9 +49,8 @@ CMotherBoard::CMotherBoard(BK_DEV_MPI model)
 	}
 }
 
-CMotherBoard::~CMotherBoard()
-{
-	m_vWindows.clear();
+CMotherBoard::~CMotherBoard() {
+///	m_vWindows.clear();
 }
 
 MSF_CONF CMotherBoard::GetConfiguration()
@@ -64,21 +63,14 @@ BK_DEV_MPI CMotherBoard::GetBoardModel()
 	return m_BoardModel;
 }
 
-bool CMotherBoard::FillWndVectorPtr(int nMemSize)
-{
+bool CMotherBoard::FillWndVectorPtr(int nMemSize) {
 	TRACE_T("FillWndVectorPtr(%d)", nMemSize)
-	m_vWindows.clear();
-	m_pMemory.clear();
+///	m_vWindows.clear();
+	m_psram.clear();
 	// Инициализация модуля памяти
-	m_pMemory.resize(nMemSize);
-
-	if (m_pMemory.data())
-	{
-		InitMemoryValues(nMemSize);
-		return true;
-	}
-
-	return false;
+	m_psram.resize(nMemSize);
+	InitMemoryValues(nMemSize);
+	return true;
 }
 
 void CMotherBoard::AttachWindow(CMainFrame *pParent)
@@ -111,24 +103,17 @@ void CMotherBoard::AttachAY8910(CAYSnd *pDevice)
 	m_pAYSnd = pDevice;
 }
 
-void CMotherBoard::AttachDebugger(CDebugger *pDevice)
-{
+void CMotherBoard::AttachDebugger(CDebugger *pDevice) {
 	m_pDebugger = pDevice;
 }
 
-void CMotherBoard::InitMemoryValues(int nMemSize)
-{
+void CMotherBoard::InitMemoryValues(int nMemSize) {
 	uint16_t val = 0;
 	uint8_t flag = 0;
-	auto pPtr = reinterpret_cast<uint16_t *>(m_pMemory.data());
-
-	for (int i = 0; i < nMemSize / 2; i++, flag--)
-	{
-		pPtr[i] = val;
+	for (int i = 0; i < nMemSize / 2; i++, flag--) {
+		m_psram.set(i, val);
 		val = ~val;
-
-		if (flag == 192)
-		{
+		if (flag == 192) {
 			val = ~val;
 			flag = 0;
 		}
@@ -165,7 +150,7 @@ uint8_t CMotherBoard::GetByteT(const uint16_t addr, int &nTC)
 {
 	const int nBank = (addr >> 12) & 0x0f;
 	BKMEMBank_t &mbPtr = m_MemoryMap[nBank];
-	uint8_t m = m_pMemory[static_cast<size_t>(mbPtr.nOffset) + (addr & 007777)];
+	uint8_t m = m_psram.get(static_cast<size_t>(mbPtr.nOffset) + (addr & 007777));
 	uint8_t v;
 
 	// Сперва проверим, на системные регистры
@@ -278,7 +263,7 @@ uint16_t CMotherBoard::GetWordT(const uint16_t addr, int &nTC)
 {
 	const int nBank = (addr >> 12) & 0x0f;
 	BKMEMBank_t &mbPtr = m_MemoryMap[nBank];
-	uint16_t m = *(uint16_t *)&m_pMemory[static_cast<size_t>(mbPtr.nOffset) + (addr & 007776)];
+	uint16_t m = m_psram.get16(static_cast<size_t>(mbPtr.nOffset) + (addr & 007776));
 	uint16_t v;
 
 	// Сперва проверим, на системные регистры
@@ -380,89 +365,63 @@ void CMotherBoard::SetByte(const uint16_t addr, uint8_t value)
 	SetByteT(addr, value, nTC);
 }
 
-void CMotherBoard::SetByteT(const uint16_t addr, uint8_t value, int &nTC)
-{
+void CMotherBoard::SetByteT(const uint16_t addr, uint8_t value, int &nTC) {
 	const int nBank = (addr >> 12) & 0x0f;
 	BKMEMBank_t &mbPtr = m_MemoryMap[nBank];
-	uint8_t *pDst = &m_pMemory[static_cast<size_t>(mbPtr.nOffset) + (addr & 07777)];
-
+	size_t psram_offset = static_cast<size_t>(mbPtr.nOffset) + (addr & 07777);
 	// Сперва проверим, на системные регистры
-	if (nBank == 15)
-	{
+	if (nBank == 15) {
 		const BK_DEV_MPI nBKFddType = GetFDDType();
-
-		if (addr >= m_nBKPortsIOArea)
-		{
-			switch (nBKFddType)
-			{
+		if (addr >= m_nBKPortsIOArea) {
+			switch (nBKFddType) {
 				case BK_DEV_MPI::SMK512:
-					switch (GetAltProMode())
-					{
+					switch (GetAltProMode()) {
 						case ALTPRO_SMK_HLT11_MODE:
 						case ALTPRO_SMK_HLT10_MODE:
 							// case ALTPRO_SMK_OZU10_MODE:
 							// в режиме Hlt11 и Hlt10 в этом диапазоне можно писать, а для старой версии, ещё и в режиме ОЗУ10
 							goto sblb1;
-
 						default:
-							if (SetSystemRegister(addr, value, GSSR_BYTEOP))
-							{
+							if (SetSystemRegister(addr, value, GSSR_BYTEOP)) {
 								nTC += REG_TIMING_CORR_VALUE;
 								return;
 							}
 					}
-
 					// иначе, в этом диапазоне действуют обычные правила
 					break;
-
 				case BK_DEV_MPI::A16M:
-
 					// в режиме Hlt11 в этом диапазоне можно писать
-					if (GetAltProMode() == ALTPRO_A16M_HLT11_MODE)
-					{
+					if (GetAltProMode() == ALTPRO_A16M_HLT11_MODE) {
 sblb1:
 						SetSystemRegister(addr, value, GSSR_BYTEOP);
-						*pDst = value;
+						m_psram.set(psram_offset, value);
 						nTC += mbPtr.nTimingCorrection;
 						return;
 					}
-
 					[[fallthrough]];
 				// иначе, как в обычном режиме, смотрим порты
 				default:
-
 					// в обычном режиме тут только регистры могут быть
-					if (SetSystemRegister(addr, value, GSSR_BYTEOP))
-					{
+					if (SetSystemRegister(addr, value, GSSR_BYTEOP)) {
 						nTC += REG_TIMING_CORR_VALUE;
 						return;
-					}
-					else
-					{
+					} else {
 						throw CExceptionHalt(addr, _T("Can't write this address."));
 					}
-
 					break;
 			}
-		}
-		else
-		{
-			if (nBKFddType == BK_DEV_MPI::SMK512 && GetAltProMode() != ALTPRO_A16M_START_MODE)
-			{
-				*pDst = value;
+		} else {
+			if (nBKFddType == BK_DEV_MPI::SMK512 && GetAltProMode() != ALTPRO_A16M_START_MODE) {
+				m_psram.set(psram_offset, value);
 				nTC += mbPtr.nTimingCorrection;
 				return;
 			}
 		}
 	}
-
-	if (mbPtr.bWritable)
-	{
-		*pDst = value;
+	if (mbPtr.bWritable) {
+		m_psram.set(psram_offset, value);
 		nTC += mbPtr.nTimingCorrection;
-	}
-	else
-	{
+	} else {
 		throw CExceptionHalt(addr, _T("Can't write this address."));
 	}
 }
@@ -476,7 +435,7 @@ void CMotherBoard::SetWord(const uint16_t addr, uint16_t value) {
 void CMotherBoard::SetWordT(const uint16_t addr, uint16_t value, int &nTC) {
 	const int nBank = (addr >> 12) & 0x0f;
 	BKMEMBank_t &mbPtr = m_MemoryMap[nBank];
-	auto pDst = reinterpret_cast<uint16_t *>(&m_pMemory[static_cast<size_t>(mbPtr.nOffset) + (addr & 07776)]);
+	size_t psram_offset = static_cast<size_t>(mbPtr.nOffset) + (addr & 07776);
 	// Сперва проверим, на системные регистры
 	if (nBank == 15) {
 		const BK_DEV_MPI nBKFddType = GetFDDType();
@@ -502,7 +461,7 @@ void CMotherBoard::SetWordT(const uint16_t addr, uint16_t value, int &nTC) {
 					if (GetAltProMode() == ALTPRO_A16M_HLT11_MODE) {
 swlb1:
 						SetSystemRegister(addr, value, GSSR_NONE);
-						*pDst = value;
+						m_psram.set(psram_offset, value);
 						nTC += mbPtr.nTimingCorrection;
 						return;
 					}
@@ -520,14 +479,14 @@ swlb1:
 			}
 		} else {
 			if (nBKFddType == BK_DEV_MPI::SMK512 && GetAltProMode() != ALTPRO_A16M_START_MODE) {
-				*pDst = value;
+				m_psram.set(psram_offset, value);
 				nTC += mbPtr.nTimingCorrection;
 				return;
 			}
 		}
 	}
 	if (mbPtr.bWritable) {
-		*pDst = value;
+		m_psram.set(psram_offset, value);
 		nTC += mbPtr.nTimingCorrection;
 	} else {
 		throw CExceptionHalt(addr, _T("Can't write this address. B2"));
@@ -543,134 +502,84 @@ GetByteIndirect,GetWordIndirect,SetByteIndirect,SetWordIndirect
 и да. тут не делаются проверки на невозможность, читать/писать в память, ибо эти функции
 не CPU. и в экранную память вывод тоже не делается.
 */
-
-uint8_t CMotherBoard::GetByteIndirect(uint16_t addr)
-{
+uint8_t CMotherBoard::GetByteIndirect(uint16_t addr) {
 	int nBank = (addr >> 12) & 0x0f;
 	uint8_t v;
-	uint8_t m = m_MemoryMap[nBank].bReadable ? m_pMemory[static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007777)]
-		: 0;
-
-	if (GetSystemRegister(addr, &v, GSSR_INTERNAL | GSSR_BYTEOP))
-	{
+	uint8_t m = m_MemoryMap[nBank].bReadable ? m_psram.get(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007777)) : 0;
+	if (GetSystemRegister(addr, &v, GSSR_INTERNAL | GSSR_BYTEOP)) {
 		return (GetAltProMode() == ALTPRO_A16M_START_MODE) ? (v | m) : v;
 	}
-
-	if ((0177700 <= addr) && (addr < 0177714))
-	{
+	if ((0177700 <= addr) && (addr < 0177714)) {
 		uint16_t w = m_cpu.GetSysRegsIndirect(addr);
-
-		if (addr & 1)
-		{
+		if (addr & 1) {
 			w >>= 8;
 		}
-
-		if (GetAltProMode() == ALTPRO_A16M_START_MODE)
-		{
+		if (GetAltProMode() == ALTPRO_A16M_START_MODE) {
 			w |= m;
 		}
-
 		return LOBYTE(w);
 	}
-
 	return m;
 }
 
-
-uint16_t CMotherBoard::GetWordIndirect(uint16_t addr)
-{
+uint16_t CMotherBoard::GetWordIndirect(uint16_t addr) {
 	int nBank = (addr >> 12) & 0x0f;
 	uint16_t v;
-	uint16_t m = m_MemoryMap[nBank].bReadable ? *(uint16_t *)&m_pMemory[static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007776)]
-		: 0;
-
-	if (GetSystemRegister(addr, &v, GSSR_INTERNAL))
-	{
+	uint16_t m = m_MemoryMap[nBank].bReadable ? m_psram.get16(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007776)) : 0;
+	if (GetSystemRegister(addr, &v, GSSR_INTERNAL)) {
 		return (GetAltProMode() == ALTPRO_A16M_START_MODE) ? (v | m) : v;
 	}
-
-	if ((0177700 <= addr) && (addr < 0177714))
-	{
+	if ((0177700 <= addr) && (addr < 0177714)) {
 		uint16_t w = m_cpu.GetSysRegsIndirect(addr);
-
-		if (GetAltProMode() == ALTPRO_A16M_START_MODE)
-		{
+		if (GetAltProMode() == ALTPRO_A16M_START_MODE) {
 			w |= m;
 		}
-
 		return w;
 	}
-
 	return m;
 }
 
-
-void CMotherBoard::SetByteIndirect(const uint16_t addr, uint8_t value)
-{
+void CMotherBoard::SetByteIndirect(const uint16_t addr, uint8_t value) {
 	const int nBank = (addr >> 12) & 0x0f;
-	uint8_t *Dst = m_MemoryMap[nBank].bWritable ? &m_pMemory[static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007777)] : nullptr;
-
-	if (SetSystemRegister(addr, value, GSSR_INTERNAL | GSSR_BYTEOP))
-	{
-		if (Dst && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512)))
-		{
-			*Dst = value;
+	size_t off8 = static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007777);
+	if (SetSystemRegister(addr, value, GSSR_INTERNAL | GSSR_BYTEOP)) {
+		if (m_MemoryMap[nBank].bWritable && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512))) {
+			m_psram.set(off8, value);
 		}
-
 		return;
 	}
-
-	if ((0177700 <= addr) && (addr < 0177714))
-	{
+	if ((0177700 <= addr) && (addr < 0177714)) {
 		m_cpu.SetSysRegs(addr, value);
-
-		if (Dst && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512)))
-		{
-			*Dst = value;
+		if (m_MemoryMap[nBank].bWritable && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512))) {
+			m_psram.set(off8, value);
 		}
-
 		return;
 	}
-
-	if (Dst)
-	{
-		*Dst = value;
+	if (m_MemoryMap[nBank].bWritable) {
+		m_psram.set(off8, value);
 	}
 }
 
-
-void CMotherBoard::SetWordIndirect(const uint16_t addr, uint16_t value)
-{
+void CMotherBoard::SetWordIndirect(const uint16_t addr, uint16_t value) {
 	const int nBank = (addr >> 12) & 0x0f;
-	auto Dst = m_MemoryMap[nBank].bWritable ?
-		reinterpret_cast<uint16_t *>(&m_pMemory[static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007776)]) : nullptr;
-
-	if (SetSystemRegister(addr, value, GSSR_INTERNAL))
-	{
-
-		if (Dst && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512)))
+	size_t off16 = static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 007776);
+	if (SetSystemRegister(addr, value, GSSR_INTERNAL)) {
+		if (m_MemoryMap[nBank].bWritable && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512)))
 		{
-			*Dst = value;
+			m_psram.set(off16, value);
 		}
-
 		return;
 	}
-
-	if ((0177700 <= addr) && (addr < 0177714))
-	{
+	if ((0177700 <= addr) && (addr < 0177714)) {
 		m_cpu.SetSysRegs(addr, value);
-
-		if (Dst && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512)))
+		if (m_MemoryMap[nBank].bWritable && (GetAltProMode() == ALTPRO_A16M_HLT11_MODE || (GetAltProMode() == ALTPRO_SMK_HLT10_MODE && GetFDDType() == BK_DEV_MPI::SMK512)))
 		{
-			*Dst = value;
+			m_psram.set(off16, value);
 		}
-
 		return;
 	}
-
-	if (Dst)
-	{
-		*Dst = value;
+	if (m_MemoryMap[nBank].bWritable) {
+		m_psram.set(off16, value);
 	}
 }
 
@@ -1006,16 +915,15 @@ void CMotherBoard::Set177716RegTap(uint16_t w)
 	// */
 }
 
-uint8_t *CMotherBoard::GetMainMemory() const
-{
-	return const_cast<uint8_t *>(m_pMemory.data());
+const PSRAM* CMotherBoard::GetMainMemory() const {
+	return &m_psram;
 }
-
+/***
 uint8_t *CMotherBoard::GetAddMemory() const
 {
 	return nullptr;
 }
-
+*/
 /*
 Чтение из системных регистров
 вход: addr - адрес регистра (177660, 177716 и т.п.)
@@ -1420,7 +1328,7 @@ bool CMotherBoard::LoadRomModule(int iniRomNameIndex, int bank)
 			len = 020000;
 		}
 
-		UINT readed = file.Read(&m_pMemory[static_cast<size_t>(bank) << 12], len);
+		UINT readed = file.Read(&m_psram, static_cast<size_t>(bank) << 12, len);
 		file.Close();
 
 		if (readed == len)
@@ -2041,7 +1949,7 @@ void CMotherBoard::Make_One_Screen_Cycle() {
 	if (!(m_sTV.bVgate || m_sTV.bHgate)) {
 		m_pParent->GetScreen()->SetExtendedMode(!(m_reg177664 & 01000)); // TODO: own driver
 		DWORD_PTR nScrAddr = (static_cast<DWORD_PTR>(GetScreenPage())) << 14;
-		uint8_t *nScr = GetMainMemory() + nScrAddr; /// + m_sTV.nVideoAddress;
+		uint8_t *nScr = m_psram.screen_base(nScrAddr); /// + m_sTV.nVideoAddress;
 		if (graphics_get_buffer2() != nScr)
 			graphics_set_buffer2(nScr);
 ///		m_pParent->GetScreen()->PrepareScreenLineWordRGB32(m_sTV.nLineCounter, dww, *reinterpret_cast<uint16_t *>(nScr));

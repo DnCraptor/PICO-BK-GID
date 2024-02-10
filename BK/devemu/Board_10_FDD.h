@@ -36,7 +36,7 @@ class CMotherBoard_10_FDD : public CMotherBoard
 
 		virtual void        SetFDDType(BK_DEV_MPI model, bool bInit = true) override;
 		virtual BK_DEV_MPI  GetFDDType() override;
-		virtual uint8_t    *GetAddMemory() const override;
+	///	virtual uint8_t    *GetAddMemory() const override;
 };
 
 /*

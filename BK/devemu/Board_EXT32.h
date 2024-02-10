@@ -31,7 +31,7 @@ class CMotherBoard_EXT32 : public CMotherBoard
 
 		virtual void        SetByteT(const uint16_t addr, uint8_t value, int &nTC) override;
 		virtual void        SetWordT(const uint16_t addr, uint16_t value, int &nTC) override;
-		virtual uint8_t    *GetAddMemory() const override;
+	///	virtual uint8_t    *GetAddMemory() const override;
 };
 
 /*

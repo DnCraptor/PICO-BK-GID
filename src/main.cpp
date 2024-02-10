@@ -23,7 +23,7 @@ extern "C" {
 #include <WinUser.h>
 
 extern "C" {
-//#include "psram_spi.h"
+#include "psram_spi.h"
 #include "nespad.h"
 #include "util_Wii_Joy.h"
 #include "vga.h"
@@ -329,10 +329,15 @@ int main() {
 
     memset(TEXT_VIDEO_RAM, 0, sizeof TEXT_VIDEO_RAM);
 
-//    init_psram();
+    init_psram();
     init_fs();
-    reset(11);
+///    reset(11);
     graphics_set_mode(g_conf.color_mode ? BK_256x256x2 : BK_512x256x1);
+    if (!PSRAM_AVAILABLE) {
+        // TODO:
+        if_manager(true);
+        while(1);
+    }
 
 #ifdef SOUND_SYSTEM
 	int hz = 44100;	//44000 //44100 //96000 //22050

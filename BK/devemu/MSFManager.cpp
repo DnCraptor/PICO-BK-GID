@@ -1,10 +1,10 @@
 ﻿// MSFManager.cpp: implementation of the CMSFManager class.
 //
-
-
 #include "pch.h"
 #include "MSFManager.h"
 #include "BKMessageBox.h"
+
+#ifdef MSF
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -14,8 +14,6 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // Construction/Destruction
-
-
 CMSFManager::CMSFManager()
 	: m_bOpenForLoad(true)
 	, m_header{ MSF_STATE_ID, MSF_VERSION_CURRENT, static_cast<DWORD>(CONF_BKMODEL::BK_0010_01) }
@@ -424,7 +422,7 @@ bool CMSFManager::SetBlockPreview(HBITMAP hScreenshot)
 
 constexpr auto nBase10MemSize = 0200000;
 
-bool CMSFManager::GetBlockBaseMemory(uint8_t *pMemory)
+bool CMSFManager::GetBlockBaseMemory(PSRAM *pMemory)
 {
 	MSF_BLOCK_INFO bi{};
 	CString str;
@@ -460,7 +458,7 @@ bool CMSFManager::GetBlockBaseMemory(uint8_t *pMemory)
 	return bRet;
 }
 
-bool CMSFManager::SetBlockBaseMemory(uint8_t *pMemory)
+bool CMSFManager::SetBlockBaseMemory(PSRAM *pMemory)
 {
 	CString str;
 	bool bRet = false;
@@ -494,7 +492,7 @@ bool CMSFManager::SetBlockBaseMemory(uint8_t *pMemory)
 
 constexpr auto nBase11MemSize = 0700000;
 
-bool CMSFManager::GetBlockBaseMemory11M(uint8_t *pMemory)
+bool CMSFManager::GetBlockBaseMemory11M(PSRAM *pMemory)
 {
 	MSF_BLOCK_INFO bi{};
 	CString str;
@@ -530,7 +528,7 @@ bool CMSFManager::GetBlockBaseMemory11M(uint8_t *pMemory)
 	return bRet;
 }
 
-bool CMSFManager::SetBlockBaseMemory11M(uint8_t *pMemory)
+bool CMSFManager::SetBlockBaseMemory11M(PSRAM *pMemory)
 {
 	CString str;
 	bool bRet = false;
@@ -564,7 +562,7 @@ bool CMSFManager::SetBlockBaseMemory11M(uint8_t *pMemory)
 
 constexpr auto nSMK512MemSize = (512 - 16) * 1024;
 
-bool CMSFManager::GetBlockMemorySMK512(uint8_t *pMemory)
+bool CMSFManager::GetBlockMemorySMK512(PSRAM *pMemory)
 {
 	MSF_BLOCK_INFO bi{};
 	CString str;
@@ -600,7 +598,7 @@ bool CMSFManager::GetBlockMemorySMK512(uint8_t *pMemory)
 	return bRet;
 }
 
-bool CMSFManager::SetBlockMemorySMK512(uint8_t *pMemory)
+bool CMSFManager::SetBlockMemorySMK512(PSRAM *pMemory)
 {
 	CString str;
 	bool bRet = false;
@@ -1284,3 +1282,4 @@ bool CMSFManager::SetBlockFrameData(MSF_FRAMEDATA *FDBlock)
 
 	return bRet;
 }
+#endif

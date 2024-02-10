@@ -46,7 +46,7 @@ bool CMotherBoard_10_FDD::FillWndVectorPtr(int nMemSize)
 	if (CMotherBoard::FillWndVectorPtr(nMemSize))
 	{
 		InitMemoryValues(nMemSize);
-		ZeroMemory(GetMainMemory() + 0200000, nMemSize - 0200000); // доп память обнулим
+	///	ZeroMemory(GetMainMemory() + 0200000, nMemSize - 0200000); // доп память обнулим
 		return true;
 	}
 
@@ -79,7 +79,7 @@ void CMotherBoard_10_FDD::SetFDDType(BK_DEV_MPI model, bool bInit)
 	switch (model)
 	{
 		case BK_DEV_MPI::A16M:
-			m_vWindows.push_back({ _T("A16M:0"), 0100000, 040000, GetAddMemory() });
+	///		m_vWindows.push_back({ _T("A16M:0"), 0100000, 040000, GetAddMemory() });
 			break;
 
 		case BK_DEV_MPI::SMK512:
@@ -89,9 +89,9 @@ void CMotherBoard_10_FDD::SetFDDType(BK_DEV_MPI model, bool bInit)
 			{
 				for (int i = 0; i < 16; ++i) //заполним список окон
 				{
-					CString str;
-					str.Format(_T("SMK:%02d (%s)"), i, g_arStrSMKPgNums[i].GetString());
-					m_vWindows.push_back({ str, 0100000, 0100000, GetAddMemory() + i * 0100000});
+			///		CString str;
+			///		str.Format(_T("SMK:%02d (%s)"), i, g_arStrSMKPgNums[i].GetString());
+			///		m_vWindows.push_back({ str, 0100000, 0100000, GetAddMemory() + i * 0100000});
 				}
 			}
 			else
@@ -108,12 +108,12 @@ BK_DEV_MPI CMotherBoard_10_FDD::GetFDDType()
 {
 	return m_fdd.GetFDDType();
 }
-
+/***
 uint8_t *CMotherBoard_10_FDD::GetAddMemory() const
 {
 	return GetMainMemory() + 0220000;
 }
-
+**/
 void CMotherBoard_10_FDD::OnReset()
 {
 	CMotherBoard::OnReset();
@@ -496,7 +496,7 @@ bool CMotherBoard_10_FDD::Interception()
 bool CMotherBoard_10_FDD::RestoreMemory(CMSFManager &msf)
 {
 	if (CMotherBoard::RestoreMemory(msf))
-	{
+	{ /***
 		if (msf.IsLoad())
 		{
 			if (!msf.GetBlockExt16Memory(GetMainMemory() + 0200000))
@@ -527,7 +527,7 @@ bool CMotherBoard_10_FDD::RestoreMemory(CMSFManager &msf)
 				}
 			}
 		}
-
+*/
 		return true;
 	}
 

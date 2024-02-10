@@ -3,6 +3,7 @@
 #include <winnt.h>
 #include <ff.h>
 #include <debug.h>
+#include "CPSRAM.h"
 
 #define AFX_DATA
 
@@ -74,6 +75,20 @@ class CFile /***: public CObject*/ {
         TRACE_T("[Close] &m_file: %08Xh", &m_file);
         if (m_o) f_close(&m_file);
         m_o = false;
+    }
+    virtual UINT Read(PSRAM* psram, size_t offset, UINT nCount) {
+        UINT rd;
+        uint8_t lpBuf[512];
+        int cnt = (int)nCount;
+        UINT res = 0;
+        while(cnt > 0) {
+            if (f_read(&m_file, lpBuf, 512, &rd) != FR_OK) return res;
+            cnt -= rd;
+            res += rd;
+            for (int i = 0; i < rd; ++i)
+                psram->set(offset + i, lpBuf[i]);
+        }
+        return res;
     }
     virtual UINT Read(void* lpBuf, UINT nCount) {
         UINT rd;

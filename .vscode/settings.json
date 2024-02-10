@@ -59,6 +59,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "debug.h": "c"
+        "debug.h": "c",
+        "xstring": "cpp"
     }
 }
