@@ -652,26 +652,22 @@ bool CCPU::InterruptDispatch()
 //  для вектора установленный бит 18 означает, что PC надо увеличить на 2,
 // как будто  была прочитана текущая инструкция
 void CCPU::SystemInterrupt(uint32_t nVector) {
-	TRACE_T("SystemInterrupt(0%06o) m_pBoard: %08Xh", nVector, m_pBoard);
 	//uint16_t w;
 	//m_pBoard->GetSystemRegister(0177716, &w, GSSR_NONE);
 	m_pBoard->SetSystemRegister(0177716, 0210, GSSR_NONE); // выставляем признак HALT режима
 	// при этом в регистр записи попадают данные регистра чтения и происходит некоторая фигня
 	// поэтому будем делать проще, ничего читать не будем, но сразу запишем нужное число - бит 4 и биты звука - нули
-	TRACE_T("m_pBoard->SetWord(0177676, GetPSW())");
 	m_pBoard->SetWord(0177676, GetPSW()); // вот это-то и вызывает прерывание по вектору 4
 	uint16_t pc = m_RON[static_cast<int>(REGISTER::PC)];
 	if (nVector & (1 << 18)) {
 		pc += 2;
 	}
-	TRACE_T("m_pBoard->SetWord(0177674, pc);");
 	m_pBoard->SetWord(0177674, pc);
 	uint16_t nVec = nVector & 0xffff;
 	m_RON[static_cast<int>(REGISTER::PC)] = GetWord(nVec);
 	// SetPSW((GetWord(nVec + 2) & 07777) | (1 << static_cast<int>(PSW_BIT::HALT))); // вот как я думаю должно быть
 	SetPSW(GetWord(nVec + 2) & 0377); // вот как происходит на самом деле
 	m_bTwiceHangup = false;
-	TRACE_T("SystemInterrupt(0%06o) done", nVector);
 }
 
 // выполнение пользовательского исключения и прерывания
@@ -1804,6 +1800,7 @@ void CCPU::ExecuteMARK()
 // EIS инструкции
 void CCPU::ExecuteMUL()
 {
+	if (!g_Config.m_bEmulateEIS && !g_Config.m_bVM1G) { ExecuteUNKNOWN(); return; }
 	// здесь у нас источник находится в поле DST
 	get_dst_arg(); // m_ALU - аргумент источника
 	int multipler = short(m_ALU & 0xffff);
@@ -1833,6 +1830,7 @@ void CCPU::ExecuteMUL()
 
 void CCPU::ExecuteDIV()
 {
+	if (!g_Config.m_bEmulateEIS) { ExecuteUNKNOWN(); return; }
 	get_dst_arg(); // m_ALU - аргумент источника
 	int divider = short(m_ALU & 0xffff);
 
@@ -1879,6 +1877,7 @@ void CCPU::ExecuteDIV()
 
 void CCPU::ExecuteASH()
 {
+	if (!g_Config.m_bEmulateEIS) { ExecuteUNKNOWN(); return; }
 	get_dst_arg(); // m_ALU - аргумент источника
 	int src = m_ALU & 077;// получим количество сдвигов
 	m_ALU = m_RON[static_cast<int>(m_nRegSrc)]; // аргумент приёмника
@@ -1932,6 +1931,7 @@ void CCPU::ExecuteASH()
 
 void CCPU::ExecuteASHC()
 {
+	if (!g_Config.m_bEmulateEIS) { ExecuteUNKNOWN(); return; }
 	get_dst_arg(); // m_ALU - аргумент источника
 	int src = m_ALU & 077;// получим количество сдвигов
 	auto nReg = m_nRegSrc;   // регистры приёмники
@@ -2208,6 +2208,7 @@ void CCPU::FISAddSub(int A, int B)
 
 void CCPU::ExecuteFADD()
 {
+	if (!g_Config.m_bEmulateFIS) { ExecuteUNKNOWN(); return; }
 	m_fisTmpReg = m_RON[static_cast<int>(m_nRegDst)];
 	// m_nRegDst - номер регистра, в котором хранится адрес блока параметров.
 	uint16_t B_hi = GetWord(m_fisTmpReg); m_fisTmpReg += 2;
@@ -2222,6 +2223,7 @@ void CCPU::ExecuteFADD()
 
 void CCPU::ExecuteFSUB()
 {
+	if (!g_Config.m_bEmulateFIS) { ExecuteUNKNOWN(); return; }
 	m_fisTmpReg = m_RON[static_cast<int>(m_nRegDst)];
 	// m_nRegDst - номер регистра, в котором хранится адрес блока параметров.
 	uint16_t B_hi = GetWord(m_fisTmpReg); m_fisTmpReg += 2;
@@ -2236,6 +2238,7 @@ void CCPU::ExecuteFSUB()
 
 void CCPU::ExecuteFMUL()
 {
+	if (!g_Config.m_bEmulateFIS) { ExecuteUNKNOWN(); return; }
 	m_fisTmpReg = m_RON[static_cast<int>(m_nRegDst)];
 	// m_nRegDst - номер регистра, в котором хранится адрес блока параметров.
 	uint16_t B_hi = GetWord(m_fisTmpReg); m_fisTmpReg += 2;
@@ -2282,6 +2285,7 @@ void CCPU::ExecuteFMUL()
 
 void CCPU::ExecuteFDIV()
 {
+	if (!g_Config.m_bEmulateFIS) { ExecuteUNKNOWN(); return; }
 	m_fisTmpReg = m_RON[static_cast<int>(m_nRegDst)];
 	// m_nRegDst - номер регистра, в котором хранится адрес блока параметров.
 	uint16_t B_hi = GetWord(m_fisTmpReg); m_fisTmpReg += 2;

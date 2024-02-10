@@ -860,8 +860,8 @@ void CMenestrel::ReInit()
 	Reset();
 	double w0 = 2 * 11000.0 / double(g_Config.m_nSoundSampleRate);
 	double w1 = 0.0;
-	int res = fir_linphase(m_nFirLength, w0, w1, FIR_FILTER::LOWPASS,
-	                       FIR_WINDOW::BLACKMAN_HARRIS, true, 0.0, m_pH.get());
+///	int res = fir_linphase(m_nFirLength, w0, w1, FIR_FILTER::LOWPASS,
+	///                       FIR_WINDOW::BLACKMAN_HARRIS, true, 0.0, m_pH.get());
 }
 
 void CMenestrel::Reset()
@@ -1009,12 +1009,12 @@ void CMenestrel::GetSample(sOneSample *pSm)
 	if (m_bDCOffset)
 	{
 		// для чистоты огибающей это лучше не включать.
-		l = DCOffset(l, m_dAvgL, m_pdDCBufL.get(), m_nDCBufPosL);
-		r = DCOffset(r, m_dAvgR, m_pdDCBufR.get(), m_nDCBufPosR);
+///		l = DCOffset(l, m_dAvgL, m_pdDCBufL.get(), m_nDCBufPosL);
+///		r = DCOffset(r, m_dAvgR, m_pdDCBufR.get(), m_nDCBufPosR);
 	}
 
 	// фильтр
-	pSm->s[OSL] = FIRFilter(l, m_pdFBufL.get(), m_nFBufPosL);
-	pSm->s[OSR] = FIRFilter(r, m_pdFBufR.get(), m_nFBufPosR);
+///	pSm->s[OSL] = FIRFilter(l, m_pdFBufL.get(), m_nFBufPosL);
+///	pSm->s[OSR] = FIRFilter(r, m_pdFBufR.get(), m_nFBufPosR);
 }
 

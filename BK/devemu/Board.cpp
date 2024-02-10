@@ -35,19 +35,13 @@ CMotherBoard::CMotherBoard(BK_DEV_MPI model)
 	, m_nBKPortsIOArea(BK_PURE_PORTSIO_AREA)
 	, m_nKeyCleanEvent(0)
 {
-	TRACE_T("CMotherBoard m_sTV.init()");
 	m_sTV.init();
-	TRACE_T("SetCPUBaseFreq(%d)", CPU_SPEED_BK10);
 	SetCPUBaseFreq(CPU_SPEED_BK10); // частота задаётся этой константой
-	TRACE_T("ZeroMemory(%08X, %d)", m_MemoryMap, sizeof m_MemoryMap);
 	ZeroMemory(m_MemoryMap, sizeof(m_MemoryMap));
-	TRACE_T("AttachBoard(this)");
 	m_cpu.AttachBoard(this);
-	TRACE_T("AttachParent(this)");
 	m_fdd.AttachParent(this);
 	TRACE_T("init_A16M_10()");
 	m_fdd.init_A16M_10(&m_ConfBKModel, ALTPRO_A16M_STD10_MODE);
-    TRACE_T("FillWndVectorPtr()");
 	// Инициализация модуля памяти
 	if (!FillWndVectorPtr(0200000))
 	{
@@ -485,7 +479,6 @@ void CMotherBoard::SetWordT(const uint16_t addr, uint16_t value, int &nTC) {
 	auto pDst = reinterpret_cast<uint16_t *>(&m_pMemory[static_cast<size_t>(mbPtr.nOffset) + (addr & 07776)]);
 	// Сперва проверим, на системные регистры
 	if (nBank == 15) {
-		TRACE_T("15 SetWordT(0%06o, 0%06o)", addr, value);
 		const BK_DEV_MPI nBKFddType = GetFDDType();
 		if (addr >= m_nBKPortsIOArea) {
 			switch (nBKFddType)	{
@@ -521,9 +514,7 @@ swlb1:
 						nTC += REG_TIMING_CORR_VALUE;
 						return;
 					} else {
-						TRACE_T("1 Can't write this address 0%06o", addr);
-						throw CExceptionHalt(addr, _T("Can't write this address."));
-						while(1); // TODO:
+						throw CExceptionHalt(addr, _T("Can't write this address. B1"));
 					}
 					break;
 			}
@@ -539,9 +530,7 @@ swlb1:
 		*pDst = value;
 		nTC += mbPtr.nTimingCorrection;
 	} else {
-		TRACE_T("2 Can't write this address 0%06o", addr);
-		throw CExceptionHalt(addr, _T("Can't write this address."));
-		while(1); // TODO:
+		throw CExceptionHalt(addr, _T("Can't write this address. B2"));
 	}
 }
 
@@ -2046,13 +2035,10 @@ extern "C" void graphics_set_buffer2(uint8_t* buffer);
 extern "C" uint8_t* graphics_get_buffer2();
 
 // это вариант точного алгоритма из VP1-037
-void CMotherBoard::Make_One_Screen_Cycle()
-{
-///	uint16_t dww = m_sTV.nVideoAddress & 076; // счётчик слов внутри строки
-///	uint16_t dwa = m_sTV.nVideoAddress & 037700; // адрес строки
-
-///	if (!(m_sTV.bVgate || m_sTV.bHgate))
-	{
+void CMotherBoard::Make_One_Screen_Cycle() {
+	uint16_t dww = m_sTV.nVideoAddress & 076; // счётчик слов внутри строки
+	uint16_t dwa = m_sTV.nVideoAddress & 037700; // адрес строки
+	if (!(m_sTV.bVgate || m_sTV.bHgate)) {
 		m_pParent->GetScreen()->SetExtendedMode(!(m_reg177664 & 01000)); // TODO: own driver
 		DWORD_PTR nScrAddr = (static_cast<DWORD_PTR>(GetScreenPage())) << 14;
 		uint8_t *nScr = GetMainMemory() + nScrAddr; /// + m_sTV.nVideoAddress;
@@ -2060,9 +2046,7 @@ void CMotherBoard::Make_One_Screen_Cycle()
 			graphics_set_buffer2(nScr);
 ///		m_pParent->GetScreen()->PrepareScreenLineWordRGB32(m_sTV.nLineCounter, dww, *reinterpret_cast<uint16_t *>(nScr));
 	}
-/***
 	dww += 2; // переходим к следующему слову
-
 	if (m_sTV.bHgate) // считаем служебное поле в строке
 	{
 		if (dww == 040) // отсчитали 16. служебных слов
@@ -2070,14 +2054,11 @@ void CMotherBoard::Make_One_Screen_Cycle()
 			dww = 0;
 			m_sTV.bHgate = false;
 		}
-	}
-	else if (dww == 0100)
-	{
+	} else if (dww == 0100) {
 		// если отсчитали 32. слова, нужно теперь считать служебные
 		dww = 0;
 		m_sTV.bHgate = true;
 		int dwl = (m_sTV.nLineCounter + 1) & 0377; // Счётчик строк
-
 		if (m_sTV.bVgate) // считаем служебные
 		{
 			if (--m_sTV.nVGateCounter <= 0) // отсчитали 64 служебные строки
@@ -2085,7 +2066,6 @@ void CMotherBoard::Make_One_Screen_Cycle()
 				dwl = 0;  // снова начнём считать информационные
 				m_sTV.bVgate = false;
 			}
-
 			// когда считаем служебные строки, выбираем из них 353..350
 			if ((m_sTV.nVGateCounter & 0374) == 050)    // if (050 <= m_nVGateCounter && m_nVGateCounter <= 053)
 			{
@@ -2095,47 +2075,34 @@ void CMotherBoard::Make_One_Screen_Cycle()
 					// применяем новое смещение
 					dwa = (m_reg177664 & 0377) << 6; // VA[13:6] <= RA[7:0];
 				}
-
 				// при этом на новую строку не переходим. в одной крутимся.
-			}
-			else
-			{
+			} else {
 				// переход на следующую строку
 				dwa += 0100; // VA[13:6] <= VA[13:6] + 8'b00000001;
 			}
-		}
-		else
-		{
-			if (dwl == 0)
-			{
+		} else {
+			if (dwl == 0) {
 				// если отсчитали 256 информационных строк, нужно теперь считать служебные.
 				m_sTV.bVgate = true;
 				m_sTV.nVGateCounter = 64;
-
 				if (!(m_reg177662out & 040000)) // если бит 14 установлен, таймер не работает.
 				{
 					Irq2Interrupt();
-
-					if (m_pAYSnd)
-					{
+					if (m_pAYSnd) {
 						// для лога дампа регистров AY
 						m_pAYSnd->log_timerTick();
 					}
 				}
-
-				m_pParent->SendMessage(WM_SCR_DRAW);
+	///			m_pParent->SendMessage(WM_SCR_DRAW);
 				// сделаем жёсткую непосредственную прорисовку кадра, при этом D2D в свёрнутом виде тормозит.
 				//m_pParent->GetScreen()->DrawScreen(true);
 			}
-
 			// переход на следующую строку
 			dwa += 0100; // VA[13:6] <= VA[13:6] + 8'b00000001;
 		}
-
 		m_sTV.nLineCounter = dwl;
 	}
-
-	m_sTV.nVideoAddress = (dwa | dww) & 037776;*/
+	m_sTV.nVideoAddress = (dwa | dww) & 037776;
 }
 
 

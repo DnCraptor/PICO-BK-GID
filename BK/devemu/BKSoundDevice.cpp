@@ -24,9 +24,9 @@ CBKSoundDevice::CBKSoundDevice()
 	, m_nDCBufPosR(0)
 	, m_dAvgL(0.0)
 	, m_dAvgR(0.0)
-	, m_pH(nullptr)
-	, m_pdFBufL(nullptr)
-	, m_pdFBufR(nullptr)
+///	, m_pH(nullptr)
+///	, m_pdFBufL(nullptr)
+///	, m_pdFBufR(nullptr)
 	, m_nFirLength(FIR_LENGTH)
 	, m_nFBufPosL(0)
 	, m_nFBufPosR(0)
@@ -34,9 +34,9 @@ CBKSoundDevice::CBKSoundDevice()
 	, m_dAccR(0.0)
 	, m_RCFVal(1.0)
 {
-	m_pdDCBufL = std::make_unique<double[]>(DCOFFSET_BUFFER_LEN);
-	m_pdDCBufR = std::make_unique<double[]>(DCOFFSET_BUFFER_LEN);
-
+///	m_pdDCBufL = std::make_unique<double[]>(DCOFFSET_BUFFER_LEN);
+///	m_pdDCBufR = std::make_unique<double[]>(DCOFFSET_BUFFER_LEN);
+/***
 	if (m_pdDCBufL && m_pdDCBufR)
 	{
 		for (int i = 0; i < DCOFFSET_BUFFER_LEN; ++i)
@@ -47,7 +47,7 @@ CBKSoundDevice::CBKSoundDevice()
 	else
 	{
 		g_BKMsgBox.Show(IDS_BK_ERROR_NOTENMEMR, MB_OK);
-	}
+	}**/
 }
 
 CBKSoundDevice::~CBKSoundDevice()
@@ -68,9 +68,9 @@ double CBKSoundDevice::DCOffset(double sample, double &fAvg, double *pBuf, int &
 	имеем указатель на позицию в буфере, прочитанное значение из буфера - это выкидываемый последний сэмпл
 	а занесение нового значения - запись текущего сэмпла в буфер на заданную позицию.
 	*/
-	fAvg += (sample - pBuf[nBufPos]) / double(DCOFFSET_BUFFER_LEN);
+/***	fAvg += (sample - pBuf[nBufPos]) / double(DCOFFSET_BUFFER_LEN);
 	pBuf[nBufPos] = sample;
-	++nBufPos &= DCOFFSET_BUFFER_MASK;
+	++nBufPos &= DCOFFSET_BUFFER_MASK;**/
 	// устраняем клиппинг, может появляться из-за резкой смены знака амплитуды
 	double t = (sample - fAvg) * 2.0; //!!! экспериментально! распространяем амплитуду на оба полупериода
 	constexpr double b = double(MAX_SAMPLE) / FLOAT_BASE;
@@ -95,6 +95,7 @@ nBufPos - позиция в буфере, pBuf, куда помещать сэм
 */
 double CBKSoundDevice::FIRFilter(double sample, double *pBuf, int &nBufPos) const
 {
+	/***
 	// поместим новый сэмпл в буфер.
 	pBuf[nBufPos] = sample;
 
@@ -132,12 +133,12 @@ double CBKSoundDevice::FIRFilter(double sample, double *pBuf, int &nBufPos) cons
 
 		return dAcc;
 	}
-
+***/
 	return sample;
 }
 
 bool CBKSoundDevice::CreateFIRBuffers(int nLen)
-{
+{/****
 	int nLen1 = nLen + 1;
 
 	if (m_pH)
@@ -169,7 +170,7 @@ bool CBKSoundDevice::CreateFIRBuffers(int nLen)
 		m_nFirLength = nLen;
 		return true;
 	}
-
+**/
 	return false;
 }
 

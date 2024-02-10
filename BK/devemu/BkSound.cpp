@@ -15,7 +15,7 @@ BKBTL. If not, see <http://www.gnu.org/licenses/>. */
 #include "BKSound.h"
 #include "BKMessageBox.h"
 #include "Tape.h"
-
+#ifdef ORIGINAL_SOUND
 // сколько будет вообще буферов
 constexpr auto BKSOUND_BLOCK_COUNT = 8;
 
@@ -445,3 +445,4 @@ void CBkSound::WriteToCapture()
 	#endif
 }
 
+#endif

@@ -17,6 +17,7 @@ BKBTL. If not, see <http://www.gnu.org/licenses/>. */
 
 #include <Mmsystem.h>
 #include "Config.h"
+#ifdef ORIGINAL_SOUND
 #include <mutex>
 
 // способ синхронизации
@@ -81,3 +82,22 @@ class CBkSound
 		void            WriteToCapture();
 		static void CALLBACK WaveCallback(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 };
+#else
+class CBkSound {
+	    uint16_t m_volume;
+	public:
+		CBkSound() : m_volume(0) {}
+		virtual ~CBkSound() {}
+		int             ReInit(int nSSR) { return 2; }
+		void            SoundGen_SetVolume(uint16_t volume) { m_volume = volume; }
+		uint16_t        SoundGen_GetVolume() { return m_volume; }
+		void            SoundGen_ResetSample(SAMPLE_INT L, SAMPLE_INT R) {}
+		void            SoundGen_SetSample(SAMPLE_INT &L, SAMPLE_INT &R) {}
+		void            SoundGen_MixSample(sOneSample *pSm) {}
+		void            SoundGen_FeedDAC_Mixer(sOneSample *pSm) {}
+		void            SetCaptureStatus(bool bCapture, const CString &strUniq) {}
+		bool            IsCapture() const {
+			return false;
+		}
+};
+#endif

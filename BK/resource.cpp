@@ -4,6 +4,7 @@
 
 BOOL CString::LoadString(int res) {
     switch (res) {
+        case IDS_BK_ERROR_NOTENMEMR :       s = "Not enough RAM"; break;
        case IDS_INI_ADDR_DISASM     :       s = "Start disasm address"; break;
        case IDS_INI_ADDR_DUMP_0     :       s = "Start dump address #0"; break;
        case IDS_INI_ASK_FOR_BREAK   :       s = "Show dialog on access violation"; break;

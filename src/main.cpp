@@ -346,26 +346,39 @@ int main() {
     CMainFrame *mf = new CMainFrame(new CScreen());
     CMotherBoard *m_pBoard = new CMotherBoard();
     CSpeaker m_speaker;
+    CBkSound *m_pSound = new CBkSound();
+    int nMtc = m_pSound->ReInit(g_Config.m_nSoundSampleRate); // пересоздаём звук с новыми параметрами, на выходе - длина медиафрейма в сэмплах
+	m_speaker.ReInit();     // ещё надо переинициализирвоать устройства, там
+	m_speaker.ConfigureTapeBuffer(nMtc);// переопределяем буферы в зависимости от текущей частоты дискретизации
+    CCovox m_covox;
+	m_covox.ReInit();       // есть вещи, зависящие от частоты дискретизации,
+///    CMenestrel m_menestrel;
+///	m_menestrel.ReInit();   //
+///    CAYSnd m_aySnd;
+///	m_aySnd.ReInit();       // которая теперь величина переменная. Но требует перезапуска конфигурации.
+///	m_paneOscillatorView.ReCreateOSC(); // пересоздаём осциллограф с новыми параметрами
+	// при необходимости откорректируем размер приёмного буфера.
+///	m_paneOscillatorView.SetBuffer(nMtc); //SendMessage(WM_OSC_SETBUFFER, WPARAM(nMtc));
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
 	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
 	m_pBoard->AttachWindow(mf);  // цепляем к MotherBoard этот класс
 	// порядок имеет значение. сперва нужно делать обязательно AttachWindow(this)
 	// и только затем m_pBoard->SetMTC(). И эта функция обязательна, там звуковой буфер вычисляется
 	// и выделяется
-	//	m_pBoard->SetMTC(nMtc); // и здесь ещё. тройная работа получается.
+	m_pBoard->SetMTC(nMtc); // и здесь ещё. тройная работа получается.
 	// Присоединяем к новосозданному чипу устройства
-	//	m_pBoard->AttachSound(m_pSound.get());
+	m_pBoard->AttachSound(m_pSound);
 	m_pBoard->AttachSpeaker(&m_speaker);
-	//	m_pBoard->AttachMenestrel(&m_menestrel);
-	//	m_pBoard->AttachCovox(&m_covox);
-	//	m_pBoard->AttachAY8910(&m_aySnd);
+///	m_pBoard->AttachMenestrel(&m_menestrel);
+	m_pBoard->AttachCovox(&m_covox);
+///	m_pBoard->AttachAY8910(&m_aySnd);
 	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
 	m_pBoard->NormalizeCPU();
 	// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
-	//	m_pDebugger->AttachBoard(GetBoard());
+///	m_pDebugger->AttachBoard(GetBoard());
 	//	m_paneRegistryDumpViewCPU.SetFreqParam();
 	// Цепляем обработчик скриптов
-	//	m_Script.AttachBoard(GetBoard());
+///	m_Script.AttachBoard(GetBoard());
 	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr)) {
 		m_pBoard->StartTimerThread();
 		m_pBoard->RunCPU();

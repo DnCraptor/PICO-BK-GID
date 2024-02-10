@@ -9,8 +9,8 @@
 #include "BKMessageBox.h"
 
 
-constexpr auto DCOFFSET_BUFFER_MASK = 0xff; // степень двойки минус 1
-constexpr auto DCOFFSET_BUFFER_LEN = (DCOFFSET_BUFFER_MASK + 1); // степень двойки
+///constexpr auto DCOFFSET_BUFFER_MASK = 0xff; // степень двойки минус 1
+///constexpr auto DCOFFSET_BUFFER_LEN = (DCOFFSET_BUFFER_MASK + 1); // степень двойки
 
 // длина ких фильтра. нечётная. чтоб симметричную характеристику строить
 constexpr auto FIR_LENGTH = 127;
@@ -22,14 +22,14 @@ class CBKSoundDevice
 		double          m_dAccL, m_dAccR;
 		// переменные для вычисления смещения DC.
 		double          m_dAvgL, m_dAvgR;
-		std::unique_ptr<double[]> m_pdDCBufL;
-		std::unique_ptr<double[]> m_pdDCBufR;
+///		std::unique_ptr<double[]> m_pdDCBufL;
+///		std::unique_ptr<double[]> m_pdDCBufR;
 		int             m_nDCBufPosL, m_nDCBufPosR;
 
-		std::unique_ptr<double[]> m_pH;     // коэффициенты КИХ
+///		std::unique_ptr<double[]> m_pH;     // коэффициенты КИХ
 		int             m_nFirLength;       // размер буфера коэффициентов
-		std::unique_ptr<double[]> m_pdFBufL;  // буферы для фильтра левый канал
-		std::unique_ptr<double[]> m_pdFBufR; // правый канал
+///		std::unique_ptr<double[]> m_pdFBufL;  // буферы для фильтра левый канал
+///		std::unique_ptr<double[]> m_pdFBufR; // правый канал
 		int             m_nFBufPosL;      // позиции в буферах фильтра
 		int             m_nFBufPosR;
 

@@ -67,8 +67,8 @@ void CEMU8930::ReInit()
 	PSG_setVolumeMode();
 	double w0 = 2 * 12000.0 / double(g_Config.m_nSoundSampleRate);
 	double w1 = 0.0;
-	int res = fir_linphase(m_nFirLength, w0, w1, FIR_FILTER::LOWPASS,
-	                       FIR_WINDOW::BLACKMAN_HARRIS, true, 0.0, m_pH.get());
+///	int res = fir_linphase(m_nFirLength, w0, w1, FIR_FILTER::LOWPASS,
+///	                       FIR_WINDOW::BLACKMAN_HARRIS, true, 0.0, m_pH.get());
 }
 void CEMU8930::PSG_init(int c, int r)
 {
@@ -869,6 +869,6 @@ void CEMU8930::GetSample(sOneSample *pSm)
 //  pSm->s[OSL] = DCOffset(pSm->s[OSL], m_dAvgL, m_pdBufferL.get(), m_nBufferPosL);
 //  pSm->s[OSR] = DCOffset(pSm->s[OSR], m_dAvgR, m_pdBufferR.get(), m_nBufferPosR);
 	// фильтр
-	pSm->s[OSL] = FIRFilter(pSm->s[OSL], m_pdFBufL.get(), m_nFBufPosL);
-	pSm->s[OSR] = FIRFilter(pSm->s[OSR], m_pdFBufR.get(), m_nFBufPosR);
+///	pSm->s[OSL] = FIRFilter(pSm->s[OSL], m_pdFBufL.get(), m_nFBufPosL);
+///	pSm->s[OSR] = FIRFilter(pSm->s[OSR], m_pdFBufR.get(), m_nFBufPosR);
 }
