@@ -65,10 +65,10 @@ class CMotherBoard : public CDevice
 			double  fFDD_Mod;
 
 			// переменные для медиатактов
-			int     nMediaTicksPerFrame; // количество медиатактов во фрейме (длина звукового буфера в сэмплах).
-			int     nMediaTickCount;    // счётчик медиа тактов (их должно быть не более g_Config.m_nSoundSampleRate/CPU_FRAMES_PER_SECOND в текущем фрейме)
-			int     nBufPos;            // позиция в звуковом буфере
-			std::unique_ptr<SAMPLE_INT[]> pSoundBuffer;   // звуковой буфер
+		///	int     nMediaTicksPerFrame; // количество медиатактов во фрейме (длина звукового буфера в сэмплах).
+		///	int     nMediaTickCount;    // счётчик медиа тактов (их должно быть не более g_Config.m_nSoundSampleRate/CPU_FRAMES_PER_SECOND в текущем фрейме)
+		///	int     nBufPos;            // позиция в звуковом буфере
+		///	std::unique_ptr<SAMPLE_INT[]> pSoundBuffer;   // звуковой буфер
 
 			// переменные для эмуляции луча ЭЛТ
 			uint16_t nVideoAddress;     // видео адрес, младшие 6 бит - счётчик строк внутри строки
@@ -85,10 +85,10 @@ class CMotherBoard : public CDevice
 				fMedia_Mod = 0.0;
 				fMemory_Mod = 0.0;
 				fFDD_Mod = 0.0;
-				nMediaTicksPerFrame = 0;
-				nMediaTickCount = 0;
-				nBufPos = 0;
-				pSoundBuffer = nullptr;
+			///	nMediaTicksPerFrame = 0;
+			///	nMediaTickCount = 0;
+			///	nBufPos = 0;
+			///	pSoundBuffer = nullptr;
 			}
 			void clear()
 			{
@@ -193,7 +193,7 @@ class CMotherBoard : public CDevice
 		void                AttachAY8910(CAYSnd *pDevice);
 		void                AttachDebugger(CDebugger *pDevice);
 
-		void                SetMTC(int mtc);
+	///	void                SetMTC(int mtc);
 
 		void                StopTimerThread();
 		bool                StartTimerThread();

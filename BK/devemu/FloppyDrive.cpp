@@ -30,7 +30,7 @@ bool CFloppyDrive::SetArrays()
 	m_nTrackSize = static_cast<size_t>(m_nSectorsPerTrk) * m_nSectorSizes[m_nSectorSize];
 	m_nRawTrackSize = FLOPPY_TRKLEN_DD;
 	m_nRawMarkerSize = m_nRawTrackSize / 2;
-
+    TRACE_T("CFloppyDrive::SetArrays() m_nRawTrackSize: %d; m_nRawMarkerSize: %d", m_nRawTrackSize, m_nRawMarkerSize);
 	if (m_pData)
 	{
 		m_pData.reset();

@@ -459,8 +459,8 @@ void CMotherBoard_11M::InitMemoryValues(int nMemSize) {
 	uint16_t val = 0;
 	int n = 8;
 	int flag = 8;
-	for (int i = 0; i < nMemSize / 2; ++i) {
-		m_psram.set(i, val);
+	for (size_t i = 0; i < nMemSize / 2; ++i) {
+		m_psram.set16(i << 1, val);
 		if (--n <= 0) {
 			n = 8;
 			if (--flag > 0)	{

@@ -170,8 +170,9 @@ bool CBKSoundDevice::CreateFIRBuffers(int nLen)
 		m_nFirLength = nLen;
 		return true;
 	}
-**/
 	return false;
+	**/
+    return true;
 }
 
 

@@ -271,14 +271,14 @@ void CConfig::_intLoadConfig(bool bLoadMain) {
 		// реализуем возможность задания произвольного пути
 		fs::path strDefPath = iniFile.GetValueString(IDS_INI_SECTIONNAME_DIRECTORIES, id, m_Directories[i].defValue.c_str()).GetString();
 		//если есть имя диска или "\\" в начале - то это абсолютный путь
-		TRACE_T(" m_Directories[%d] %s <- %s", i, m_Directories[i].pstrValue->c_str(), strDefPath.c_str());
+	//	TRACE_T(" m_Directories[%d] %s <- %s", i, m_Directories[i].pstrValue->c_str(), strDefPath.c_str());
 		if (strDefPath.has_root_name()) {
 			*m_Directories[i].pstrValue = strDefPath;
 		} else {
 			// иначе - это относительный путь от домашней директории
 			*m_Directories[i].pstrValue = GetConfCurrPath() / strDefPath;
 		}
-		TRACE_T(" m_Directories[%d] %s", i, m_Directories[i].pstrValue->c_str());
+	//	TRACE_T(" m_Directories[%d] %s", i, m_Directories[i].pstrValue->c_str());
 		i++;
 	}
 	// Инициализация параметров

@@ -67,12 +67,12 @@ class CFile /***: public CObject*/ {
         if (nOpenFlags & CFile::modeWrite) mode |= (FA_WRITE | FA_OPEN_APPEND);
         if (nOpenFlags & CFile::modeCreate) mode |= FA_CREATE_ALWAYS;
         m_o = f_open(&m_file, lpszFileName, mode) == FR_OK;
-        if (m_o) TRACE_T("[Open] file: '%s'; flags: %08Xh; &m_file: %08Xh; res: %d", lpszFileName, nOpenFlags, &m_file, m_o);
+    //    if (m_o) TRACE_T("[Open] file: '%s'; flags: %08Xh; &m_file: %08Xh; res: %d", lpszFileName, nOpenFlags, &m_file, m_o);
         return m_o;
     }
     virtual size_t GetLength() const { return f_size(&m_file); }
     virtual void Close() {
-        TRACE_T("[Close] &m_file: %08Xh", &m_file);
+    //    TRACE_T("[Close] &m_file: %08Xh", &m_file);
         if (m_o) f_close(&m_file);
         m_o = false;
     }
@@ -82,11 +82,16 @@ class CFile /***: public CObject*/ {
         int cnt = (int)nCount;
         UINT res = 0;
         while(cnt > 0) {
-            if (f_read(&m_file, lpBuf, 512, &rd) != FR_OK) return res;
+            if (f_read(&m_file, lpBuf, 512, &rd) != FR_OK) {
+                TRACE_T("[Read] failed &m_file: %08Xh offset: %08Xh rd: %08Xh", &m_file, offset, rd);
+                return res;
+            }
             cnt -= rd;
             res += rd;
-            for (int i = 0; i < rd; ++i)
-                psram->set(offset + i, lpBuf[i]);
+            for (int i = 0; i < rd; i += 2) {
+                psram->set16(offset + i, *(uint16_t*)&lpBuf[i]);
+            }
+            offset += rd;
         }
         return res;
     }

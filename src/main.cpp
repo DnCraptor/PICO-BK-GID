@@ -295,7 +295,6 @@ int main() {
     inInit(LOAD_WAV_PIO);
 #endif
 
-    TRACE_T(("gpio_init(PICO_DEFAULT_LED_PIN)"));
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
 
@@ -305,12 +304,10 @@ int main() {
         sleep_ms(23);
         gpio_put(PICO_DEFAULT_LED_PIN, false);
     }
-    TRACE_T(("Before Init_Wii_Joystick"));
     #ifdef USE_WII
     if (!Init_Wii_Joystick()) {
     #endif
         #ifdef USE_NESPAD
-        TRACE_T(("Before nespad_begin"));
         nespad_begin(clock_get_hz(clk_sys) / 1000, NES_GPIO_CLK, NES_GPIO_DATA, NES_GPIO_LAT);
         #endif
     #ifdef USE_WII
@@ -318,7 +315,6 @@ int main() {
         add_repeating_timer_ms(60, Wii_Joystick_Timer_CB, NULL, &Wii_timer);
     }
     #endif
-    TRACE_T(("Before keyboard_init"));
     keyboard_init();
 
     sem_init(&vga_start_semaphore, 0, 1);
@@ -352,31 +348,23 @@ int main() {
     CMotherBoard *m_pBoard = new CMotherBoard();
     CSpeaker m_speaker;
     CBkSound *m_pSound = new CBkSound();
-    int nMtc = m_pSound->ReInit(g_Config.m_nSoundSampleRate); // пересоздаём звук с новыми параметрами, на выходе - длина медиафрейма в сэмплах
-	m_speaker.ReInit();     // ещё надо переинициализирвоать устройства, там
-	m_speaker.ConfigureTapeBuffer(nMtc);// переопределяем буферы в зависимости от текущей частоты дискретизации
     CCovox m_covox;
-	m_covox.ReInit();       // есть вещи, зависящие от частоты дискретизации,
-///    CMenestrel m_menestrel;
-///	m_menestrel.ReInit();   //
-///    CAYSnd m_aySnd;
-///	m_aySnd.ReInit();       // которая теперь величина переменная. Но требует перезапуска конфигурации.
+   // CMenestrel m_menestrel;
+	//m_menestrel.ReInit();   //
+   // CAYSnd m_aySnd;
+	//m_aySnd.ReInit();       // которая теперь величина переменная. Но требует перезапуска конфигурации.
 ///	m_paneOscillatorView.ReCreateOSC(); // пересоздаём осциллограф с новыми параметрами
 	// при необходимости откорректируем размер приёмного буфера.
 ///	m_paneOscillatorView.SetBuffer(nMtc); //SendMessage(WM_OSC_SETBUFFER, WPARAM(nMtc));
 	m_pBoard->SetFDDType(g_Config.m_BKFDDModel);
 	// присоединим устройства, чтобы хоть что-то было для выполнения ResetHot
 	m_pBoard->AttachWindow(mf);  // цепляем к MotherBoard этот класс
-	// порядок имеет значение. сперва нужно делать обязательно AttachWindow(this)
-	// и только затем m_pBoard->SetMTC(). И эта функция обязательна, там звуковой буфер вычисляется
-	// и выделяется
-	m_pBoard->SetMTC(nMtc); // и здесь ещё. тройная работа получается.
 	// Присоединяем к новосозданному чипу устройства
 	m_pBoard->AttachSound(m_pSound);
 	m_pBoard->AttachSpeaker(&m_speaker);
-///	m_pBoard->AttachMenestrel(&m_menestrel);
+	//m_pBoard->AttachMenestrel(&m_menestrel);
 	m_pBoard->AttachCovox(&m_covox);
-///	m_pBoard->AttachAY8910(&m_aySnd);
+	//m_pBoard->AttachAY8910(&m_aySnd);
 	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
 	m_pBoard->NormalizeCPU();
 	// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип

@@ -139,7 +139,7 @@ void CMotherBoard_EXT32::SetByteT(const uint16_t addr, uint8_t value, int &nTC)
 			return;
 		}
 
-		throw CExceptionHalt(addr, _T("Can't write this address."));
+		throw CExceptionHalt(addr, _T("Can't write this address. BB1"));
 	}
 
 	// monitor on 0100000 - 0120000
@@ -152,11 +152,11 @@ void CMotherBoard_EXT32::SetByteT(const uint16_t addr, uint8_t value, int &nTC)
 	if (m_MemoryMap[nBank].bWritable)
 	{
 		nTC += m_MemoryMap[nBank].nTimingCorrection;
-		m_psram.set(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07777), value);
+		m_psram.set8(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07777), value);
 	}
 	else
 	{
-		throw CExceptionHalt(addr, _T("Can't write this address."));
+		throw CExceptionHalt(addr, _T("Can't write this address. BB2"));
 	}
 }
 
@@ -188,7 +188,7 @@ void CMotherBoard_EXT32::SetWordT(const uint16_t addr, uint16_t value, int &nTC)
 	if (m_MemoryMap[nBank].bWritable)
 	{
 		nTC += m_MemoryMap[nBank].nTimingCorrection;
-		m_psram.set(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07776), value);
+		m_psram.set16(static_cast<size_t>(m_MemoryMap[nBank].nOffset) + (addr & 07776), value);
 	}
 	else
 	{
