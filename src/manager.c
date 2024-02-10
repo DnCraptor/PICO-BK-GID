@@ -14,7 +14,7 @@
 #include "nespad.h"
 #include "config_em.h"
 
-bool is_swap_wins_enabled = true;
+extern bool is_swap_wins_enabled;
 extern bool swap_wins;
 volatile bool is_dendy_joystick = true;
 

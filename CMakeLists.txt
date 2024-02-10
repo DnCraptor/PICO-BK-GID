@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 set(PICO_CXX_ENABLE_EXCEPTIONS 1)
 include(pico_sdk_import.cmake)
 
-project(pico-bk C CXX ASM)
+project(pico-bk-gid C CXX ASM)
 option(OVERCLOCKING "Target Pico MHz" 366)
 if(NOT OVERCLOCKING)
     SET(OVERCLOCKING 366)
@@ -43,8 +43,8 @@ message(STATUS "")
 
 add_executable(${PROJECT_NAME} ${SRC})
 
-pico_set_program_name(pico-bk "PICO BK-0010/11 Emulator for ZX Murmulator devboard by DnCraptor")
-pico_set_program_version(pico-bk "test")
+pico_set_program_name(pico-bk-gid "PICO BK-0010[-01]/11[M] Emulator for ZX Murmulator devboard by DnCraptor")
+pico_set_program_version(pico-bk-gid "test")
 
 #set(PICO_DEOPTIMIZED_DEBUG 1)
 

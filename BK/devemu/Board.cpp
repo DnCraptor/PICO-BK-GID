@@ -1779,20 +1779,16 @@ void CMotherBoard::StopTimerThread()
 	m_mutLockTimerThread.unlock();***/
 }
 
-bool CMotherBoard::StartTimerThread()
-{
-	/***
-	m_TimerThread = std::thread(&CMotherBoard::TimerThreadFunc, this);
+bool CMotherBoard::StartTimerThread() {
+///	m_TimerThread = std::thread(&CMotherBoard::TimerThreadFunc, this);
 	m_bKillTimerEvent = false;
-
-	if (m_TimerThread.joinable())
-	{
-		m_TimerThread.detach();
+///	if (m_TimerThread.joinable()) {
+//		m_TimerThread.detach();
 		return true;
-	}
+//	}
 
-	g_BKMsgBox.Show(IDS_BK_ERROR_NOTENMEMR, MB_OK);***/
-	return false;
+///	g_BKMsgBox.Show(IDS_BK_ERROR_NOTENMEMR, MB_OK);***/
+//	return false;
 }
 
 
@@ -1813,6 +1809,12 @@ void CMotherBoard::FrameParam()
 }
 
 extern "C" int if_manager(bool force);
+extern volatile bool escPressed;
+extern "C" {
+	#include "BKKey.h"
+	#include "ps2.h"
+}
+#define KEY_MENU_ESC		5
 
 void CMotherBoard::TimerThreadFunc()
 {
@@ -1820,16 +1822,35 @@ void CMotherBoard::TimerThreadFunc()
 	uint16_t nPreviousPC = ADDRESS_NONE;    // предыдущее значение регистра РС
 	// типы nPreviousPC и m_sTV.nGotoAddress не должны совпадать, иначе будет всегда срабатывать условие отладочного
 	// останова, даже если нам этого не надо
-////	do
+	do
 	{
-		int tormoz = if_manager(false);
+		uint_fast16_t code = ps2get_raw_code() & 0xFFFF;
+		if (code) {
+			uint16_t nInt = INTERRUPT_60; // TODO:
+			code = Key_Translate(code);
+			if (code != KEY_UNKNOWN) {
+				if (code == KEY_MENU_ESC) {
+                    int tormoz = if_manager(escPressed);
+				} else {
+					this->m_reg177662in = code & 0177;
+					// если ещё прошлый код не прочитали, новый игнорируем.
+					if (!(this->m_reg177660 & 0200)) {
+						// сюда заходим только если прочитан прошлый код
+						this->KeyboardInterrupt(nInt); // TODO: (vkbdvw->GetAR2Status()) ? INTERRUPT_274 : nInt);
+					}
+					// Установим в регистре 177716 флаг нажатия клавиши
+					this->m_reg177716in &= ~0100;
+				}
+			}
+		}
+		
 		if (m_bRunning) // если процессор работает, выполняем эмуляцию
 		{
 ///			m_mutRunLock.lock(); // блокируем участок, чтобы при остановке обязательно дождаться, пока фрейм не закончится
 			if (m_bBreaked) // если процессор в отладочном останове
 			{
 ///				DrawDebugScreen();  // продолжаем обновлять экран
-///				Sleep(20);          // со стандартной частотой примерно 50Гц
+				Sleep(20);          // со стандартной частотой примерно 50Гц
 			} else {
 				// Выполняем набор инструкций
 				// Если время пришло, выполняем текущую инструкцию
@@ -1914,29 +1935,29 @@ void CMotherBoard::TimerThreadFunc()
 					}
 				}
 				if (--m_sTV.fMemoryTicks <= 0.0) {
-					if (m_sTV.fMemoryTicks < 1.0) {
+					do {
 				//		TRACE_T("Make_One_Screen_Cycle()");
 						Make_One_Screen_Cycle();  // тут выполняются циклы экрана
 						m_sTV.fMemoryTicks += m_sTV.fMemory_Mod;
-					}
+					} while (m_sTV.fMemoryTicks < 1.0);
 				}
                 if (m_pSpeaker) {
 				//	TRACE_T("RCFilterLF()");
 					m_pSpeaker->RCFilterLF(m_sTV.fCpuTickTime); // эмуляция конденсатора на выходе линейного входа.
 				}
 				if (--m_sTV.fMediaTicks <= 0.0) {
-					if (m_sTV.fMediaTicks < 1.0) {
+					do {
 				//		TRACE_T("MediaTick()");
 						MediaTick();  // тут делается звучание всех устройств и обработка прочих устройств
 						m_sTV.fMediaTicks += m_sTV.fMedia_Mod;
-					}
+					} while (m_sTV.fMediaTicks < 1.0);
 				}
 				if (--m_sTV.fFDDTicks <= 0.0) {
-					if (m_sTV.fFDDTicks < 1.0)	{
+					do {
 				//		TRACE_T("m_fdd.Periodic()");
 						m_fdd.Periodic();     // Вращаем диск на одно слово на дорожке
 						m_sTV.fFDDTicks += m_sTV.fFDD_Mod;
-					}
+					} while (m_sTV.fFDDTicks < 1.0);
 				}
 			}
 ///			m_mutRunLock.unlock();
@@ -1944,10 +1965,10 @@ void CMotherBoard::TimerThreadFunc()
 		else
 		{
 		//	TRACE_T("Sleep(20)");
-////			Sleep(20);
+			Sleep(20);
 		}
 	}
-////	while (!m_bKillTimerEvent);       // пока не придёт событие остановки
+	while (!m_bKillTimerEvent);       // пока не придёт событие остановки
 	m_bKillTimerEvent = false;
 }
 

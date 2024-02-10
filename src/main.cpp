@@ -98,8 +98,8 @@ static bool __not_in_flash_func(main_timer_callback)(repeating_timer_t *rt) {
         return true;
     }
     CMotherBoard* m_pBoard = (CMotherBoard*)rt->user_data;
-    int i = 20;
-    while(--i)
+    //int i = 20;
+    //while(--i)
         m_pBoard->TimerThreadFunc();
     return true;
 }
@@ -253,9 +253,7 @@ inline static void read_config(const char* path) {
 static void init_fs() {
     FRESULT result = f_mount(&fatfs, "", 1);
     if (FR_OK != result) {
-        char tmp[80];
-        sprintf(tmp, "Unable to mount SD-card: %s (%d)", FRESULT_str(result), result);
-        logMsg(tmp);
+        printf("Unable to mount SD-card: %s (%d)", FRESULT_str(result), result);
     } else {
         SD_CARD_AVAILABLE = true;
     }
@@ -296,7 +294,7 @@ int main() {
     inInit(LOAD_WAV_PIO);
 #endif
 
-    DBGM_PRINT(("gpio_init(PICO_DEFAULT_LED_PIN)"));
+    TRACE_T(("gpio_init(PICO_DEFAULT_LED_PIN)"));
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
 
@@ -306,12 +304,12 @@ int main() {
         sleep_ms(23);
         gpio_put(PICO_DEFAULT_LED_PIN, false);
     }
-    DBGM_PRINT(("Before Init_Wii_Joystick"));
+    TRACE_T(("Before Init_Wii_Joystick"));
     #ifdef USE_WII
     if (!Init_Wii_Joystick()) {
     #endif
         #ifdef USE_NESPAD
-        DBGM_PRINT(("Before nespad_begin"));
+        TRACE_T(("Before nespad_begin"));
         nespad_begin(clock_get_hz(clk_sys) / 1000, NES_GPIO_CLK, NES_GPIO_DATA, NES_GPIO_LAT);
         #endif
     #ifdef USE_WII
@@ -319,7 +317,7 @@ int main() {
         add_repeating_timer_ms(60, Wii_Joystick_Timer_CB, NULL, &Wii_timer);
     }
     #endif
-    DBGM_PRINT(("Before keyboard_init"));
+    TRACE_T(("Before keyboard_init"));
     keyboard_init();
 
     sem_init(&vga_start_semaphore, 0, 1);
@@ -369,12 +367,12 @@ int main() {
 	if (m_pBoard->InitBoard(g_Config.m_nCPURunAddr)) {
 		m_pBoard->StartTimerThread();
 		m_pBoard->RunCPU();
-        if (!add_repeating_timer_us(1, main_timer_callback, m_pBoard, &main_timer)) {
+        if (!add_repeating_timer_ms(20, main_timer_callback, m_pBoard, &main_timer)) {
 		    TRACE_T("Failed to add main_timer_callback timer");
 	    }
     }
     while (1) {
-        sleep_ms(1);
+        sleep_ms(20);
     }
     return 0;
 }
