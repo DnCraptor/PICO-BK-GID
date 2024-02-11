@@ -349,10 +349,10 @@ int main() {
     CSpeaker m_speaker;
     CBkSound *m_pSound = new CBkSound();
     CCovox m_covox;
-   // CMenestrel m_menestrel;
-	//m_menestrel.ReInit();   //
-   // CAYSnd m_aySnd;
-	//m_aySnd.ReInit();       // которая теперь величина переменная. Но требует перезапуска конфигурации.
+    CMenestrel m_menestrel;
+	m_menestrel.ReInit();   //
+ ///   CAYSnd m_aySnd;
+//	m_aySnd.ReInit();       // которая теперь величина переменная. Но требует перезапуска конфигурации.
 ///	m_paneOscillatorView.ReCreateOSC(); // пересоздаём осциллограф с новыми параметрами
 	// при необходимости откорректируем размер приёмного буфера.
 ///	m_paneOscillatorView.SetBuffer(nMtc); //SendMessage(WM_OSC_SETBUFFER, WPARAM(nMtc));
@@ -362,9 +362,9 @@ int main() {
 	// Присоединяем к новосозданному чипу устройства
 	m_pBoard->AttachSound(m_pSound);
 	m_pBoard->AttachSpeaker(&m_speaker);
-	//m_pBoard->AttachMenestrel(&m_menestrel);
+	m_pBoard->AttachMenestrel(&m_menestrel);
 	m_pBoard->AttachCovox(&m_covox);
-	//m_pBoard->AttachAY8910(&m_aySnd);
+///	m_pBoard->AttachAY8910(&m_aySnd);
 	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
 	m_pBoard->NormalizeCPU();
 	// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип

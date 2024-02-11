@@ -61,8 +61,8 @@ void CEMU2149::ReInit()
 	PSG_init(g_Config.m_nSoundChipFrequency * 2, g_Config.m_nSoundSampleRate);
 	PSG_reset(); // использует значения, заданные в PSG_init
 	PSG_setVolumeMode();
-	double w0 = 2 * 12000.0 / double(g_Config.m_nSoundSampleRate);
-	double w1 = 0.0;
+///	double w0 = 2 * 12000.0 / double(g_Config.m_nSoundSampleRate);
+///	double w1 = 0.0;
 ///	int res = fir_linphase(m_nFirLength, w0, w1, FIR_FILTER::LOWPASS,
 ///	                       FIR_WINDOW::BLACKMAN_HARRIS, true, 0.0, m_pH.get());
 }

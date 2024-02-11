@@ -853,30 +853,24 @@ void CMenestrel::init(int c, int r)
 	m_dPSGStep = 1.0 / double(m_nClock);
 }
 
-void CMenestrel::ReInit()
-{
+void CMenestrel::ReInit() {
 	// 1000000 - тактовая частота для i8253
 	init(1000000, g_Config.m_nSoundSampleRate);
 	Reset();
-	double w0 = 2 * 11000.0 / double(g_Config.m_nSoundSampleRate);
-	double w1 = 0.0;
+///	double w0 = 2 * 11000.0 / double(g_Config.m_nSoundSampleRate);
+//	double w1 = 0.0;
 ///	int res = fir_linphase(m_nFirLength, w0, w1, FIR_FILTER::LOWPASS,
 	///                       FIR_WINDOW::BLACKMAN_HARRIS, true, 0.0, m_pH.get());
 }
 
-void CMenestrel::Reset()
-{
+void CMenestrel::Reset() {
 	m_dPSGTime = 0;
 	m_bWrPrev = false;
 	m_bGatePrev = false;
-
-	for (auto &cnt : LeftCh)
-	{
+	for (auto &cnt : LeftCh) {
 		cnt.reset();
 	}
-
-	for (auto &cnt : RightCh)
-	{
+	for (auto &cnt : RightCh) {
 		cnt.reset();
 	}
 }
