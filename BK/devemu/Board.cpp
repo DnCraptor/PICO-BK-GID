@@ -670,10 +670,9 @@ void CMotherBoard::UnStopInterrupt()
 }
 
 
-void CMotherBoard::KeyboardInterrupt(uint16_t interrupt)
-{
+void CMotherBoard::KeyboardInterrupt(uint16_t interrupt) {
+	TRACE_T("KeyboardInterrupt: %d", interrupt);
 	m_reg177660 |= 0200;       // Установим состояние готовности в 177660
-
 	if (!(m_reg177660 & 0100))	// если прерывания разрешены, делаем прерывание
 	{
 		m_cpu.InterruptVIRQ(interrupt); // делаем прерывание
@@ -1223,21 +1222,16 @@ void CMotherBoard::BreakCPU()
 	m_pParent->PostMessage(WM_CPU_DEBUGBREAK);
 }
 
-void CMotherBoard::UnbreakCPU(int nGoto)
-{
+void CMotherBoard::UnbreakCPU(int nGoto) {
 	m_sTV.nGotoAddress = nGoto;
 	m_bBreaked = false;     // отменяем отладочную приостановку
 }
 
-void CMotherBoard::RunCPU(bool bUnbreak)
-{
-	if (!m_bRunning)
-	{
-		if (bUnbreak)
-		{
+void CMotherBoard::RunCPU(bool bUnbreak) {
+	if (!m_bRunning) {
+		if (bUnbreak) {
 			UnbreakCPU(ADDRESS_NONE);
 		}
-
 		// Set running flag
 		m_bRunning = true;
 	}
@@ -1709,7 +1703,6 @@ void CMotherBoard::TimerThreadFunc()
 				}
 			}
 		}
-		
 		if (m_bRunning) // если процессор работает, выполняем эмуляцию
 		{
 ///			m_mutRunLock.lock(); // блокируем участок, чтобы при остановке обязательно дождаться, пока фрейм не закончится
@@ -1746,7 +1739,7 @@ void CMotherBoard::TimerThreadFunc()
 					}
 					catch (CExceptionHalt &halt)
 					{
-						TRACE_T("CExceptionHalt: 0%07o, m_bAskForBreak: %d", nPreviousPC, g_Config.m_bAskForBreak);
+						TRACE_T("CExceptionHalt: 0%06o, m_bAskForBreak: %d", nPreviousPC, g_Config.m_bAskForBreak);
 						// BK Violation exception. Например запись в ПЗУ или чтение из несуществующей памяти
 						if (g_Config.m_bAskForBreak)
 						{

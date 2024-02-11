@@ -109,16 +109,6 @@ CDebugger::~CDebugger()
 {
 }
 
-void CDebugger::AttachBoard(CMotherBoard *pBoard)
-{
-	m_pBoard = pBoard;
-
-	if (m_pBoard)
-	{
-		m_pBoard->AttachDebugger(this);
-	}
-}
-
 void CDebugger::SetCurrentAddress(uint16_t address) const
 {
 	g_Config.m_nDisasmAddr = address;
@@ -1918,3 +1908,13 @@ uint16_t CDebugger::CalcNextAddr(uint16_t pc)
 }
 
 #endif
+
+void CDebugger::AttachBoard(CMotherBoard *pBoard)
+{
+	m_pBoard = pBoard;
+
+	if (m_pBoard)
+	{
+		m_pBoard->AttachDebugger(this);
+	}
+}

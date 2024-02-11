@@ -368,7 +368,8 @@ int main() {
 	// если в ини файле задана частота, то применим её, вместо частоты по умолчанию.
 	m_pBoard->NormalizeCPU();
 	// Цепляем к новому чипу отладчик, т.е. наоборот, к отладчику чип
-///	m_pDebugger->AttachBoard(GetBoard());
+    CDebugger * m_pDebugger = new CDebugger();
+	m_pDebugger->AttachBoard(m_pBoard);
 	//	m_paneRegistryDumpViewCPU.SetFreqParam();
 	// Цепляем обработчик скриптов
 ///	m_Script.AttachBoard(GetBoard());

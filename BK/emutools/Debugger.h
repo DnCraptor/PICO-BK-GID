@@ -28,7 +28,7 @@ enum : int
 	SYS_PORT_177716_OUT_MEM
 };
 
-#ifdef DEBUGGER
+#ifdef UI
 // массив цветов для подсветки синтаксиса
 enum : int
 {
@@ -348,6 +348,7 @@ class CDebugger {
 
 		static int          m_outLevel;
 	public:
+	    void                AttachBoard(CMotherBoard *pBoard);
         bool                IsInstructionOver(const uint16_t instruction) const;
 		int                 CalcInstructionLength(uint16_t instr);
 		uint16_t            CalcNextAddr(uint16_t pc);

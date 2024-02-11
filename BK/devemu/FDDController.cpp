@@ -1904,7 +1904,7 @@ void CFDDController::Periodic() // сдвиг на 1 RAW слово на дор�
 	{
 		return;    // Вращаем дискеты только если включён мотор
 	}
-
+	TRACE_T("CFDDController::Periodic");
 	{
 		// область действия мутекса
 ///		std::lock_guard<std::mutex> lk(m_mutPeriodicBusy);
