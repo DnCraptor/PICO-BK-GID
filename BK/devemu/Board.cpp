@@ -1292,8 +1292,7 @@ bool CMotherBoard::Interception()
 	return false; // если ничего не выполнилось
 }
 
-int CMotherBoard::GetScreenPage() const
-{
+int CMotherBoard::GetScreenPage() const {
 	return 1;    // для БК10 всегда 1
 }
 
@@ -1709,7 +1708,7 @@ void CMotherBoard::TimerThreadFunc()
 			if (m_bBreaked) // если процессор в отладочном останове
 			{
 				TRACE_T("DrawDebugScreen() tba");
-///				DrawDebugScreen();  // продолжаем обновлять экран
+				DrawDebugScreen();  // продолжаем обновлять экран
 				Sleep(20);          // со стандартной частотой примерно 50Гц
 			} else {
 				// Выполняем набор инструкций
@@ -1724,6 +1723,22 @@ void CMotherBoard::TimerThreadFunc()
 						} else // если не был -
 						{
 							// Выполняем одну инструкцию, возвращаем время выполнения одной инструкции в тактах.
+					/**		if (m_pDebugger) {
+								CString strInstr;
+								uint16_t codes[8];
+								uint16_t r0 = m_cpu.GetRON(CCPU::REGISTER::R0);
+								uint16_t r1 = m_cpu.GetRON(CCPU::REGISTER::R1);
+								uint16_t r2 = m_cpu.GetRON(CCPU::REGISTER::R2);
+								uint16_t r3 = m_cpu.GetRON(CCPU::REGISTER::R3);
+								uint16_t r4 = m_cpu.GetRON(CCPU::REGISTER::R4);
+								uint16_t r5 = m_cpu.GetRON(CCPU::REGISTER::R5);
+								uint16_t sp = m_cpu.GetRON(CCPU::REGISTER::SP);
+								uint16_t pc = m_cpu.GetRON(CCPU::REGISTER::PC);
+								uint16_t psw = m_cpu.GetRON(CCPU::REGISTER::PSW);
+								TRACE_T("%06o : %06o : %06o : %06o : %06o : %06o : %06o : %06o : %06o", r0, r1, r2, r3, r4, r5, sp, pc, psw);
+								int len = m_pDebugger->DebugInstruction(pc, strInstr, codes);
+								TRACE_T("%06o : %06o : %d : %s", pc, codes[0], len, strInstr.GetString());
+							}*/
 							m_sTV.nCPUTicks = m_cpu.TranslateInstruction();
                 //            TRACE_T("2 m_sTV.nCPUTicks: %d", m_sTV.nCPUTicks);
 							if (m_nKeyCleanEvent) {
@@ -1736,36 +1751,28 @@ void CMotherBoard::TimerThreadFunc()
 						// Сохраняем текущее значение PC для отладки
 						nPreviousPC = m_cpu.GetRON(CCPU::REGISTER::PC);
 				///		TRACE_T("nPreviousPC: 0%07o", nPreviousPC);
-					}
-					catch (CExceptionHalt &halt)
-					{
+					} catch (CExceptionHalt &halt) {
 						TRACE_T("CExceptionHalt: 0%06o, m_bAskForBreak: %d", nPreviousPC, g_Config.m_bAskForBreak);
 						// BK Violation exception. Например запись в ПЗУ или чтение из несуществующей памяти
-						if (g_Config.m_bAskForBreak)
-						{
+						if (g_Config.m_bAskForBreak) {
 							BreakCPU();  // Останавливаем CPU для отладки
-				///			CString strMessage;
-				///			strMessage.Format(IDS_ERRMSG_ROM, halt.m_addr, nPreviousPC, halt.m_info);
-				///			const int answer = g_BKMsgBox.Show(strMessage, MB_ABORTRETRYIGNORE | MB_DEFBUTTON2 | MB_ICONSTOP);
-
-				///			switch (answer)
-				///			{
-				///				case IDIGNORE:  // если выбрали "игнорировать"
-				///					g_Config.m_bAskForBreak = false; // то снимаем галку, и больше не вызываем диалог
-				///					[[fallthrough]];
+							CString strMessage;
+							strMessage.Format(IDS_ERRMSG_ROM, halt.m_addr, nPreviousPC, halt.m_info);
+							const int answer = g_BKMsgBox.Show(strMessage, MB_ABORTRETRYIGNORE | MB_DEFBUTTON2 | MB_ICONSTOP);
+							switch (answer)	{
+								case IDIGNORE:  // если выбрали "игнорировать"
+									g_Config.m_bAskForBreak = false; // то снимаем галку, и больше не вызываем диалог
+									[[fallthrough]];
 								// и выполним всё, что должно выполняться для "повтор"
-				///				case IDRETRY: // если выбрали "повтор" - то просто продолжить выполнение и посмотреть, что будет дальше
-				///					UnbreakCPU(ADDRESS_NONE); // обратно запускаем CPU
-				///					m_cpu.ReplyError();  // Делаем прер. по вектору 4(halt) в следующем цикле
-				///					break;
-
-				///				case IDABORT: // если выбрали "прервать" - остаёмся в отладочном останове
-				///				default:
+								case IDRETRY: // если выбрали "повтор" - то просто продолжить выполнение и посмотреть, что будет дальше
+									UnbreakCPU(ADDRESS_NONE); // обратно запускаем CPU
+									m_cpu.ReplyError();  // Делаем прер. по вектору 4(halt) в следующем цикле
 									break;
-				///			}
-						}
-						else
-						{
+								case IDABORT: // если выбрали "прервать" - остаёмся в отладочном останове
+								default:
+									break;
+							}
+						} else {
 							TRACE_T("ReplyError()");
 							m_sTV.nCPUTicks = 64;
 							m_cpu.ReplyError();  // Делаем прер. по вектору 4(halt) в следующем цикле
@@ -2007,10 +2014,11 @@ void CMotherBoard::Make_One_Screen_Cycle() {
 
 // специально для отладки, рисуем экран старым методом.
 // при этом новый метод не отключается и поэтому возможны разного рода казусы.
-void CMotherBoard::DrawDebugScreen() const
-{
-///	int nScrAddr = GetScreenPage() << 14;
-///	m_pParent->PostMessage(WM_SCR_DEBUGDRAW, WPARAM(nScrAddr));
+void CMotherBoard::DrawDebugScreen() {
+	DWORD_PTR nScrAddr = (static_cast<DWORD_PTR>(GetScreenPage())) << 14;
+	uint8_t *nScr = m_psram.screen_base(nScrAddr);
+	if (graphics_get_buffer2() != nScr)
+		graphics_set_buffer2(nScr);
 }
 
 constexpr auto BK_NAMELENGTH = 16;   // Максимальная длина имени файла на БК - 16 байтов

@@ -311,7 +311,7 @@ class CMotherBoard : public CDevice
 		virtual const PSRAM*GetMainMemory() const;
 	///	virtual uint8_t    *GetAddMemory() const;
 
-		void                DrawDebugScreen() const;
+		void                DrawDebugScreen();
 };
 
 /*

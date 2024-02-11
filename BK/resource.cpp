@@ -211,6 +211,10 @@ BOOL CString::LoadString(int res) {
        case IDS_INI_NATIVERUSLATSWITCH :    s ="Native RusLat Switch"; break;
        case IDS_TOOLTIP_BUTTON_RDC_CVMODE : s ="Переключение режима дополнительного представления содержимого регистров."; break;
        case IDS_TOOLTIP_EDIT_RDC_CPUFREQ :  s ="Поле для ручного задания частоты."; break;
+       case IDS_ERRMSG_NOTROM :      s = "There is no ROM module "; break;
+       case IDS_ERRMSG_ROM :         s = "Exception on address: %06o.\nWrong instruction on: %06o.\nPossible issue: ""%s"".\n""Stop"" - debug.\n""Repeat"" - continue execution. \n""Skip"" - do not show this message."; break;
+       case IDS_ERRMSG_ROM_NOT_DEFINED: s = "ATTN, ROM module was not found "; break;
+       case IDS_ERROR_CANTOPENFILE : s = "Impossible to open file."; break;
        default:
             TRACE_T("LoadString failed for %d", res);
             s.clear();

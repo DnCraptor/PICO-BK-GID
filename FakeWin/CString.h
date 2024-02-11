@@ -70,6 +70,14 @@ public:
         s = t;
         delete t;
     }
+    inline void Format(const CString& sFormat, ...) {
+	    va_list argList;
+        size_t len = sFormat.GetLength() << 1;
+        PXSTR t = new XCHAR[len];
+        snprintf(t, len, sFormat.GetString(), argList);
+        s = t;
+        delete t;
+    }
     inline int Compare(const CString& si) const {
         return strcmp(s.c_str(), si.s.c_str());
     }

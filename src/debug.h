@@ -15,6 +15,7 @@ extern void logMsg(char* msg);
 #ifdef __cplusplus
 
 #include "BKMessageBox.h"
-#define TRACE_T(...) { char tmp[128]; snprintf(tmp, 128, __VA_ARGS__); g_BKMsgBox.Show(CString(tmp), 0); }
+#include <hardware/pio.h>
+#define TRACE_T(...) { gpio_put(PICO_DEFAULT_LED_PIN, true); char tmp[128]; snprintf(tmp, 128, __VA_ARGS__); g_BKMsgBox.Show(CString(tmp), 0); gpio_put(PICO_DEFAULT_LED_PIN, false); }
 
 #endif

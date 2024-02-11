@@ -35,6 +35,7 @@ typedef struct tagMSG {
 #define MB_ICONINFORMATION          MB_ICONASTERISK
 #define MB_ICONSTOP                 MB_ICONHAND
 
+#define MB_DEFBUTTON2           0x00000100L
 /*
  * Virtual Keys, Standard Set
  */

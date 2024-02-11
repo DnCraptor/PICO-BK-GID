@@ -27,7 +27,7 @@ enum : int
 	SYS_PORT_177716_OUT_TAP,
 	SYS_PORT_177716_OUT_MEM
 };
-
+constexpr int MNEMONIX_NUM = 113;
 #ifdef UI
 // массив цветов для подсветки синтаксиса
 enum : int
@@ -43,7 +43,6 @@ enum : int
 	HLCOLOR_NUM_COLS    // количество цветов
 };
 extern const COLORREF g_crDebugColorHighLighting[HLCOLOR_NUM_COLS];
-constexpr int MNEMONIX_NUM = 113;
 
 class CMotherBoard;
 
@@ -72,8 +71,6 @@ class CDebugger
 		static const CString m_strArgFormat_Addr;
 		static const CString m_strArgFormat_Number;
 		static const CString m_strArgFormat_Comma;
-
-		static const CString m_strMnemonix[MNEMONIX_NUM];
 
 		CMotherBoard       *m_pBoard;
 		CDisasmView        *m_pDisasmDlg;
@@ -321,21 +318,26 @@ class CDebugger
  */
 #else
 class CDebugger {
+		static const CString m_strMnemonix[MNEMONIX_NUM];
 		using CalcInstrLenRef     = int (CDebugger::*)() const; // в качестве аргумента - значение в m_wInstr, результат - возвращаемое значение
 		using CalcNextAddrRef     = uint16_t (CDebugger::*)(); // в качестве аргумента - значение в m_wInstr, m_wPC - адрес за опкодом, результат - следующий адрес, или ADDRESS_NONE, если рассчитать невозможно
 		using DisassembleInstrRef = int (CDebugger::*)(uint16_t *); // в качестве аргумента - значение в m_wInstr и m_wPC, результат - в m_strInstr и m_strArg, возвращает кол-во доп.слов инструкции
 
 		struct InstrFuncRefs
 		{
-			const CString      *pMnemonic;
+			int                 mnemonicIdx;
 			CalcInstrLenRef     InstrLenRef;
 			CalcNextAddrRef     NextAddrRef;
 			DisassembleInstrRef DisasmInstrRef;
 		};
+		class DebugMap {
+			public:
+				InstrFuncRefs operator[] (uint16_t code);
+		};
+		static DebugMap     DEBUG_EIS_MAP;
 
 		CMotherBoard       *m_pBoard;
 
-		std::unique_ptr<InstrFuncRefs[]> m_pInstrRefsMap;
 		bool                m_bPrevCmdC;    // флаг, как дизассемблировать BCC/BHIS BCS/BLO
 		bool                m_bPrevCmdCp;   // после команды CMP - сравнение, иначе - битС
 
@@ -345,9 +347,12 @@ class CDebugger {
 		uint16_t            m_wInstr;       // сама инструкция
 		bool                m_bCBug;        // флаг бага флага С
 		uint16_t            m_wFreg;        // регистр флагов состояний NZVC с учётом бага
+		CString             m_strInstr;     // мнемоника
+		CString             m_strArg;       // аргументы, если есть
 
 		static int          m_outLevel;
 	public:
+		CDebugger();
 	    void                AttachBoard(CMotherBoard *pBoard);
         bool                IsInstructionOver(const uint16_t instruction) const;
 		int                 CalcInstructionLength(uint16_t instr);
@@ -373,9 +378,90 @@ class CDebugger {
 	        // оставим это излишество на случай, если решим алгоритмы поменять
 	        return IsBpeakpointAtAddress(addr);
         }
-		static bool IsInstructionOut(const uint16_t instruction) {
-			/// TODO: ???
-			return false;
+		static bool IsInstructionOut(const uint16_t instruction);
+		int DebugInstruction(uint16_t pc, CString &strInstr, uint16_t *codes);
+		int CalcLenOneWord() const;
+		uint16_t            GetArgD(int pos);
+		uint16_t            GetArgAddrD(int meth, CCPU::REGISTER reg) const;
+		int                 CalcArgLength(int pos) const;
+		int          CalcLenTwoFields() const;
+		int          CalcLenFourFields() const;
+		int          CalcLenFIS() const;
+		uint16_t            CalcNextAddrRegular4();
+		uint16_t            CalcNextAddrRegular2();
+		uint16_t            CalcNextAddrRegular();
+		uint16_t            CalcNextAddrUNKNOWN();
+		uint16_t            CalcNextAddrRTI();
+		uint16_t            CalcNextAddrRTS();
+		uint16_t            CalcNextAddrJMP();
+		uint16_t            CalcNextAddrMARK();
+		uint16_t            CalcNextAddrSOB();
+		uint16_t            CalcNextAddrBR();
+		uint16_t            CalcNextAddrBNE();
+		uint16_t            CalcNextAddrBEQ();
+		uint16_t            CalcNextAddrBGE();
+		uint16_t            CalcNextAddrBLT();
+		uint16_t            CalcNextAddrBGT();
+		uint16_t            CalcNextAddrBLE();
+		uint16_t            CalcNextAddrBPL();
+		uint16_t            CalcNextAddrBMI();
+		uint16_t            CalcNextAddrBHI();
+		uint16_t            CalcNextAddrBLOS();
+		uint16_t            CalcNextAddrBVC();
+		uint16_t            CalcNextAddrBVS();
+		uint16_t            CalcNextAddrBCC();
+		uint16_t            CalcNextAddrBCS();
+		uint16_t            CalcNextAddrSWAB_MFPS();
+		uint16_t            CalcNextAddrMOVB();
+
+		int                 DisassembleNoArgs(uint16_t *codes);
+		int                 DisassembleUnknown(uint16_t *codes);
+		int                 DisassembleCLS(uint16_t *codes);
+		int                 DisassembleSET(uint16_t *codes);
+		int                 DisassembleRTS(uint16_t *codes);
+		int                 DisassembleTwoField(uint16_t *codes);
+		int                 DisassembleFourField(uint16_t *codes);
+		int                 DisassembleMARK(uint16_t *codes);
+		int                 DisassembleEMT(uint16_t *codes);
+		int                 DisassembleBR(uint16_t *codes);
+		int                 DisassembleBCC(uint16_t *codes);
+		int                 DisassembleBCS(uint16_t *codes);
+		int                 DisassembleJSR(uint16_t *codes);
+		int                 DisassembleEISExt(uint16_t *codes);
+		int                 DisassembleXOR(uint16_t *codes);
+		int                 DisassembleFIS(uint16_t *codes);
+		int                 DisassembleSOB(uint16_t *codes);
+		int                 DisassembleCMP(uint16_t *codes);
+		int                 DisassembleSETF(uint16_t *codes);
+		int                 DisassembleSETD(uint16_t *codes);
+		int                 DisassembleSETL(uint16_t *codes);
+		int                 DisassembleSETI(uint16_t *codes);
+		int                 DisassembleTwoFieldFPUD(uint16_t *codes);
+		int                 DisassembleACDFieldFPUD(uint16_t *codes);
+		int                 DisassembleACDFieldLDX(uint16_t *codes);
+		int                 DisassembleACDFieldLDEXP(uint16_t *codes);
+		int                 DisassembleACDFieldLDCJX(uint16_t *codes);
+		int                 DisassembleACDFieldLDCXY(uint16_t *codes);
+		int                 DisassembleACSFieldFPUD(uint16_t *codes);
+		int                 DisassembleACSFieldSTX(uint16_t *codes);
+		int                 DisassembleACSFieldSTEXP(uint16_t *codes);
+		int                 DisassembleACSFieldSTCXJ(uint16_t *codes);
+		int                 DisassembleACSFieldSTCXY(uint16_t *codes);
+		static const CString m_strRegNames[8];
+		static const CString m_strRegNamesFPU[8];
+		static const CString m_strAddrFormat[8];
+		static const CString m_strAddrFormat_PC[8];
+		static const CString m_strArgFormat_Addr;
+		static const CString m_strArgFormat_Number;
+		static const CString m_strArgFormat_Comma;
+		inline bool         GetFREGBit(PSW_BIT pos)
+		{
+			return !!(m_wFreg & (1 << static_cast<int>(pos)));
 		}
+		uint16_t            GetRegister(const CCPU::REGISTER reg) const;
+		int                 ConvertArgToString(int arg, uint16_t pc, CString &strSrc, uint16_t &code) const;
+		//флаги дизассемблирования FPU
+		bool                m_bFD, m_bFL;
+		int                 ConvertArgToStringFPU(int arg, uint16_t pc, CString &strSrc, uint16_t &code) const;
 };
 #endif

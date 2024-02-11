@@ -437,12 +437,11 @@ int CCPU::TranslateInstruction() {
 					m_Freg &= 0177776;
 				}
 			}
-	////		TRACE_T("0%06o: 0%06o", pc, m_instruction);
 			// Find command implementation using the command map
 		///	(this->*m_pExecuteMethodMap[m_instruction])();  // Call command implementation method
 		    ExecuteMethodRef cpu_opcode = DEFAULT_CPU_EIS_MAP[m_instruction];
 			(this->*cpu_opcode)();
-	////		TRACE_T("0%06o: 0%06o done. PC: 0%06o", pc, m_instruction, m_RON[static_cast<int>(REGISTER::PC)]);
+	//		TRACE_T("0%06o: 0%06o done. PC: 0%06o", pc, m_instruction, m_RON[static_cast<int>(REGISTER::PC)]);
 		}
 	} else {
 		TRACE_T("InterruptDispatch");
@@ -481,20 +480,19 @@ void CCPU::ReplyError()
 // диспетчер прерываний. проверим, есть ли незамаскированные запросы на прерывания
 // если есть, выполним прерывание и выход true
 // иначе выход false, и можно выполнять инструкцию.
-bool CCPU::InterruptDispatch()
-{
+bool CCPU::InterruptDispatch() {
 	uint32_t nVector = 0;  // младшее слово - адрес вектора
 	// старшее слово - признаки:
 	// бит 0 - векторное прерывание (чтобы 0 тоже можно было обрабатывать)
 	// бит 1 - прерывание halt mode
 	// бит 2 - PC надо уменьшить на 2 (только в halt mode)
-
 	if (m_bVIRQErrrq)  // Ошибка передачи вектора.
 	{
 		m_bVIRQErrrq = false;
 		m_bGetVector = false; // вектор больше не получаем, но ожидаем вероятность двойного зависания
 		m_nInternalTick = timing_Misk[TIMING_IDX_BUS_ERROR];
 		nVector = 0160012 | (1 << 17); // прерывание в пультовом режиме
+		TRACE_T("1 ");
 	}
 	else if (m_bRPL2rq) // Двойное зависание, priority 1
 	{
