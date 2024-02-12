@@ -16,7 +16,13 @@ extern "C" {
 #include <string.h>
 
 #include "Board_10.h"
+#include "Board_11.h"
+#include "Board_11M.h"
 #include "Board_10_FDD.h"
+#include "Board_11_FDD.h"
+#include "Board_11M_FDD.h"
+#include "Board_EXT32.h"
+#include "Board_MSTD.h"
 #include "Config.h"
 #include "resource.h"
 #include "debug.h"
@@ -345,7 +351,38 @@ int main() {
     g_Config.InitConfig(CString("bk.ini"));
     g_Config.VerifyRoms(); // проверим наличие, но продолжим выполнение при отсутствии чего-либо
     CMainFrame *mf = new CMainFrame(new CScreen());
-    CMotherBoard *m_pBoard = new CMotherBoard();
+    CMotherBoard *m_pBoard = 0;
+    CONF_BKMODEL nConf = g_Config.GetBKModel();
+    g_Config.SetBKModel(nConf); // ensure m_BKBoardModel is correct
+    switch(g_Config.m_BKBoardModel) {
+		case MSF_CONF::BK10:
+			m_pBoard = new CMotherBoard_10();
+			break;
+		case MSF_CONF::BK1001_MSTD:
+			m_pBoard = new CMotherBoard_MSTD();
+			break;
+		case MSF_CONF::BK1001_EXT32:
+			m_pBoard = new CMotherBoard_EXT32();
+			break;
+		case MSF_CONF::BK1001_FDD:
+			m_pBoard = new CMotherBoard_10_FDD();
+			break;
+		case MSF_CONF::BK11:
+			m_pBoard = new CMotherBoard_11();
+			break;
+		case MSF_CONF::BK11_FDD:
+			m_pBoard = new CMotherBoard_11_FDD();
+			break;
+		case MSF_CONF::BK11M:
+			m_pBoard = new CMotherBoard_11M();
+			break;
+		case MSF_CONF::BK11M_FDD:
+			m_pBoard = new CMotherBoard_11M_FDD();
+			break;
+		default:
+			m_pBoard = new CMotherBoard();
+			break;
+    }
     CSpeaker m_speaker;
     CBkSound *m_pSound = new CBkSound();
     CCovox m_covox;
